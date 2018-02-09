@@ -1,0 +1,35 @@
+#
+# Jailhouse, a Linux-based partitioning hypervisor
+#
+# Copyright (c) Siemens AG, 2018
+#
+# Authors:
+#  Jan Kiszka <jan.kiszka@siemens.com>
+#
+# SPDX-License-Identifier: GPL-2.0
+#
+
+header:
+  version: 5
+
+target: multiconfig:qemuamd64-jailhouse:demo-image
+
+repos:
+  jailhouse:
+
+  isar:
+    url: https://github.com/siemens/isar
+    refspec: 0245f4d754efa92be4a9671074e7cd79e3e39452
+    layers:
+      meta:
+      meta-isar:
+
+bblayers_conf_header:
+  standard: |
+    LCONF_VERSION = "6"
+    BBPATH = "${TOPDIR}"
+    BBFILES ?= ""
+
+local_conf_header:
+  standard: |
+    CONF_VERSION = "1"
