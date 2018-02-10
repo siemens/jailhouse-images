@@ -26,6 +26,15 @@ case "$1" in
 	x86|x86_64|amd64)
 		DISTRO_ARCH=amd64
 		QEMU=qemu-system-x86_64
+		QEMU_EXTRA_ARGS=" \
+			-cpu kvm64,-kvm_pv_eoi,-kvm_steal_time,-kvm_asyncpf,-kvmclock,+vmx,+arat \
+			-enable-kvm -machine q35,kernel_irqchip=split \
+			-device ide-hd,drive=disk \
+			-device intel-iommu,intremap=on,x-buggy-eim=on \
+			-device intel-hda,addr=1b.0 -device hda-duplex \
+			-device e1000e,addr=2.0,netdev=net"
+		KERNEL_CMDLINE="root=/dev/sda intel_iommu=off \
+			memmap=66M\$0x3b000000"
 		;;
 	""|--help)
 		usage
@@ -42,14 +51,8 @@ shift 1
 
 ${QEMU_PATH}${QEMU} \
 	-drive file=${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.ext4.img,discard=unmap,if=none,id=disk,format=raw \
-	-device ide-hd,drive=disk -m 1G -enable-kvm -smp 4 \
-	-serial mon:stdio -serial vc \
-	-cpu kvm64,-kvm_pv_eoi,-kvm_steal_time,-kvm_asyncpf,-kvmclock,+vmx,+arat \
-	-machine q35,kernel_irqchip=split \
-	-device intel-iommu,intremap=on,x-buggy-eim=on \
-	-device intel-hda,addr=1b.0 -device hda-duplex \
-	-netdev user,id=net -device e1000e,addr=2.0,netdev=net \
+	-m 1G -smp 4 -serial mon:stdio -serial vc -netdev user,id=net \
 	-kernel ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz* \
-	-append "intel_iommu=off memmap=66M\$0x3b000000 root=/dev/sda" \
+	-append "${KERNEL_CMDLINE}" \
 	-initrd ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img* \
-	"$@"
+	${QEMU_EXTRA_ARGS} "$@"
