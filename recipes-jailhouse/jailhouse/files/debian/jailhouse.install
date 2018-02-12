@@ -1,2 +1,2 @@
-configs/*.cell etc/jailhouse
-inmates/demos/x86/*.bin usr/libexec/jailhouse/demos
+configs{,/*}/*.cell etc/jailhouse
+inmates/demos/*/*.bin usr/libexec/jailhouse/demos

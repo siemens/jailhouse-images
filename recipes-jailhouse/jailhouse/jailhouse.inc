@@ -14,7 +14,7 @@ DESCRIPTION = "Jailhouse partitioning hypervisor"
 LICENSE = "GPL-2.0 & BSD-2-clause"
 
 SRC_URI = " \
-    git://github.com/siemens/jailhouse \
+    git://github.com/siemens/jailhouse;branch=next \
     file://debian/"
 
 S = "git"
