@@ -9,8 +9,11 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
-require conf/multiconfig/qemuamd64-stretch.conf
+header:
+  version: 5
+  includes:
+    - kas.yml
 
-PREFERRED_PROVIDER_virtual/kernel ?= "linux-jailhouse"
-
-PREFERRED_VERSION_jailhouse ?= "0.8"
+local_conf_header:
+  latest: |
+    PREFERRED_VERSION_jailhouse = "0.9999-next"

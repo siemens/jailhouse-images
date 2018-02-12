@@ -14,15 +14,21 @@ usage()
 {
 	echo "Usage: $0 [OPTIONS]"
 	echo -e "\nOptions:"
+	echo -e "--latest\tBuild latest Jailhouse version from next branch."
 	echo -e "--shell\t\tDrop into a shell to issue bitbake commands" \
 		"manually."
 	exit 1
 }
 
+LATEST=""
 CMD="build"
 
 while [ $# -gt 0 ]; do
 	case "$1" in
+	--latest)
+		LATEST="-latest"
+		shift 1
+		;;
 	--shell)
 		CMD="shell"
 		shift 1
@@ -42,4 +48,4 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   -e no_proxy=$no_proxy \
 	   kasproject/kas-isar sh -c "
 		cd /out;
-		kas ${CMD} /jailhouse-images/kas.yml"
+		kas ${CMD} /jailhouse-images/kas${LATEST}.yml"

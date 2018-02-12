@@ -9,8 +9,7 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
-require conf/multiconfig/qemuamd64-stretch.conf
+require jailhouse.inc
 
-PREFERRED_PROVIDER_virtual/kernel ?= "linux-jailhouse"
-
-PREFERRED_VERSION_jailhouse ?= "0.8"
+SRCREV = "next"
+PV = "0.9999-next"
