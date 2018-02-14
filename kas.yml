@@ -18,8 +18,8 @@ repos:
   jailhouse:
 
   isar:
-    url: https://github.com/siemens/isar
-    refspec: 0245f4d754efa92be4a9671074e7cd79e3e39452
+    url: https://github.com/ilbers/isar
+    refspec: 9a8b7fe77cbd006b6053f85e593301c60ea0cfbd
     layers:
       meta:
       meta-isar:
