@@ -21,9 +21,10 @@ S = "git"
 
 inherit dpkg
 
-DEPENDS = "virtual/kernel"
+DEPENDS = "linux-image-${KERNEL_NAME}"
 
 dpkg_runbuild_prepend() {
     cp -r ${WORKDIR}/debian ${WORKDIR}/${S}/
     sed -i 's/@PV@/${PV}/' ${WORKDIR}/${S}/debian/changelog
+    sed -i 's/@KERNEL_NAME@/${KERNEL_NAME}/' ${WORKDIR}/${S}/debian/control
 }
