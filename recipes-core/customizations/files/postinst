@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Jailhouse Demo Image (login: root/root)" > /etc/issue
+
+echo "PermitRootLogin yes" >> /etc/ssh/sshd_config

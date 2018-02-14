@@ -1,0 +1,10 @@
+jailhouse enable /etc/jailhouse/qemu-x86.cell
+jailhouse console
+jailhouse cell create /etc/jailhouse/apic-demo.cell
+jailhouse cell load apic-demo /usr/libexec/jailhouse/demos/apic-demo.bin
+jailhouse cell start apic-demo
+jailhouse cell stats apic-demo
+jailhouse cell destroy apic-demo
+jailhouse cell linux /etc/jailhouse/linux-x86-demo.cell /boot/vmlinuz* -i /usr/libexec/jailhouse/demos/rootfs.cpio -c "console=ttyS0 8250.nr_uarts=1 ip=192.168.19.2"
+ssh 192.168.19.2
+jailhouse disable

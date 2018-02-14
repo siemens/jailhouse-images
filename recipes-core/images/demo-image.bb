@@ -13,4 +13,4 @@ require recipes-core/images/isar-image-base.bb
 
 IMAGE_PREINSTALL += "bash-completion less vim nano"
 
-IMAGE_INSTALL += "jailhouse"
+IMAGE_INSTALL += "jailhouse customizations"
