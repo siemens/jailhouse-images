@@ -1,3 +1,4 @@
+#!/usr/bin/make -f
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
@@ -9,8 +10,13 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
-require recipes-core/images/isar-image-base.bb
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/default.mk
 
-IMAGE_PREINSTALL += "bash-completion less vim nano"
+binary:
+	cp ../.config .
+	${MAKE} olddefconfig
+	dh $@ --parallel
 
-IMAGE_INSTALL += "jailhouse customizations non-root-initramfs"
+%:
+	dh $@ --parallel
