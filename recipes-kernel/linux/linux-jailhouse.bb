@@ -21,3 +21,5 @@ PV = "4.14.18"
 S = "linux-${SRCREV}"
 
 KERNEL_DEFCONFIG_qemuamd64 = "x86_64_defconfig"
+
+KBUILD_DEPENDS += "liblz4-tool"
