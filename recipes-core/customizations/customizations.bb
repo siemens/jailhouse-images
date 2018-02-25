@@ -15,9 +15,16 @@ DESCRIPTION = "demo image customizations"
 
 SRC_URI = " \
     file://postinst \
-    file://.bash_history"
+    file://.bash_history \
+    file://e1000e-intx.conf \
+    file://e1000e"
 
 do_install() {
+	install -v -d ${D}/etc/modprobe.d
+	install -v -m 644 ${WORKDIR}/e1000e-intx.conf ${D}/etc/modprobe.d/
+
+	install -v -d ${D}/etc/network/interfaces.d
+	install -v -m 644 ${WORKDIR}/e1000e ${D}/etc/network/interfaces.d/
 
 	install -v -d ${D}/root
 	install -v -m 600 ${WORKDIR}/.bash_history ${D}/root/

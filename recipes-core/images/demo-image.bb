@@ -11,6 +11,9 @@
 
 require recipes-core/images/isar-image-base.bb
 
-IMAGE_PREINSTALL += "bash-completion less vim nano"
+IMAGE_PREINSTALL += " \
+    bash-completion less vim nano \
+    ifupdown isc-dhcp-client net-tools iputils-ping ssh \
+    pciutils"
 
 IMAGE_INSTALL += "jailhouse customizations non-root-initramfs"
