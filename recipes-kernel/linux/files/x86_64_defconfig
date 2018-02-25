@@ -1858,7 +1858,7 @@ CONFIG_WLAN_VENDOR_QUANTENNA=y
 # CONFIG_WAN is not set
 # CONFIG_VMXNET3 is not set
 # CONFIG_FUJITSU_ES is not set
-# CONFIG_IVSHMEM_NET is not set
+CONFIG_IVSHMEM_NET=y
 # CONFIG_ISDN is not set
 # CONFIG_NVM is not set
 
