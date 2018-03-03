@@ -16,7 +16,7 @@ The host-side requirements are:
 - QEMU 2.7 (for x86 image)
 - Kernel >= 4.4 with KVM support (for x86 image)
 
-To build all images, just run ```build-image.sh```. A QEMU image can then be
+To build all images, just run ```build-images.sh```. A QEMU image can then be
 started using ```start-qemu.sh ARCHITECTURE```. Currently supported is "x86" as
 architecture.
 
