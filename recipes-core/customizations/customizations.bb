@@ -19,7 +19,8 @@ SRC_URI = " \
     file://e1000e-intx.conf \
     file://e1000e \
     file://ivshmem-net \
-    file://known_hosts"
+    file://known_hosts \
+    file://99-silent-printk.conf"
 
 do_install() {
 	install -v -d ${D}/etc/modprobe.d
@@ -28,6 +29,9 @@ do_install() {
 	install -v -d ${D}/etc/network/interfaces.d
 	install -v -m 644 ${WORKDIR}/e1000e ${D}/etc/network/interfaces.d/
 	install -v -m 644 ${WORKDIR}/ivshmem-net ${D}/etc/network/interfaces.d/
+
+	install -v -d ${D}/etc/sysctl.d
+	install -v -m 644 ${WORKDIR}/99-silent-printk.conf ${D}/etc/sysctl.d/
 
 	install -v -d ${D}/root
 	install -v -m 600 ${WORKDIR}/.bash_history ${D}/root/
