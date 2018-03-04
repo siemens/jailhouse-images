@@ -17,11 +17,14 @@ usage()
 	echo -e "--latest\tBuild latest Jailhouse version from next branch."
 	echo -e "--shell\t\tDrop into a shell to issue bitbake commands" \
 		"manually."
+	echo -e "--docker-args\tAdditional arguments to pass to docker for" \
+		"running the build."
 	exit 1
 }
 
 LATEST=""
 CMD="build"
+DOCKER_ARGS=""
 
 while [ $# -gt 0 ]; do
 	case "$1" in
@@ -32,6 +35,11 @@ while [ $# -gt 0 ]; do
 	--shell)
 		CMD="shell"
 		shift 1
+		;;
+	--docker-args)
+		[ $# -gt 0 ] || usage
+		DOCKER_ARGS=$2
+		shift 2
 		;;
 	*)
 		usage
@@ -45,7 +53,7 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
 	   --device $(/sbin/losetup -f) \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
-	   -e no_proxy=$no_proxy \
+	   -e no_proxy=$no_proxy ${DOCKER_ARGS} \
 	   kasproject/kas-isar sh -c "
 		cd /out;
 		kas ${CMD} /jailhouse-images/kas${LATEST}.yml"
