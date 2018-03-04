@@ -1,0 +1,58 @@
+From 0d69f78fb52b66df49c24935d4218c7c8c1f6e7b Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 7 Jan 2018 08:43:22 +0100
+Subject: [PATCH 1/4] tools: cell-linux: Use minimal decompression space for
+ ARM64
+
+Factor out a default decompression factor for ARM because ARM64 does not
+perform any compression so far, thus has a factor of 1 only. This allows
+for more compact non-root Linux cell layout during load.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Reviewed-by: Lokesh Vutla <lokeshvutla@ti.com>
+---
+ tools/jailhouse-cell-linux | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/tools/jailhouse-cell-linux b/tools/jailhouse-cell-linux
+index 086d5982..d27951b7 100755
+--- a/tools/jailhouse-cell-linux
++++ b/tools/jailhouse-cell-linux
+@@ -310,8 +310,10 @@ class ARMCommon:
+         if args.initrd:
+             ramdisk_size = page_align(os.fstat(args.initrd.fileno()).st_size)
+             # leave sufficient space between the kernel and the initrd
+-            image_size += kernel_size * 4
+-            kernel_size *= 5
++            decompression_factor = self.default_decompression_factor()
++            decompression_space = decompression_factor * kernel_size
++            kernel_size += decompression_space
++            image_size += decompression_space
+ 
+         if not args.dtb:
+             print('No device tree specified', file=sys.stderr)
+@@ -425,6 +427,10 @@ class ARM(ARMCommon):
+     def get_kernel_offset(kernel):
+         return 0
+ 
++    @staticmethod
++    def default_decompression_factor():
++        return 4
++
+ 
+ class ARM64(ARMCommon):
+     name = 'arm64'
+@@ -442,6 +448,10 @@ class ARM64(ARMCommon):
+         (text_offset,) = struct.unpack_from('<Q', kernel.read(8))
+         return text_offset
+ 
++    @staticmethod
++    def default_decompression_factor():
++        return 1
++
+ 
+ def resolve_arch(defined_arch=None):
+     arch_classes = {'x86': X86, 'arm': ARM, 'arm64': ARM64, None: None}
+-- 
+2.13.6
+
