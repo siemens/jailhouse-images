@@ -1,0 +1,189 @@
+From 00bc86eb526b474bbd4eefe6fb29556a64043c5d Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 18 Feb 2018 17:36:21 +0100
+Subject: [PATCH 4/4] configs: x86: Expand inmate reservation
+
+Add further 16 MB for inmates, using it for linux-x86-demo. This helps
+starting standard, larger kernels that can also be used for the root
+cell.
+
+While adjusting the two remaining AMD configs, also update their
+hypervisor size which makes them compatible with linux-x86-demo again.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ README.md                     |  4 ++--
+ configs/f2a88xm-hd3.c         |  6 +++---
+ configs/imb-a180.c            |  6 +++---
+ configs/linux-x86-demo.c      |  8 ++++----
+ configs/qemu-x86.c            | 14 +++++++-------
+ tools/jailhouse-config-create |  2 +-
+ 6 files changed, 20 insertions(+), 20 deletions(-)
+
+diff --git a/README.md b/README.md
+index 077592e1..1fcb1425 100644
+--- a/README.md
++++ b/README.md
+@@ -149,12 +149,12 @@ Software requirements
+     additional cell. This currently has to be pre-allocated during boot-up.
+     On x86 this is typically done by adding
+ 
+-        memmap=66M$0x3b000000
++        memmap=82M$0x3a000000
+ 
+     as parameter to the command line of the virtual machine's kernel. Note that
+     if you plan to put this parameter in GRUB2 variables in /etc/default/grub,
+     then you will need three escape characters before the dollar
+-    (e.g. ```GRUB_CMDLINE_LINUX_DEFAULT="memmap=66M\\\$0x3b000000"```).
++    (e.g. ```GRUB_CMDLINE_LINUX_DEFAULT="memmap=82M\\\$0x3a000000"```).
+ 
+ #### ARM architecture:
+ 
+diff --git a/configs/f2a88xm-hd3.c b/configs/f2a88xm-hd3.c
+index f35f34d7..96688b44 100644
+--- a/configs/f2a88xm-hd3.c
++++ b/configs/f2a88xm-hd3.c
+@@ -14,7 +14,7 @@
+  * by Valentine Sinitsyn <valentine.sinitsyn@gmail.com>.
+  *
+  * NOTE: This config expects the following to be appended to your kernel cmdline
+- *       "memmap=0x4200000$0x3b000000"
++ *       "memmap=82M$0x3a000000"
+  */
+ 
+ #include <jailhouse/types.h>
+@@ -35,8 +35,8 @@ struct {
+ 		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+ 		.revision = JAILHOUSE_CONFIG_REVISION,
+ 		.hypervisor_memory = {
+-			.phys_start = 0x3b000000,
+-			.size = 0x4000000,
++			.phys_start = 0x3a000000,
++			.size = 0x600000,
+ 		},
+ 		.debug_console = {
+ 			.address = 0x3f8,
+diff --git a/configs/imb-a180.c b/configs/imb-a180.c
+index 07ea208c..4d3bb263 100644
+--- a/configs/imb-a180.c
++++ b/configs/imb-a180.c
+@@ -13,7 +13,7 @@
+  * Adjusted by Valentine Sinitsyn <valentine.sinitsyn@gmail.com>
+  *
+  * NOTE: This config expects the following to be appended to your kernel cmdline
+- *       "memmap=0x4200000$0x3b000000"
++ *       "memmap=82M$0x3a000000"
+  */
+ 
+ #include <jailhouse/types.h>
+@@ -34,8 +34,8 @@ struct {
+ 		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+ 		.revision = JAILHOUSE_CONFIG_REVISION,
+ 		.hypervisor_memory = {
+-			.phys_start = 0x3b000000,
+-			.size = 0x4000000,
++			.phys_start = 0x3a000000,
++			.size = 0x600000,
+ 		},
+ 		.debug_console = {
+ 			.address = 0x3f8,
+diff --git a/configs/linux-x86-demo.c b/configs/linux-x86-demo.c
+index aab1df13..1985d6c1 100644
+--- a/configs/linux-x86-demo.c
++++ b/configs/linux-x86-demo.c
+@@ -1,7 +1,7 @@
+ /*
+  * Jailhouse, a Linux-based partitioning hypervisor
+  *
+- * Configuration for linux inmate, 1 CPU, ~60 MB RAM, 1 serial port
++ * Configuration for Linux inmate, 1 CPU, 74 MB RAM, ~1MB shmem, serial ports
+  *
+  * Copyright (c) Siemens AG, 2013-2015
+  *
+@@ -57,7 +57,7 @@ struct {
+ 
+ 	.mem_regions = {
+ 		/* low RAM */ {
+-			.phys_start = 0x3b600000,
++			.phys_start = 0x3a600000,
+ 			.virt_start = 0,
+ 			.size = 0x00100000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+@@ -70,9 +70,9 @@ struct {
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_COMM_REGION,
+ 		},
+ 		/* high RAM */ {
+-			.phys_start = 0x3b700000,
++			.phys_start = 0x3a700000,
+ 			.virt_start = 0x00200000,
+-			.size = 0x3a00000,
++			.size = 0x4a00000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA |
+ 				JAILHOUSE_MEM_LOADABLE,
+diff --git a/configs/qemu-x86.c b/configs/qemu-x86.c
+index c2345ba9..0514c260 100644
+--- a/configs/qemu-x86.c
++++ b/configs/qemu-x86.c
+@@ -2,7 +2,7 @@
+  * Jailhouse, a Linux-based partitioning hypervisor
+  *
+  * Test configuration for QEMU Q35 VM, 1 GB RAM, 4 cores,
+- * 6 MB hypervisor, 60 MB inmates (-4K shared mem device)
++ * 6 MB hypervisor, 74 MB inmates, 1MB shared mem devices
+  *
+  * Copyright (c) Siemens AG, 2013-2016
+  *
+@@ -13,7 +13,7 @@
+  * the COPYING file in the top-level directory.
+  *
+  * See README.md for QEMU command lines on Intel and AMD.
+- * Guest kernel command line appendix: memmap=66M$0x3b000000
++ * Guest kernel command line appendix: memmap=82M$0x3a000000
+  */
+ 
+ #include <jailhouse/types.h>
+@@ -34,7 +34,7 @@ struct {
+ 		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
+ 		.revision = JAILHOUSE_CONFIG_REVISION,
+ 		.hypervisor_memory = {
+-			.phys_start = 0x3b000000,
++			.phys_start = 0x3a000000,
+ 			.size = 0x600000,
+ 		},
+ 		.debug_console = {
+@@ -78,14 +78,14 @@ struct {
+ 		/* RAM */ {
+ 			.phys_start = 0x0,
+ 			.virt_start = 0x0,
+-			.size = 0x3b000000,
++			.size = 0x3a000000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
+ 		},
+ 		/* RAM (inmates) */ {
+-			.phys_start = 0x3b600000,
+-			.virt_start = 0x3b600000,
+-			.size = 0x3b00000,
++			.phys_start = 0x3a600000,
++			.virt_start = 0x3a600000,
++			.size = 0x4b00000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA,
+ 		},
+diff --git a/tools/jailhouse-config-create b/tools/jailhouse-config-create
+index ce2affce..6624c537 100755
+--- a/tools/jailhouse-config-create
++++ b/tools/jailhouse-config-create
+@@ -683,7 +683,7 @@ def parse_kernel_cmdline():
+ 
+ 
+ def alloc_mem(regions, size):
+-    mem = [0x3b000000, size]
++    mem = [0x3a000000, size]
+     for r in regions:
+         if (
+             r.typestr == 'System RAM' and
+-- 
+2.13.6
+

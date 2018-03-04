@@ -33,8 +33,9 @@ case "$1" in
 			-device intel-iommu,intremap=on,x-buggy-eim=on \
 			-device intel-hda,addr=1b.0 -device hda-duplex \
 			-device e1000e,addr=2.0,netdev=net"
-		KERNEL_CMDLINE="root=/dev/sda intel_iommu=off \
-			memmap=66M\$0x3b000000 vga=0x305"
+		KERNEL_CMDLINE=" \
+			root=/dev/sda intel_iommu=off memmap=82M\$0x3a000000 \
+			vga=0x305"
 		;;
 	""|--help)
 		usage
