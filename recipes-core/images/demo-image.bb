@@ -9,6 +9,8 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
+ROOTFS_EXTRA = "1024"
+
 require recipes-core/images/isar-image-base.bb
 
 IMAGE_PREINSTALL += " \
