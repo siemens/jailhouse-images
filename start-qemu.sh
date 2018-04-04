@@ -54,7 +54,7 @@ shift 1
 ${QEMU_PATH}${QEMU} \
 	-drive file=${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.ext4.img,discard=unmap,if=none,id=disk,format=raw \
 	-m 1G -smp 4 -serial mon:stdio -netdev user,id=net \
-	-kernel ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz* \
+	-kernel ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz*_debian-stretch-qemu$DISTRO_ARCH \
 	-append "${KERNEL_CMDLINE}" \
-	-initrd ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img* \
+	-initrd ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img*_debian-stretch-qemu$DISTRO_ARCH \
 	${QEMU_EXTRA_ARGS} "$@"
