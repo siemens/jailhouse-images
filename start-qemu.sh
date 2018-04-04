@@ -29,6 +29,7 @@ case "$1" in
 		QEMU_EXTRA_ARGS=" \
 			-cpu kvm64,-kvm_pv_eoi,-kvm_steal_time,-kvm_asyncpf,-kvmclock,+vmx,+arat \
 			-enable-kvm -machine q35,kernel_irqchip=split \
+			-serial vc \
 			-device ide-hd,drive=disk \
 			-device intel-iommu,intremap=on,x-buggy-eim=on \
 			-device intel-hda,addr=1b.0 -device hda-duplex \
@@ -52,7 +53,7 @@ shift 1
 
 ${QEMU_PATH}${QEMU} \
 	-drive file=${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.ext4.img,discard=unmap,if=none,id=disk,format=raw \
-	-m 1G -smp 4 -serial mon:stdio -serial vc -netdev user,id=net \
+	-m 1G -smp 4 -serial mon:stdio -netdev user,id=net \
 	-kernel ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz* \
 	-append "${KERNEL_CMDLINE}" \
 	-initrd ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img* \
