@@ -15,7 +15,7 @@ DESCRIPTION = "demo image customizations"
 
 SRC_URI = " \
     file://postinst \
-    file://.bash_history \
+    file://.bash_history-${MACHINE} \
     file://e1000e-intx.conf \
     file://e1000e \
     file://ivshmem-net \
@@ -34,7 +34,7 @@ do_install() {
 	install -v -m 644 ${WORKDIR}/99-silent-printk.conf ${D}/etc/sysctl.d/
 
 	install -v -d ${D}/root
-	install -v -m 600 ${WORKDIR}/.bash_history ${D}/root/
+	install -v -m 600 ${WORKDIR}/.bash_history-${MACHINE} ${D}/root/.bash_history
 
 	install -v -d -m 700 ${D}/root/.ssh
 	install -v -m 644 ${WORKDIR}/known_hosts ${D}/root/.ssh/
