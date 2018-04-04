@@ -16,4 +16,4 @@ export prefix=/usr
 export DEB_BUILD_OPTIONS=parallel=$(shell nproc)
 
 %:
-	dh $@ --parallel
+	CFLAGS= LDFLAGS= dh $@ --parallel
