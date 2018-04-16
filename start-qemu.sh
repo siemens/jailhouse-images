@@ -35,7 +35,7 @@ case "$1" in
 			-device intel-hda,addr=1b.0 -device hda-duplex \
 			-device e1000e,addr=2.0,netdev=net"
 		KERNEL_CMDLINE=" \
-			root=/dev/sda intel_iommu=off memmap=82M\$0x3a000000 \
+			root=/dev/sda2 intel_iommu=off memmap=82M\$0x3a000000 \
 			vga=0x305"
 		;;
 	""|--help)
@@ -48,11 +48,12 @@ case "$1" in
 esac
 
 IMAGE_BUILD_DIR="$(dirname $0)/out/"
+IMAGE_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.*.img)
 
 shift 1
 
 ${QEMU_PATH}${QEMU} \
-	-drive file=${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.ext4.img,discard=unmap,if=none,id=disk,format=raw \
+	-drive file=${IMAGE_FILE},discard=unmap,if=none,id=disk,format=raw \
 	-m 1G -smp 4 -serial mon:stdio -netdev user,id=net \
 	-kernel ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz*_debian-stretch-qemu$DISTRO_ARCH \
 	-append "${KERNEL_CMDLINE}" \
