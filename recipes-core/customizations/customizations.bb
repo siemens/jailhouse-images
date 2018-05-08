@@ -20,7 +20,8 @@ SRC_URI = " \
     file://e1000e \
     file://ivshmem-net \
     file://known_hosts \
-    file://99-silent-printk.conf"
+    file://99-silent-printk.conf \
+    file://20-jailhouse-motd"
 
 do_install() {
 	install -v -d ${D}/etc/modprobe.d
@@ -32,6 +33,9 @@ do_install() {
 
 	install -v -d ${D}/etc/sysctl.d
 	install -v -m 644 ${WORKDIR}/99-silent-printk.conf ${D}/etc/sysctl.d/
+
+	install -v -d ${D}/etc/update-motd.d
+	install -v -m 755 ${WORKDIR}/20-jailhouse-motd ${D}/etc/update-motd.d/
 
 	install -v -d ${D}/root
 	install -v -m 600 ${WORKDIR}/.bash_history-${MACHINE} ${D}/root/.bash_history
