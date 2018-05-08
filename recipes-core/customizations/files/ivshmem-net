@@ -1,5 +1,12 @@
 allow-hotplug enp0s14
+allow-hotplug enP1p0s0
 
+# used on physical PCI bus
 iface enp0s14 inet static
+	address 192.168.19.1
+	netmask 255.255.255.0
+
+# used on virtual PCI bus
+iface enP1p0s0 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
