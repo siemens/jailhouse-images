@@ -38,6 +38,19 @@ case "$1" in
 			root=/dev/sda2 intel_iommu=off memmap=82M\$0x3a000000 \
 			vga=0x305"
 		;;
+	arm64|aarch64)
+		DISTRO_ARCH=arm64
+		QEMU=qemu-system-aarch64
+		QEMU_EXTRA_ARGS=" \
+			-cpu cortex-a57 \
+			-machine virt,gic-version=3,virtualization=on \
+			-device virtio-serial-device \
+			-device virtconsole,chardev=con -chardev vc,id=con \
+			-device virtio-blk-device,drive=disk \
+			-device virtio-net-device,netdev=net"
+		KERNEL_CMDLINE=" \
+			root=/dev/vda mem=768M"
+		;;
 	""|--help)
 		usage
 		;;
