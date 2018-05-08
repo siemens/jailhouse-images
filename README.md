@@ -13,12 +13,17 @@ Quickstart
 The host-side requirements are:
 
 - Docker (tested with 17.09.1-ce)
-- QEMU >= 2.8 (for x86 image)
+- QEMU >= 2.8 for x86 image, >= 2.12 for ARM64 image
 - Kernel >= 4.4 with KVM support (for x86 image)
 
 To build all images, just run ```build-images.sh```. A QEMU image can then be
-started using ```start-qemu.sh ARCHITECTURE```. Currently supported is "x86" as
-architecture.
+started using ```start-qemu.sh ARCHITECTURE```. Currently supported are "x86"
+and "arm64" as architectures.
+
+Note that the ARM64 image is not built by default as it currently takes several
+hours to complete. You can request the build this way:
+
+    KAS_TARGET="multiconfig:qemuarm64-jailhouse:demo-image" ./build-images.sh
 
 
 Community Resources

@@ -49,8 +49,8 @@ done
 
 mkdir -p out
 docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
-	   -e USER_ID=$(id -u) -e SHELL=${SHELL} --rm -t -i \
-	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
+	   -e USER_ID=$(id -u) -e SHELL=${SHELL} -e KAS_TARGET="${KAS_TARGET}" \
+	   --rm -t -i --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
 	   --device $(/sbin/losetup -f) \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
 	   -e no_proxy=$no_proxy ${DOCKER_ARGS} \
