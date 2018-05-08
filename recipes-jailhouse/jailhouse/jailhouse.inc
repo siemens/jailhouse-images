@@ -26,6 +26,10 @@ DEPENDS = "linux-image-${KERNEL_NAME}"
 
 dpkg_runbuild_prepend() {
     cp -r ${WORKDIR}/debian ${WORKDIR}/${S}/
+    if [ "${DISTRO_ARCH}" != "amd64" ]; then
+        # Install device trees only on non-x86 archs as they only exist there
+        echo "configs{,/*}/dts/*.dtb etc/jailhouse/dts" >> ${WORKDIR}/${S}/debian/jailhouse.install
+    fi
     cp ${WORKDIR}/${MACHINE}_config.h ${WORKDIR}/${S}/include/jailhouse/config.h
     sed -i 's/@PV@/${PV}/' ${WORKDIR}/${S}/debian/changelog
     sed -i 's/@KERNEL_NAME@/${KERNEL_NAME}/' ${WORKDIR}/${S}/debian/control
