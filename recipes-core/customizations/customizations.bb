@@ -24,6 +24,8 @@ SRC_URI = " \
     file://20-jailhouse-motd"
 
 do_install() {
+	sudo rm -rf ${D}/etc ${D}/root
+
 	install -v -d ${D}/etc/modprobe.d
 	install -v -m 644 ${WORKDIR}/e1000e-intx.conf ${D}/etc/modprobe.d/
 
@@ -42,4 +44,6 @@ do_install() {
 
 	install -v -d -m 700 ${D}/root/.ssh
 	install -v -m 644 ${WORKDIR}/known_hosts ${D}/root/.ssh/
+
+	sudo chown -R root:root ${D}/etc ${D}/root
 }
