@@ -1,7 +1,7 @@
 From 00bc86eb526b474bbd4eefe6fb29556a64043c5d Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Sun, 18 Feb 2018 17:36:21 +0100
-Subject: [PATCH 4/4] configs: x86: Expand inmate reservation
+Subject: [PATCH 4/5] configs: x86: Expand inmate reservation
 
 Add further 16 MB for inmates, using it for linux-x86-demo. This helps
 starting standard, larger kernels that can also be used for the root

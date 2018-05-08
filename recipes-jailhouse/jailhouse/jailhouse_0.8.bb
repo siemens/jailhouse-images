@@ -15,6 +15,7 @@ SRC_URI += " \
     file://0001-tools-cell-linux-Use-minimal-decompression-space-for.patch \
     file://0002-tools-cell-linux-Make-kernel-decompression-factor-co.patch \
     file://0003-tools-cell-linux-Tune-x86-decompression-factor-based.patch \
-    file://0004-configs-x86-Expand-inmate-reservation.patch"
+    file://0004-configs-x86-Expand-inmate-reservation.patch \
+    file://0005-tools-cell-linux-Add-support-for-compressed-arm64-ke.patch"
 
 SRCREV = "07341fa315a7fabb38f07cd3c0b3fe880cffaa65"

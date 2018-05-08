@@ -1,7 +1,7 @@
 From d0257b07736ebd41df368d9d19fef9b70586218f Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Sun, 7 Jan 2018 11:30:35 +0100
-Subject: [PATCH 3/4] tools: cell-linux: Tune x86 decompression factor based on
+Subject: [PATCH 3/5] tools: cell-linux: Tune x86 decompression factor based on
  compression method
 
 On x86, we can find out which compression method was used. So we are
