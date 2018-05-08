@@ -14,9 +14,9 @@ require recipes-kernel/linux/linux-custom.inc
 SRC_URI += " \
     https://github.com/siemens/linux/archive/${SRCREV}.tar.gz \
     file://${MACHINE}_defconfig"
-SRC_URI[sha256sum] = "38a98baa8cbdeb6b06554e5ea724ee8d08bfd32645f6b1d2d4af41f7ada6ea70"
-SRCREV = "c2cb6bc17681b44eeeb66ca40bd8051053105317"
-PV = "4.14.32"
+SRC_URI[sha256sum] = "3f4bca35a5a525710ae592f1640f0f009fefee08a896ceb561c5086ea7d08711"
+SRCREV = "104cee7fcc0b21ca80d0eaedadf310e22ab69bdb"
+PV = "4.14.39"
 
 S = "linux-${SRCREV}"
 
