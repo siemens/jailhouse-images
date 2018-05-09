@@ -14,7 +14,7 @@ ROOTFS_EXTRA = "1024"
 require recipes-core/images/isar-image-base.bb
 
 IMAGE_PREINSTALL += " \
-    bash-completion less vim nano \
+    bash-completion less vim nano man \
     ifupdown isc-dhcp-client net-tools iputils-ping ssh \
     pciutils ethtool"
 
