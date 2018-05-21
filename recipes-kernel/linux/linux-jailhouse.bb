@@ -19,7 +19,7 @@ SRC_URI[sha256sum] = "3f4bca35a5a525710ae592f1640f0f009fefee08a896ceb561c5086ea7
 SRCREV = "104cee7fcc0b21ca80d0eaedadf310e22ab69bdb"
 PV = "4.14.39"
 
-S = "linux-${SRCREV}"
+S = "${WORKDIR}/linux-${SRCREV}"
 
 KERNEL_DEFCONFIG = "${MACHINE}_defconfig"
 

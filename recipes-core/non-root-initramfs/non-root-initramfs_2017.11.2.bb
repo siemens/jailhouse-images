@@ -20,7 +20,7 @@ SRC_URI = " \
     file://overlay/"
 SRC_URI[sha256sum] = "736d38933b93cc2365950f58dbabe8803b3c2b029457b8fe7e5323df39a39019"
 
-S = "buildroot-${PV}"
+S = "${WORKDIR}/buildroot-${PV}"
 
 dpkg_runbuild_prepend() {
 	cd ${WORKDIR}
