@@ -28,5 +28,6 @@ dpkg_runbuild_prepend() {
 	cp -r debian ${S}
 	sed -i 's/@PV@/${PV}/' ${S}/debian/changelog
 
+	sed -i 's|^BR2_DL_DIR=.*|BR2_DL_DIR="/downloads/buildroot"|' ${DISTRO_ARCH}-config
 	ln -sf ${DISTRO_ARCH}-config .config
 }
