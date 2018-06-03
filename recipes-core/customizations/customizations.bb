@@ -24,7 +24,7 @@ SRC_URI = " \
     file://99-silent-printk.conf \
     file://20-jailhouse-motd"
 
-DEBIAN_DEPENDS = "passwd"
+DEBIAN_DEPENDS = "openssh-server, passwd"
 
 do_install() {
 	sudo rm -rf ${D}/etc ${D}/root
