@@ -9,4 +9,6 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
-PREFERRED_VERSION_jailhouse ?= "0.9.1"
+require jailhouse.inc
+
+SRCREV = "c2327d42887795a57163680a82b947fcb5e4a7d3"
