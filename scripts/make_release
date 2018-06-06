@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Jailhouse, a Linux-based partitioning hypervisor
+#
+# Copyright (c) Siemens AG, 2014
+#
+# Authors:
+#  Jan Kiszka <jan.kiszka@siemens.com>
+#
+# SPDX-License-Identifier: GPL-2.0
+#
+
+usage() {
+	echo "usage: $0 name"
+	exit 1
+}
+
+name=$1
+
+if [ -z "$name" ]; then
+	usage
+fi
+
+if [ ! -d .git ]; then
+	echo "Must be run from top-level directory"
+	exit 1
+fi
+
+if [ -n "`git status -s -uno`" ]; then
+	echo "Working directory is dirty!"
+	exit 1
+fi
+
+echo -e "Tag commit\n\n    `git log -1 --oneline`"
+echo -e "\nof branch\n\n    `git branch | sed -n 's/^\* //p'`"
+echo -ne "\nas $name? (y/N) "
+read answer
+if [ "$answer" != "y" ]; then
+	exit 1
+fi
+
+git tag -as $name -m "Release $name"
