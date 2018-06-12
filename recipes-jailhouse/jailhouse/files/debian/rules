@@ -16,4 +16,4 @@ export prefix=/usr
 export DEB_BUILD_OPTIONS=parallel=$(shell nproc)
 
 %:
-	CFLAGS= LDFLAGS= dh $@ --parallel
+	CFLAGS= LDFLAGS= dh $@ --parallel --with python2
