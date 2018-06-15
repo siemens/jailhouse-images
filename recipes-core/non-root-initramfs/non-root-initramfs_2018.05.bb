@@ -18,7 +18,7 @@ SRC_URI = " \
     file://debian/ \
     file://${DISTRO_ARCH}-config \
     file://overlay/"
-SRC_URI[sha256sum] = "736d38933b93cc2365950f58dbabe8803b3c2b029457b8fe7e5323df39a39019"
+SRC_URI[sha256sum] = "e75b1a8cb0adb6ef6db9a809d4f4a8bb6494206ed0c4145e773b69251df92a01"
 
 S = "${WORKDIR}/buildroot-${PV}"
 
