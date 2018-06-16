@@ -14,7 +14,8 @@ inherit dpkg-raw
 DESCRIPTION = "demo image customizations"
 
 SRC_URI = " \
-    file://postinst \
+    file://postinst-common \
+    file://postinst-${MACHINE} \
     file://.bash_history-${MACHINE} \
     file://e1000e-intx.conf \
     file://e1000e \
@@ -48,6 +49,8 @@ do_install() {
 
 	install -v -d -m 700 ${D}/root/.ssh
 	install -v -m 644 ${WORKDIR}/known_hosts ${D}/root/.ssh/
+
+	cat ${WORKDIR}/postinst-common ${WORKDIR}/postinst-${MACHINE} > ${WORKDIR}/postinst
 
 	sudo chown -R root:root ${D}/etc ${D}/root
 }
