@@ -1,0 +1,10 @@
+jailhouse enable /etc/jailhouse/orangepi0.cell
+jailhouse console
+jailhouse cell create /etc/jailhouse/orangepi0-gic-demo.cell
+jailhouse cell load orangepi0-gic-demo /usr/libexec/jailhouse/demos/gic-demo.bin -s "led-reg=0x1c20810 led-pin=17" -a 0x1000
+jailhouse cell start orangepi0-gic-demo
+jailhouse cell stats orangepi0-gic-demo
+jailhouse cell destroy orangepi0-gic-demo
+jailhouse cell linux /etc/jailhouse/orangepi0-linux-demo.cell /boot/vmlinuz* -d /etc/jailhouse/dts/inmate-orangepi0.dtb -i /usr/libexec/jailhouse/demos/rootfs.cpio -c "console=ttyS0,115200 ip=192.168.19.2"
+ssh 192.168.19.2
+jailhouse disable

@@ -1,0 +1,7 @@
+cat << EOF > /etc/default/u-boot-script
+KERNEL_ARGS_APPEND="root=/dev/mmcblk0p1 mem=128M vmalloc=512M"
+NO_INITRD="yes"
+SCRIPT_PREPEND="setenv fdt_high 0xffffffff"
+EOF
+
+update-u-boot-script
