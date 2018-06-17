@@ -1,0 +1,34 @@
+From 7da57801878ccee31517108d9d08e6a33ceeec37 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 17 Jun 2018 12:25:56 +0200
+Subject: [PATCH 2/2] Makefile: Add proper build targets
+
+This allows to build and install the module by just providing KDIR to
+make. It also respects DESTDIR to ease cross-installation.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ Makefile | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index fd15d31..9188e5f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -50,3 +50,13 @@ ccflags-y += -DXRADIO_USE_LONG_KEEP_ALIVE_PERIOD
+ ldflags-y += --strip-debug
+ 
+ obj-$(CONFIG_XRADIO) += xradio_wlan.o
++
++INSTALL_MOD_PATH ?= $(DESTDIR)
++export INSTALL_MOD_PATH
++
++modules modules_install clean:
++	$(MAKE) -C $(KDIR) M=$(PWD) $@
++
++install: modules_install
++
++.PHONY: modules modules_install install clean
+-- 
+2.13.7
+

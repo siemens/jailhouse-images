@@ -1,0 +1,28 @@
+From 6265e69f787a4e2b63aa9e5d1def00ea52898e53 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 17 Jun 2018 12:04:12 +0200
+Subject: [PATCH 1/2] Adjust wrapping of ieee80211_nullfunc_get
+
+The three-argument change got merged into 4.14.17 as well.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ ap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ap.c b/ap.c
+index b64078e..d18b48d 100644
+--- a/ap.c
++++ b/ap.c
+@@ -1173,7 +1173,7 @@ static int xradio_upload_null(struct xradio_vif *priv)
+ 		.rate = 0xFF,
+ 	};
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 17))
+ 	frame.skb = ieee80211_nullfunc_get(priv->hw, priv->vif, false);
+ #else
+ 	frame.skb = ieee80211_nullfunc_get(priv->hw, priv->vif);
+-- 
+2.13.7
+
