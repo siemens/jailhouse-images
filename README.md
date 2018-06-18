@@ -7,8 +7,8 @@ demonstration and testing. The images are generated from Debian packages using
 the [Isar build system](https://github.com/ilbers/isar).
 
 
-Quickstart
-----------
+Quickstart for Virtual Targets
+------------------------------
 
 The host-side requirements are:
 
@@ -25,6 +25,33 @@ Note that the ARM64 image is not built by default as it currently takes several
 hours to complete. You can request the build this way:
 
     KAS_TARGET="multiconfig:qemuarm64-jailhouse:demo-image" ./build-images.sh
+
+
+Quickstart for Physical Targets
+-------------------------------
+
+Currently supported is the [Orange Pi Zero](http://www.orangepi.org/orangepizero)
+(256 MB edition). Run the following command to build this target:
+
+    KAS_TARGET="multiconfig:orangepi-zero-jailhouse:demo-image" ./build-images.sh
+
+Afterwards, flash the image on an empty SD card:
+
+    dd if=out/build/tmp/deploy/images/demo-image-debian-stretch-orangepi-zero.wic.img \
+       of=/dev/mmcblk0 bs=4M status=progress
+
+To configure the WLAN interface on this board, create
+/etc/network/interfaces.d/wlan0 with the following content:
+
+    allow-hotplug wlan0
+
+    iface wlan0 inet dhcp
+        wpa-ssid <your wlan ssid>
+        wpa-psk <your wlan key>
+
+Note that the driver and the WLAN firmware are of experimental quality and have
+significant reception latency problems. In contrast, the LAN interface works
+smoothly.
 
 
 Community Resources
