@@ -15,6 +15,7 @@ usage()
 	echo "Usage: $0 [OPTIONS]"
 	echo -e "\nOptions:"
 	echo -e "--latest\tBuild latest Jailhouse version from next branch."
+	echo -e "--all\t\tBuild all available images (may take hours...)."
 	echo -e "--shell\t\tDrop into a shell to issue bitbake commands" \
 		"manually."
 	echo -e "--docker-args\tAdditional arguments to pass to docker for" \
@@ -30,6 +31,13 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 	--latest)
 		LATEST="-latest"
+		shift 1
+		;;
+	--all)
+		KAS_TARGET=
+		while read MACHINE DESCRIPTION; do
+			KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse:demo-image"
+		done < images.list
 		shift 1
 		;;
 	--shell)
