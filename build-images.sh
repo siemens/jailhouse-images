@@ -47,6 +47,49 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
+if [ -z "${KAS_TARGET}" ]; then
+	echo "Available images demo images:"
+	IFS="	"
+	MACHINES=
+	NUM_MACHINES=0
+	while read MACHINE DESCRIPTION; do
+		MACHINES="${MACHINES} ${MACHINE}"
+		NUM_MACHINES=$((NUM_MACHINES + 1))
+		echo " ${NUM_MACHINES}: ${DESCRIPTION}"
+	done < images.list
+	echo " 0: all (may take hours...)"
+	echo ""
+
+	echo -n "Select images to build (space-separated index list): "
+	read SELECTION
+	[ -z "${SELECTION}" ] && exit 0
+
+	IFS=" "
+	KAS_TARGET=
+	for IDX in ${SELECTION}; do
+		if [ ${IDX} -eq 0 ] 2>/dev/null; then
+			KAS_TARGET=
+			for MACHINE in ${MACHINES}; do
+				KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse:demo-image"
+			done
+			break
+		fi
+
+		N=1
+		for MACHINE in ${MACHINES}; do
+			if [ ${N} -eq ${IDX} ] 2>/dev/null; then
+				KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse:demo-image"
+				break
+			fi
+			N=$((N + 1))
+		done
+		if [ ${N} -gt ${NUM_MACHINES} ]; then
+			echo "Invalid index: ${IDX}"
+			exit 1
+		fi
+	done
+fi
+
 mkdir -p out
 docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   -e USER_ID=$(id -u) -e SHELL=${SHELL} \
