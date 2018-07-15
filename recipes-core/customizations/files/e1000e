@@ -1,3 +1,0 @@
-allow-hotplug enp0s2
-
-iface enp0s2 inet dhcp
