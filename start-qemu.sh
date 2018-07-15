@@ -61,7 +61,7 @@ case "$1" in
 esac
 
 IMAGE_BUILD_DIR="$(dirname $0)/out/"
-IMAGE_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.*.img)
+IMAGE_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-qemu${DISTRO_ARCH}-debian-stretch-qemu${DISTRO_ARCH}.*.img)
 
 KERNEL_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz*_debian-stretch-qemu${DISTRO_ARCH} | tail -1)
 INITRD_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img*_debian-stretch-qemu${DISTRO_ARCH} | tail -1)
