@@ -63,12 +63,13 @@ esac
 IMAGE_BUILD_DIR="$(dirname $0)/out/"
 IMAGE_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-debian-stretch-qemu${DISTRO_ARCH}.*.img)
 
+KERNEL_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz*_debian-stretch-qemu${DISTRO_ARCH} | tail -1)
+INITRD_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img*_debian-stretch-qemu${DISTRO_ARCH} | tail -1)
+
 shift 1
 
 ${QEMU_PATH}${QEMU} \
 	-drive file=${IMAGE_FILE},discard=unmap,if=none,id=disk,format=raw \
 	-m 1G -smp 4 -serial mon:stdio -netdev user,id=net \
-	-kernel ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz*_debian-stretch-qemu$DISTRO_ARCH \
-	-append "${KERNEL_CMDLINE}" \
-	-initrd ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img*_debian-stretch-qemu$DISTRO_ARCH \
-	${QEMU_EXTRA_ARGS} "$@"
+	-kernel ${KERNEL_FILE} -append "${KERNEL_CMDLINE}" \
+	-initrd ${INITRD_FILE} ${QEMU_EXTRA_ARGS} "$@"
