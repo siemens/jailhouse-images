@@ -9,6 +9,8 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
+PN = "customizations-${MACHINE}"
+
 inherit dpkg-raw
 
 DESCRIPTION = "demo image customizations"
