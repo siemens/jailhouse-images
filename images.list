@@ -1,3 +1,4 @@
 qemuamd64	QEMU/KVM Intel-x86 virtual target
 qemuarm64	QEMU ARM64 virtual target
 orangepi-zero	Orange Pi Zero (256 MB edition)
+nuc6cay		Intel NUC (NUC6CAY, 8 GB RAM)  [requires '--latest']
