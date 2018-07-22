@@ -33,3 +33,5 @@ bblayers_conf_header:
 local_conf_header:
   standard: |
     CONF_VERSION = "1"
+  cross: |
+    ISAR_CROSS_COMPILE = "1"
