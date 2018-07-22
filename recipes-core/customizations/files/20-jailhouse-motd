@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo "
+echo -n '
 For trying out Jailhouse, the following commands have been placed into the
-shell history:"
-
-head -10 /root/.bash_history | sed 's/^/ # /'
+shell history:

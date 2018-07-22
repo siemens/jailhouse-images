@@ -1,6 +1,14 @@
 #!/bin/sh
 echo "Jailhouse Demo Image (login: root/root)" > /etc/issue
 
+# Store initial shell history persistently for motd use,
+# prefix commands with " # ".
+sed 's/^ /   \0/;s/^[^ ]/ # \0/' /root/.bash_history >> /etc/update-motd.d/20-jailhouse-motd
+echo "'" >> /etc/update-motd.d/20-jailhouse-motd
+
+# Remove any long line wrappings from commands in the shell history.
+sed -i ':restart /\\$/N;s/\\\n[ ]*//;t restart' /root/.bash_history
+
 echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 echo "demo" > /etc/hostname
