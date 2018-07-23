@@ -1,0 +1,19 @@
+image: kasproject/kas-isar:latest
+
+variables:
+  GIT_STRATEGY: clone
+
+all:
+  stage: build
+  script:
+    - export http_proxy=$HTTP_PROXY
+    - export https_proxy=$HTTPS_PROXY
+    - export ftp_proxy=$FTP_PROXY
+    - export no_proxy=$NO_PROXY
+    - while read MACHINE DESCRIPTION; do
+          KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse:demo-image-${MACHINE}";
+      done < images.list
+    - export KAS_TARGET
+    - cd ..
+    - kas build jailhouse-images/kas.yml
+    - kas build jailhouse-images/kas-latest.yml
