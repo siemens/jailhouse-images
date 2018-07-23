@@ -11,7 +11,7 @@
 
 python() {
     machine = d.getVar('MACHINE', True)
-    if machine in ['qemuamd64']:
+    if machine in ['qemuamd64', 'nuc6cay']:
         machine = 'x86-64'
     d.setVar('JAILHOUSE_CONFIG', machine + '_config.h')
 }
