@@ -13,7 +13,7 @@ require recipes-kernel/linux/linux-custom.inc
 
 python() {
     machine = d.getVar('MACHINE', True)
-    if machine in ['qemuamd64']:
+    if machine in ['qemuamd64', 'nuc6cay']:
         machine = 'x86-64'
     d.setVar('KERNEL_DEFCONFIG', machine + '_defconfig')
 }
