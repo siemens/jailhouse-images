@@ -1,8 +1,12 @@
 allow-hotplug eth0
 allow-hotplug enp0s2
+allow-hotplug enp3s0
 
 # used on qemuarm64 and orangepi-zero
 iface eth0 inet dhcp
 
 # used on qemuamd64
 iface enp0s2 inet dhcp
+
+# used on nuc6cay
+iface enp3s0 inet dhcp

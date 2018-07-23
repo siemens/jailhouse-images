@@ -1,9 +1,15 @@
 allow-hotplug enp0s14
+allow-hotplug enp0s16
 allow-hotplug enp0s0
 allow-hotplug enP1p0s0
 
 # used on physical PCI bus
 iface enp0s14 inet static
+	address 192.168.19.1
+	netmask 255.255.255.0
+
+# used on NUC6CAY
+iface enp0s16 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
 
