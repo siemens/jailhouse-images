@@ -15,5 +15,17 @@ export prefix=/usr
 
 export DEB_BUILD_OPTIONS=parallel=$(shell nproc)
 
+export CROSS_COMPILE=$(DEB_HOST_GNU_TYPE)-
+
+ifeq ($(DEB_HOST_GNU_CPU), arm)
+export ARCH=arm
+endif
+ifeq ($(DEB_HOST_GNU_CPU), aarch64)
+export ARCH=arm64
+endif
+ifneq (,$(findstring 86,$(DEB_HOST_GNU_CPU)))
+export ARCH=x86
+endif
+
 %:
 	CFLAGS= LDFLAGS= dh $@ --parallel --with python2
