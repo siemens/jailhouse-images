@@ -15,6 +15,9 @@ ROOTFS_EXTRA = "1024"
 
 require recipes-core/images/isar-image-base.bb
 
+ISAR_RELEASE_CMD = "git -C ${LAYERDIR_jailhouse} describe --tags --dirty --match 'v[0-9].[0-9]*'"
+DESCRIPTION = "Jailhouse demo image"
+
 IMAGE_PREINSTALL += " \
     bash-completion less vim nano man \
     ifupdown isc-dhcp-client net-tools iputils-ping ssh \
