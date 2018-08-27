@@ -1,7 +1,7 @@
-From 41f6f89e0d8efb5e213418b24d43ba680535753d Mon Sep 17 00:00:00 2001
+From 4a85e5a4ab7fa9f226029a4cbd69b9b23996678a Mon Sep 17 00:00:00 2001
 From: Corentin Labbe <clabbe.montjoie@gmail.com>
 Date: Tue, 24 Oct 2017 19:57:14 +0200
-Subject: [PATCH 3/7] net: stmmac: sun8i: Restore the compatibles
+Subject: [PATCH 3/8] net: stmmac: sun8i: Restore the compatibles
 
 The original dwmac-sun8i DT bindings have some issue on how to handle
 integrated PHY and was reverted in last RC of 4.13.
@@ -36,5 +36,5 @@ index b3eb344bb158..e5ff734d4f9b 100644
  };
  MODULE_DEVICE_TABLE(of, sun8i_dwmac_match);
 -- 
-2.13.7
+2.16.4
 

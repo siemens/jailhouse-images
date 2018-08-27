@@ -1,0 +1,38 @@
+From 6de7404090b401a6345975c9ef7c01425daeab05 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 26 Aug 2018 20:52:30 +0200
+Subject: [PATCH 8/8] serial: mvebu-uart: Fix reporting of effective CSIZE to
+ userspace
+
+Apparently, this driver (or the hardware) does not support character
+length settings. It's apparently running in 8-bit mode, but it makes
+userspace believe it's in 5-bit mode. That makes tcsetattr with CS8
+incorrectly fail, breaking e.g. getty from busybox, thus the login shell
+on ttyMVx.
+
+Fix by hard-wiring CS8 into c_cflag.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ drivers/tty/serial/mvebu-uart.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
+index 45b57c294d13..401c983ec5f3 100644
+--- a/drivers/tty/serial/mvebu-uart.c
++++ b/drivers/tty/serial/mvebu-uart.c
+@@ -327,8 +327,10 @@ static void mvebu_uart_set_termios(struct uart_port *port,
+ 	if ((termios->c_cflag & CREAD) == 0)
+ 		port->ignore_status_mask |= STAT_RX_RDY | STAT_BRK_ERR;
+ 
+-	if (old)
++	if (old) {
+ 		tty_termios_copy_hw(termios, old);
++		termios->c_cflag |= CS8;
++	}
+ 
+ 	baud = uart_get_baud_rate(port, termios, old, 0, 460800);
+ 	uart_update_timeout(port, termios->c_cflag, baud);
+-- 
+2.16.4
+

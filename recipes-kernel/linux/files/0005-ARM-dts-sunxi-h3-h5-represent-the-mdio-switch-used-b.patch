@@ -1,7 +1,7 @@
-From 374e3208fa9e93f9ebbe9166771e527fa73024bf Mon Sep 17 00:00:00 2001
+From dd220bf142f8cbd31e1589044efa66488cd9c255 Mon Sep 17 00:00:00 2001
 From: Corentin Labbe <clabbe.montjoie@gmail.com>
 Date: Tue, 31 Oct 2017 09:19:11 +0100
-Subject: [PATCH 5/7] ARM: dts: sunxi: h3/h5: represent the mdio switch used by
+Subject: [PATCH 5/8] ARM: dts: sunxi: h3/h5: represent the mdio switch used by
  sun8i-h3-emac
 
 Since dwmac-sun8i could use either an integrated PHY or an external PHY
@@ -60,5 +60,5 @@ index d38282b9e5d4..2721b39c1875 100644
  			};
  		};
 -- 
-2.13.7
+2.16.4
 

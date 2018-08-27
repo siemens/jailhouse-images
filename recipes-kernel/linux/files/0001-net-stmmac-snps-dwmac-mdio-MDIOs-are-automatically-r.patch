@@ -1,7 +1,7 @@
-From 0c51e7930914d0ff36a9424217203c43bffbea31 Mon Sep 17 00:00:00 2001
+From 87665212bc776247084792254316036a2b408fc0 Mon Sep 17 00:00:00 2001
 From: Corentin Labbe <clabbe.montjoie@gmail.com>
 Date: Tue, 24 Oct 2017 19:57:12 +0200
-Subject: [PATCH 1/7] net: stmmac: snps, dwmac-mdio MDIOs are automatically
+Subject: [PATCH 1/8] net: stmmac: snps, dwmac-mdio MDIOs are automatically
  registered
 
 stmmac bindings docs said that its mdio node must have
@@ -34,5 +34,5 @@ index 195eb7e71473..05f122b8424a 100644
  	};
  
 -- 
-2.13.7
+2.16.4
 

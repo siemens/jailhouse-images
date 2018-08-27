@@ -1,7 +1,7 @@
-From 1bbab9600f94cacc5b09f96592fa3d51b5e737a5 Mon Sep 17 00:00:00 2001
+From 8675216640b2d5edb9ecb92a20dafcd2e0d89273 Mon Sep 17 00:00:00 2001
 From: Corentin Labbe <clabbe.montjoie@gmail.com>
 Date: Tue, 31 Oct 2017 09:19:12 +0100
-Subject: [PATCH 6/7] ARM: dts: sunxi: Restore EMAC changes (boards)
+Subject: [PATCH 6/8] ARM: dts: sunxi: Restore EMAC changes (boards)
 
 The original dwmac-sun8i DT bindings have some issue on how to handle
 integrated PHY and was reverted in last RC of 4.13.
@@ -311,5 +311,5 @@ index 97920b12a944..6dbf7b2e0c13 100644
 +	};
 +};
 -- 
-2.13.7
+2.16.4
 

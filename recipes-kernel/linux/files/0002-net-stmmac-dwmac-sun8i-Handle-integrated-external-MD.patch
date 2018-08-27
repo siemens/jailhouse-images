@@ -1,7 +1,7 @@
-From 85c5661ac18e7d60cdf28490c8a97ebbf2534abd Mon Sep 17 00:00:00 2001
+From 21eaebce670e1cf8552336982446efdf64083487 Mon Sep 17 00:00:00 2001
 From: Corentin Labbe <clabbe.montjoie@gmail.com>
 Date: Tue, 24 Oct 2017 19:57:13 +0200
-Subject: [PATCH 2/7] net: stmmac: dwmac-sun8i: Handle integrated/external
+Subject: [PATCH 2/8] net: stmmac: dwmac-sun8i: Handle integrated/external
  MDIOs
 
 The Allwinner H3 SoC have two distinct MDIO bus, only one could be
@@ -510,5 +510,5 @@ index 39c2122a4f26..b3eb344bb158 100644
  
  static const struct of_device_id sun8i_dwmac_match[] = {
 -- 
-2.13.7
+2.16.4
 

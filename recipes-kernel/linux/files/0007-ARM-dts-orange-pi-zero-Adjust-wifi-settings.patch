@@ -1,7 +1,7 @@
-From 1b42b51b35c7d0b160351d561bf57c9e014ff9f4 Mon Sep 17 00:00:00 2001
+From ea1d3f3a5274de5d97a22f8620e46a36ae33faea Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Sun, 17 Jun 2018 08:18:41 +0200
-Subject: [PATCH 7/7] ARM: dts: orange-pi-zero: Adjust wifi settings
+Subject: [PATCH 7/8] ARM: dts: orange-pi-zero: Adjust wifi settings
 
 This imports the dts changes of https://github.com/fifteenhex/xradio to
 enable the wifi module.
@@ -91,5 +91,5 @@ index 6713d0f2b3f4..ad0829e8f716 100644
  	bias-pull-up;
  };
 -- 
-2.13.7
+2.16.4
 

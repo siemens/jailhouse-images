@@ -1,7 +1,7 @@
-From 32c2b21a8e1e0558d748e81f4e8c710923fd2ca1 Mon Sep 17 00:00:00 2001
+From ee238cd8fa7078f28debe7685d652186f1443db5 Mon Sep 17 00:00:00 2001
 From: Corentin Labbe <clabbe.montjoie@gmail.com>
 Date: Tue, 31 Oct 2017 09:19:10 +0100
-Subject: [PATCH 4/7] arm: dts: sunxi: h3/h5: Restore EMAC changes
+Subject: [PATCH 4/8] arm: dts: sunxi: h3/h5: Restore EMAC changes
 
 The original dwmac-sun8i DT bindings have some issue on how to handle
 integrated PHY and was reverted in last RC of 4.13.
@@ -55,5 +55,5 @@ index 11240a8313c2..d38282b9e5d4 100644
  			compatible = "allwinner,sun8i-h3-spi";
  			reg = <0x01c68000 0x1000>;
 -- 
-2.13.7
+2.16.4
 
