@@ -1,12 +1,15 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2018.05 Configuration
+# Buildroot 2018.05.1 Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_5=y
 BR2_HOST_GCC_AT_LEAST_4_6=y
 BR2_HOST_GCC_AT_LEAST_4_7=y
 BR2_HOST_GCC_AT_LEAST_4_8=y
+BR2_HOST_GCC_AT_LEAST_4_9=y
+BR2_HOST_GCC_AT_LEAST_5=y
+BR2_HOST_GCC_AT_LEAST_6=y
 
 #
 # Target options
@@ -87,7 +90,7 @@ BR2_XZCAT="xzcat"
 BR2_LZCAT="lzip -d -c"
 BR2_TAR_OPTIONS=""
 BR2_DEFCONFIG="$(CONFIG_DIR)/defconfig"
-BR2_DL_DIR="$(TOPDIR)/dl"
+BR2_DL_DIR="/downloads/buildroot"
 BR2_HOST_DIR="$(BASE_DIR)/host"
 
 #
@@ -171,7 +174,7 @@ BR2_TOOLCHAIN_BUILDROOT_LIBC="uclibc"
 # BR2_KERNEL_HEADERS_4_15 is not set
 BR2_KERNEL_HEADERS_4_16=y
 # BR2_KERNEL_HEADERS_VERSION is not set
-BR2_DEFAULT_KERNEL_HEADERS="4.16.13"
+BR2_DEFAULT_KERNEL_HEADERS="4.16.17"
 BR2_PACKAGE_LINUX_HEADERS=y
 
 #
@@ -2424,7 +2427,7 @@ BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS=y
 # BR2_PACKAGE_NETSTAT_NAT is not set
 
 #
-# NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7, dynamic library
+# NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.2, dynamic library
 #
 # BR2_PACKAGE_NFACCT is not set
 

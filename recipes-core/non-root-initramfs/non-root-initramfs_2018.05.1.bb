@@ -18,7 +18,7 @@ SRC_URI = " \
     file://debian/ \
     file://${DISTRO_ARCH}-config \
     file://overlay/"
-SRC_URI[sha256sum] = "e75b1a8cb0adb6ef6db9a809d4f4a8bb6494206ed0c4145e773b69251df92a01"
+SRC_URI[sha256sum] = "8dc4b9bd22a165a4df0a1737f01de3dd0a6c15d9f8b16989426af062471a0abb"
 
 S = "${WORKDIR}/buildroot-${PV}"
 
@@ -28,6 +28,5 @@ dpkg_runbuild_prepend() {
 	cp -r debian ${S}
 	sed -i 's/@PV@/${PV}/' ${S}/debian/changelog
 
-	sed -i 's|^BR2_DL_DIR=.*|BR2_DL_DIR="/downloads/buildroot"|' ${DISTRO_ARCH}-config
 	ln -sf ${DISTRO_ARCH}-config .config
 }
