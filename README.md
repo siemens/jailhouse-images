@@ -59,6 +59,21 @@ As the device comes without a UART connector, the output of Jailhouse can only
 be seen via the EFI framebuffer on a monitor or on the virtual Jailhouse
 console (`jailhouse console`).
 
+### ESPRESSObin
+
+The [ESPRESSObin](http://espressobin.net/tech-spec/) 1 GB edition is supported.
+Before being able to boot the SD card image, the pre-installed U-Boot needs
+further manual tuning (because the old vendor U-Boot lacks distro support).
+Attach to the serial port of the board and type the following on the U-Boot
+command line:
+
+    setenv bootcmd "load mmc 0:1 0x4d00000 /boot/boot.scr; source 0x4d00000"
+    saveenv
+    reset
+
+After that, the board will automatically start from the generated SD card
+image.
+
 
 Community Resources
 -------------------
