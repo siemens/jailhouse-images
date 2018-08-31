@@ -1,0 +1,1 @@
+part / --source rootfs --ondisk mmcblk0 --fstype ext4 --label platform --align 1024
