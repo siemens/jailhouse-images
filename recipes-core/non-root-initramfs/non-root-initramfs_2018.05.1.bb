@@ -30,3 +30,7 @@ dpkg_runbuild_prepend() {
 
 	ln -sf ${DISTRO_ARCH}-config .config
 }
+
+dpkg_runbuild_append() {
+	sudo chown -R $(stat -c "%U" ${DL_DIR}) ${DL_DIR}/buildroot
+}
