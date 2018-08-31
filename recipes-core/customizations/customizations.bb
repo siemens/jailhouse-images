@@ -31,6 +31,9 @@ DEBIAN_DEPENDS = "openssh-server, passwd"
 DEBIAN_DEPENDS_append_orangepi-zero = ", u-boot-script"
 DEPENDS_append_orangepi-zero = "u-boot-script"
 
+DEBIAN_DEPENDS_append_espressobin = ", u-boot-script"
+DEPENDS_append_espressobin = "u-boot-script"
+
 do_install() {
 	sudo rm -rf ${D}/etc ${D}/root
 

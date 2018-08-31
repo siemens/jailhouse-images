@@ -1,0 +1,14 @@
+jailhouse enable /etc/jailhouse/espressobin.cell
+jailhouse console
+jailhouse cell create /etc/jailhouse/espressobin-gic-demo.cell
+jailhouse cell load gic-demo /usr/libexec/jailhouse/demos/gic-demo.bin
+jailhouse cell start gic-demo
+jailhouse cell stats gic-demo
+jailhouse cell destroy gic-demo
+jailhouse cell linux /etc/jailhouse/espressobin-linux-demo.cell \
+                     /boot/vmlinuz* \
+                     -d /etc/jailhouse/dts/inmate-espressobin.dtb \
+                     -i /usr/libexec/jailhouse/demos/rootfs.cpio \
+                     -c "console=ttyMV0 ip=192.168.19.2"
+ssh 192.168.19.2
+jailhouse disable
