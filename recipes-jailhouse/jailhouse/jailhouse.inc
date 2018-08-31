@@ -13,6 +13,9 @@ python() {
     machine = d.getVar('MACHINE', True)
     if machine in ['qemuamd64', 'nuc6cay']:
         machine = 'x86-64'
+    # only work with --latest where configs became obsolete
+    if machine == 'espressobin':
+        machine = 'qemuarm64'
     d.setVar('JAILHOUSE_CONFIG', machine + '_config.h')
 }
 
