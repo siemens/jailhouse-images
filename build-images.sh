@@ -98,11 +98,16 @@ if [ -z "${KAS_TARGET}" ]; then
 	done
 fi
 
+if [ -t 1 ]; then
+	INTERACTIVE="-t -i"
+fi
+
 mkdir -p out
 docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   -e USER_ID=$(id -u) -e SHELL=${SHELL} \
 	   -e KAS_TARGET="${KAS_TARGET}" -e KAS_TASK="${KAS_TASK}" \
-	   --rm -t -i --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
+	   --rm ${INTERACTIVE} \
+	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
 	   --device $(/sbin/losetup -f) \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
 	   -e no_proxy=$no_proxy ${DOCKER_ARGS} \
