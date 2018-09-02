@@ -10,6 +10,6 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
-depmod -a
+depmod -a $(ls /lib/modules)
 
 echo jailhouse >> /etc/modules
