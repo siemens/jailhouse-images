@@ -1,4 +1,15 @@
-include recipes-kernel/linux-module/module.inc
+#
+# Jailhouse, a Linux-based partitioning hypervisor
+#
+# Copyright (c) Siemens AG, 2018
+#
+# Authors:
+#  Jan Kiszka <jan.kiszka@siemens.com>
+#
+# SPDX-License-Identifier: GPL-2.0
+#
+
+require recipes-kernel/linux-module/module.inc
 
 FW_URL = "https://github.com/armbian/firmware/blob/7172b4b6608b131cbd6c60253c78a231993beed8/xr819"
 
