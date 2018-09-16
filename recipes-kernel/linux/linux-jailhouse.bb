@@ -28,9 +28,9 @@ SRC_URI += " \
     file://0006-ARM-dts-sunxi-Restore-EMAC-changes-boards.patch \
     file://0007-ARM-dts-orange-pi-zero-Adjust-wifi-settings.patch \
     file://${KERNEL_DEFCONFIG}"
-SRC_URI[sha256sum] = "2cf3accdbf9396141169f5906c77069f61554bc6a2f88c6c1c1983030e4e3ed1"
-SRCREV = "c4dc6dcc96ee8cda3311988ab9339a1201d50280"
-PV = "4.14.62"
+SRC_URI[sha256sum] = "27dbdeee1e6f2f4aea6bcfc6d552f371c6ccc2e63e12d692516d05e3daa9cf1f"
+SRCREV = "fb67a109309134bee65d97e29076128d603227b3"
+PV = "4.14.70"
 
 S = "${WORKDIR}/linux-${SRCREV}"
 
