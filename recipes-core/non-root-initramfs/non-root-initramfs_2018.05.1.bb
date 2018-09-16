@@ -22,7 +22,7 @@ SRC_URI[sha256sum] = "8dc4b9bd22a165a4df0a1737f01de3dd0a6c15d9f8b16989426af06247
 
 S = "${WORKDIR}/buildroot-${PV}"
 
-dpkg_runbuild_prepend() {
+do_prepare_build() {
 	cd ${WORKDIR}
 
 	cp -r debian ${S}
