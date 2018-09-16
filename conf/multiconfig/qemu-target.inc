@@ -9,13 +9,6 @@
 # SPDX-License-Identifier: GPL-2.0
 #
 
-MACHINE = "nuc6cay"
-
 DISTRO = "jailhouse-demo"
-DISTRO_ARCH = "amd64"
 
-IMAGE_TYPE = "wic-img"
-WKS_FILE = "nuc6cay"
-IMAGER_INSTALL += "${GRUB_BOOTLOADER_INSTALL}"
-
-IMAGE_PREINSTALL_append = " firmware-iwlwifi"
+IMAGE_TYPE = "ext4-img"
