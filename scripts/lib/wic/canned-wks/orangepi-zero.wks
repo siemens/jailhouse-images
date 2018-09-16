@@ -1,5 +1,3 @@
-part u-boot --source rawcopy --sourceparams="file=/usr/lib/u-boot/orangepi_zero/u-boot-sunxi-with-spl.bin" --ondisk mmcblk --no-table --align 8
+part u-boot --source rawcopy --sourceparams "file=/usr/lib/u-boot/orangepi_zero/u-boot-sunxi-with-spl.bin" --no-table --align 8
 
-part / --source rootfs --ondisk mmcblk --fstype=ext4 --label platform --align 1024
-
-bootloader --append="root=/dev/mmcblk0p1"
+part / --source rootfs --ondisk mmcblk0 --fstype ext4 --label platform --align 1024
