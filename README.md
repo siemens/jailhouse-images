@@ -74,6 +74,17 @@ command line:
 After that, the board will automatically start from the generated SD card
 image.
 
+### HiKey
+
+The [LeMaker HiKey](http://www.lemaker.org/product-hikey-specification.html) is
+supported with its 1 GB edition. The generated image can be used to boot from
+SD card. This requires a recent version of the UEFI-based bootloader (tested
+with version 1.4, September 17 2018).
+
+You may also use the content of the boot and the root partition to fill the
+corresponding partitions on the eMMC, but do no flash the complete image
+directly to the eMMC because it does not contain any firmware.
+
 
 Community Resources
 -------------------
