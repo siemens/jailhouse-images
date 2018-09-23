@@ -1,3 +1,14 @@
+#
+# Jailhouse, a Linux-based partitioning hypervisor
+#
+# Copyright (c) Siemens AG, 2018
+#
+# Authors:
+#  Jan Kiszka <jan.kiszka@siemens.com>
+#
+# SPDX-License-Identifier: MIT
+#
+
 cat << EOF > /etc/default/u-boot-script
 ROOT_PARTITION=1
 KERNEL_ARGS="root=/dev/mmcblk0p1 mem=128M vmalloc=512M"

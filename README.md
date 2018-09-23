@@ -90,3 +90,12 @@ Community Resources
 -------------------
 
 See [Jailhouse project](https://github.com/siemens/jailhouse).
+
+
+License
+-------
+
+Unless otherwise stated in the respective file, files in this layer are
+provided under the MIT license, see COPYING file. Patches (files ending with
+.patch) are licensed according to their target project and file, typically
+GPLv2.
