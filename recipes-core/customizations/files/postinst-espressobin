@@ -1,5 +1,6 @@
 cat << EOF > /etc/default/u-boot-script
-KERNEL_ARGS_APPEND="root=/dev/mmcblk0p1 rw rootwait mem=768M"
+ROOT_PARTITION=1
+KERNEL_ARGS="root=/dev/mmcblk0p1 rw rootwait mem=768M"
 NO_INITRD="yes"
 SCRIPT_PREPEND="
 setenv devtype mmc
