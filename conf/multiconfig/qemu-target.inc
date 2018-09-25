@@ -12,3 +12,6 @@
 DISTRO = "jailhouse-demo"
 
 IMAGE_TYPE = "ext4-img"
+
+IMAGE_INSTALL_remove += "expand-on-first-boot"
+ROOTFS_EXTRA = "1024"

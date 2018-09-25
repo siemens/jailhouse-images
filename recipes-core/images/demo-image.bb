@@ -11,8 +11,6 @@
 
 PN = "demo-image-${MACHINE}"
 
-ROOTFS_EXTRA = "1024"
-
 require recipes-core/images/isar-image-base.bb
 
 ISAR_RELEASE_CMD = "git -C ${LAYERDIR_jailhouse} describe --tags --dirty --match 'v[0-9].[0-9]*'"
@@ -25,3 +23,4 @@ IMAGE_PREINSTALL += " \
     pciutils ethtool iperf3"
 
 IMAGE_INSTALL += "jailhouse customizations-${MACHINE} non-root-initramfs"
+IMAGE_INSTALL += "expand-on-first-boot"
