@@ -1,1 +1,0 @@
-#define CONFIG_MACH_ORANGEPI0		1

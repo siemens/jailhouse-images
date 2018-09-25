@@ -28,6 +28,7 @@ case "$1" in
 		QEMU=qemu-system-x86_64
 		QEMU_EXTRA_ARGS=" \
 			-cpu kvm64,-kvm_pv_eoi,-kvm_steal_time,-kvm_asyncpf,-kvmclock,+vmx,+arat \
+			-smp 4 \
 			-enable-kvm -machine q35,kernel_irqchip=split \
 			-serial vc \
 			-device ide-hd,drive=disk \
@@ -43,6 +44,7 @@ case "$1" in
 		QEMU=qemu-system-aarch64
 		QEMU_EXTRA_ARGS=" \
 			-cpu cortex-a57 \
+			-smp 16 \
 			-machine virt,gic-version=3,virtualization=on \
 			-device virtio-serial-device \
 			-device virtconsole,chardev=con -chardev vc,id=con \
@@ -70,6 +72,6 @@ shift 1
 
 ${QEMU_PATH}${QEMU} \
 	-drive file=${IMAGE_FILE},discard=unmap,if=none,id=disk,format=raw \
-	-m 1G -smp 4 -serial mon:stdio -netdev user,id=net \
+	-m 1G -serial mon:stdio -netdev user,id=net \
 	-kernel ${KERNEL_FILE} -append "${KERNEL_CMDLINE}" \
 	-initrd ${INITRD_FILE} ${QEMU_EXTRA_ARGS} "$@"

@@ -11,4 +11,4 @@
 
 require jailhouse.inc
 
-SRCREV = "c2327d42887795a57163680a82b947fcb5e4a7d3"
+SRCREV = "f596aa7355bc2134650544bdf1e13f1f55d3f2fc"
