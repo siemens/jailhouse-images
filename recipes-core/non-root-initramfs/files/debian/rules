@@ -18,5 +18,7 @@ binary:
 	${MAKE} olddefconfig
 	dh $@ --parallel
 
+override_dh_auto_test:
+
 %:
 	dh $@ --parallel
