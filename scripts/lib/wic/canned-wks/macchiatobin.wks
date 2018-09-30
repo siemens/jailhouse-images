@@ -1,0 +1,14 @@
+#
+# Jailhouse, a Linux-based partitioning hypervisor
+#
+# Copyright (c) Siemens AG, 2018
+#
+# Authors:
+#  Jan Kiszka <jan.kiszka@siemens.com>
+#
+# SPDX-License-Identifier: MIT
+#
+
+part u-boot --source rawcopy --sourceparams "file=/usr/lib/u-boot/macchiatobin/flash-image.bin" --no-table --align 2048 --size 2M
+
+part / --source rootfs --ondisk mmcblk1 --fstype ext4 --label platform --active --align 1024
