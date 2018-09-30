@@ -1,0 +1,489 @@
+From 06e3ecb5eefc4b199e0a60cb246fedea330caa21 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 30 Sep 2018 10:13:14 +0200
+Subject: [PATCH] configs: Add support for MACCHIATObin board
+
+Add configs for the Marvell Armada 8040-based MACCHIATObin board.
+
+As we set the pci_domain to 1 and the upstream kernel does not
+initialize linux,pci-domain, we need a patch to the DTB for the time
+being.
+
+MSI support should eventually be possible as well, but we still with
+INTx for the virtual shmem devices for now.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ configs/arm64/dts/inmate-macchiatobin.dts | 106 +++++++++++++++++++++++
+ configs/arm64/macchiatobin-gic-demo.c     |  72 ++++++++++++++++
+ configs/arm64/macchiatobin-linux-demo.c   | 124 +++++++++++++++++++++++++++
+ configs/arm64/macchiatobin.c              | 134 ++++++++++++++++++++++++++++++
+ 4 files changed, 436 insertions(+)
+ create mode 100644 configs/arm64/dts/inmate-macchiatobin.dts
+ create mode 100644 configs/arm64/macchiatobin-gic-demo.c
+ create mode 100644 configs/arm64/macchiatobin-linux-demo.c
+ create mode 100644 configs/arm64/macchiatobin.c
+
+diff --git a/configs/arm64/dts/inmate-macchiatobin.dts b/configs/arm64/dts/inmate-macchiatobin.dts
+new file mode 100644
+index 00000000..51f07da1
+--- /dev/null
++++ b/configs/arm64/dts/inmate-macchiatobin.dts
+@@ -0,0 +1,106 @@
++/*
++ * Jailhouse, a Linux-based partitioning hypervisor
++ *
++ * Device tree for Linux inmate test on MACCHIATObin,
++ * corresponds to configs/arm64/macchiatobin-linux-demo.c
++ *
++ * Copyright (c) Siemens AG, 2016-2018
++ *
++ * Authors:
++ *  Jan Kiszka <jan.kiszka@siemens.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++
++/dts-v1/;
++
++/ {
++	model = "Jailhouse cell on MACCHIATObin";
++
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	interrupt-parent = <&gic>;
++
++	hypervisor {
++		compatible = "jailhouse,cell";
++	};
++
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		cpu@100 {
++			compatible = "arm,cortex-a72", "arm,armv8";
++			device_type = "cpu";
++			reg = <0x100>;
++			enable-method = "psci";
++		};
++		cpu@101 {
++			compatible = "arm,cortex-a72", "arm,armv8";
++			device_type = "cpu";
++			reg = <0x101>;
++			enable-method = "psci";
++		};
++	};
++
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++	};
++
++	gic: interrupt-controller@f0210000 {
++		compatible = "arm,gic-400";
++		#interrupt-cells = <3>;
++		interrupt-controller;
++		reg = <0x0 0xf0210000 0x0 0x10000>, /* GICD */
++		      <0x0 0xf022f000 0x0 0x20000>; /* GICC */
++	};
++
++	ap_syscon: system-controller@f06f4000 {
++		compatible = "syscon", "simple-mfd";
++		reg = <0 0xf06f4000 0 0x2000>;
++
++		ap_clk: clock {
++			compatible = "marvell,ap806-clock";
++			#clock-cells = <1>;
++		};
++	};
++
++	uart0: serial@f0512000 {
++		compatible = "snps,dw-apb-uart";
++		reg = <0 0xf0512000 0 0x100>;
++		reg-shift = <2>;
++		interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
++		reg-io-width = <1>;
++		clocks = <&ap_clk 3>;
++	};
++
++	pci@fc000000 {
++		compatible = "pci-host-ecam-generic";
++		device_type = "pci";
++		bus-range = <0 0>;
++		#address-cells = <3>;
++		#size-cells = <2>;
++		#interrupt-cells = <1>;
++		interrupt-map-mask = <0 0 0 7>;
++		interrupt-map = <0 0 0 1 &gic GIC_SPI 80 IRQ_TYPE_EDGE_RISING>,
++				<0 0 0 2 &gic GIC_SPI 81 IRQ_TYPE_EDGE_RISING>,
++				<0 0 0 3 &gic GIC_SPI 82 IRQ_TYPE_EDGE_RISING>,
++				<0 0 0 4 &gic GIC_SPI 83 IRQ_TYPE_EDGE_RISING>;
++		reg = <0x0 0xfc000000 0x0 0x100000>;
++		ranges =
++			<0x02000000 0x00 0x10000000 0x0 0x10000000 0x00 0x10000>;
++	};
++};
+diff --git a/configs/arm64/macchiatobin-gic-demo.c b/configs/arm64/macchiatobin-gic-demo.c
+new file mode 100644
+index 00000000..713319d2
+--- /dev/null
++++ b/configs/arm64/macchiatobin-gic-demo.c
+@@ -0,0 +1,72 @@
++/*
++ * Jailhouse, a Linux-based partitioning hypervisor
++ *
++ * Configuration for gic-demo inmate on Marvell MACCHIATObin board:
++ * 1 CPU, 64K RAM, 1 serial port
++ *
++ * Copyright (c) Siemens AG, 2017-2018
++ *
++ * Authors:
++ *  Jan Kiszka <jan.kiszka@siemens.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include <jailhouse/types.h>
++#include <jailhouse/cell-config.h>
++
++#define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
++
++struct {
++	struct jailhouse_cell_desc cell;
++	__u64 cpus[1];
++	struct jailhouse_memory mem_regions[3];
++} __attribute__((packed)) config = {
++	.cell = {
++		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
++		.revision = JAILHOUSE_CONFIG_REVISION,
++		.name = "gic-demo",
++		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG,
++
++		.cpu_set_size = sizeof(config.cpus),
++		.num_memory_regions = ARRAY_SIZE(config.mem_regions),
++		.num_irqchips = 0,
++		.pio_bitmap_size = 0,
++		.num_pci_devices = 0,
++
++		.console = {
++			.address = 0xf0512000,
++			.type = JAILHOUSE_CON_TYPE_8250,
++			.flags = JAILHOUSE_CON_ACCESS_MMIO |
++				 JAILHOUSE_CON_REGDIST_4,
++		},
++	},
++
++	.cpus = {
++		0x2,
++	},
++
++	.mem_regions = {
++		/* UART */ {
++			.phys_start = 0xf0512000,
++			.virt_start = 0xf0512000,
++			.size = 0x1000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
++		},
++		/* RAM */ {
++			.phys_start = 0x13faf0000,
++			.virt_start = 0,
++			.size = 0x00010000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_LOADABLE,
++		},
++		/* communication region */ {
++			.virt_start = 0x80000000,
++			.size = 0x00001000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_COMM_REGION,
++		},
++	}
++};
+diff --git a/configs/arm64/macchiatobin-linux-demo.c b/configs/arm64/macchiatobin-linux-demo.c
+new file mode 100644
+index 00000000..63fbbba7
+--- /dev/null
++++ b/configs/arm64/macchiatobin-linux-demo.c
+@@ -0,0 +1,124 @@
++/*
++ * Jailhouse, a Linux-based partitioning hypervisor
++ *
++ * Configuration for linux-demo inmate on MACCHIATObin:
++ * 2 CPUs, 128M RAM, serial port
++ *
++ * Copyright (c) Siemens AG, 2014-2018
++ *
++ * Authors:
++ *  Jan Kiszka <jan.kiszka@siemens.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ */
++
++#include <jailhouse/types.h>
++#include <jailhouse/cell-config.h>
++
++#define ARRAY_SIZE(a) sizeof(a) / sizeof(a[0])
++
++struct {
++	struct jailhouse_cell_desc cell;
++	__u64 cpus[1];
++	struct jailhouse_memory mem_regions[6];
++	struct jailhouse_irqchip irqchips[1];
++	struct jailhouse_pci_device pci_devices[1];
++} __attribute__((packed)) config = {
++	.cell = {
++		.signature = JAILHOUSE_CELL_DESC_SIGNATURE,
++		.revision = JAILHOUSE_CONFIG_REVISION,
++		.name = "MACCHIATObin-linux-demo",
++		.flags = JAILHOUSE_CELL_PASSIVE_COMMREG |
++			JAILHOUSE_CELL_VIRTUAL_CONSOLE_PERMITTED,
++
++		.cpu_set_size = sizeof(config.cpus),
++		.num_memory_regions = ARRAY_SIZE(config.mem_regions),
++		.num_irqchips = ARRAY_SIZE(config.irqchips),
++		.num_pci_devices = ARRAY_SIZE(config.pci_devices),
++
++		.vpci_irq_base = 112-32,
++
++		.console = {
++			.address = 0xf0512000,
++			.type = JAILHOUSE_CON_TYPE_8250,
++			.flags = JAILHOUSE_CON_ACCESS_MMIO |
++				 JAILHOUSE_CON_REGDIST_4,
++		},
++	},
++
++	.cpus = {
++		0xc,
++	},
++
++	.mem_regions = {
++		/* UART */ {
++			.phys_start = 0xf0512000,
++			.virt_start = 0xf0512000,
++			.size = 0x1000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
++		},
++		/* syscon (read-only) */ {
++			.phys_start = 0xf06f4000,
++			.virt_start = 0xf06f4000,
++			.size = 0x1000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_IO |
++				JAILHOUSE_MEM_ROOTSHARED,
++		},
++		/* RAM */ {
++			.phys_start = 0x13fa00000,
++			.virt_start = 0,
++			.size = 0x10000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_LOADABLE,
++		},
++		/* RAM */ {
++			.phys_start = 0x137000000,
++			.virt_start = 0x137000000,
++			.size = 0x8000000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA |
++				JAILHOUSE_MEM_LOADABLE,
++		},
++		/* IVSHMEM shared memory region */ {
++			.phys_start = 0x13fb00000,
++			.virt_start = 0x13fb00000,
++			.size = 0x100000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_ROOTSHARED,
++		},
++		/* communication region */ {
++			.virt_start = 0x80000000,
++			.size = 0x00001000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_COMM_REGION,
++		},
++	},
++
++	.irqchips = {
++		/* GIC */ {
++			.address = 0xf0210000,
++			.pin_base = 32,
++			.pin_bitmap = {
++				(1 << (51 - 32)),
++				0,
++				(1 << (112 - 96)),
++				0
++			},
++		},
++	},
++
++	.pci_devices = {
++		/* 00:00.0 */ {
++			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
++			.bdf = 0 << 3,
++			.bar_mask = {
++				0xffffff00, 0xffffffff, 0x00000000,
++				0x00000000, 0x00000000, 0x00000000,
++			},
++			.shmem_region = 4,
++			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
++		},
++	},
++};
+diff --git a/configs/arm64/macchiatobin.c b/configs/arm64/macchiatobin.c
+new file mode 100644
+index 00000000..c0df0572
+--- /dev/null
++++ b/configs/arm64/macchiatobin.c
+@@ -0,0 +1,134 @@
++/*
++ * Jailhouse, a Linux-based partitioning hypervisor
++ *
++ * Configuration for Marvell MACCHIATObin board
++ *
++ * Copyright (c) Siemens AG, 2017-2018
++ *
++ * Authors:
++ *  Jan Kiszka <jan.kiszka@siemens.com>
++ *
++ * This work is licensed under the terms of the GNU GPL, version 2.  See
++ * the COPYING file in the top-level directory.
++ *
++ * Reservation via device tree: 0x800000000..0x83fffffff
++ */
++
++#include <jailhouse/types.h>
++#include <jailhouse/cell-config.h>
++
++#define ARRAY_SIZE(a) (sizeof(a) / sizeof(a[0]))
++
++struct {
++	struct jailhouse_system header;
++	__u64 cpus[1];
++	struct jailhouse_memory mem_regions[5];
++	struct jailhouse_irqchip irqchips[1];
++	struct jailhouse_pci_device pci_devices[1];
++} __attribute__((packed)) config = {
++	.header = {
++		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
++		.revision = JAILHOUSE_CONFIG_REVISION,
++		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
++		.hypervisor_memory = {
++			.phys_start = 0x13fc00000,
++			.size =       0x000400000,
++		},
++		.debug_console = {
++			.address = 0xf0512000,
++			.size = 0x1000,
++			.type = JAILHOUSE_CON_TYPE_8250,
++			.flags = JAILHOUSE_CON_ACCESS_MMIO |
++				JAILHOUSE_CON_REGDIST_4,
++		},
++		.platform_info = {
++			.pci_mmconfig_base = 0xfc000000,
++			.pci_mmconfig_end_bus = 0,
++			.pci_is_virtual = 1,
++			.pci_domain = 1,
++			.arm = {
++				.gic_version = 2,
++				.gicd_base = 0xf0210000,
++				.gicc_base = 0xf022f000,
++				.gich_base = 0xf0240000,
++				.gicv_base = 0xf026f000,
++				.maintenance_irq = 25,
++			},
++		},
++		.root_cell = {
++			.name = "MACCHIATObin",
++
++			.cpu_set_size = sizeof(config.cpus),
++			.num_memory_regions = ARRAY_SIZE(config.mem_regions),
++			.num_irqchips = ARRAY_SIZE(config.irqchips),
++			.num_pci_devices = ARRAY_SIZE(config.pci_devices),
++
++			.vpci_irq_base = 108-32,
++		},
++	},
++
++	.cpus = {
++		0xf,
++	},
++
++	.mem_regions = {
++		/* MMIO (permissive) */ {
++			.phys_start = 0xf0300000,
++			.virt_start = 0xf0300000,
++			.size =	       0x4300000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO,
++		},
++		/* MMIO (PCIe) */ {
++			.phys_start = 0xf6000000,
++			.virt_start = 0xf6000000,
++			.size =	       0x1000000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_IO,
++		},
++		/* RAM */ {
++			.phys_start = 0x0,
++			.virt_start = 0x0,
++			.size = 0xc0000000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE,
++		},
++		/* RAM */ {
++			.phys_start = 0x100000000,
++			.virt_start = 0x100000000,
++			.size = 0x3fb00000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE,
++		},
++		/* IVSHMEM shared memory region for 00:00.0 */ {
++			.phys_start = 0x13fb00000,
++			.virt_start = 0x13fb00000,
++			.size = 0x100000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
++		},
++	},
++
++	.irqchips = {
++		/* GIC */ {
++			.address = 0xf0210000,
++			.pin_base = 32,
++			.pin_bitmap = {
++				0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff,
++			},
++		},
++	},
++
++	.pci_devices = {
++		/* 0001:00:00.0 */ {
++			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
++			.domain = 1,
++			.bdf = 0 << 3,
++			.bar_mask = {
++				0xffffff00, 0xffffffff, 0x00000000,
++				0x00000000, 0x00000000, 0x00000000,
++			},
++			.shmem_region = 4,
++			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
++		},
++	},
++};
+-- 
+2.16.4
+
