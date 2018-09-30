@@ -20,7 +20,7 @@ IMAGE_PREINSTALL += " \
     bash-completion less vim nano man \
     ifupdown isc-dhcp-client net-tools iputils-ping ssh \
     iw wireless-tools wpasupplicant \
-    pciutils ethtool iperf3"
+    pciutils usbutils ethtool iperf3"
 
 IMAGE_INSTALL += "jailhouse customizations-${MACHINE} non-root-initramfs"
 IMAGE_INSTALL += "expand-on-first-boot"
