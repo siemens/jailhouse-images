@@ -74,6 +74,18 @@ command line:
 After that, the board will automatically start from the generated SD card
 image.
 
+### MACCHIATObin
+
+The [MACCHIATObin](http://macchiatobin.net/compare/) is supported in both
+variants. Same story as with the ESPRESSObin regarding the pre-installed
+U-Boot, but we are able to replace it with a recent upstream version:
+Follow the [instructions](http://wiki.macchiatobin.net/tiki-index.php?page=MACCHIATObin+Interface+list#Boot_Selection)
+to switch the board to SD card booting, then flash the image on an empty
+card and plug that into the board.
+
+Note that the generated image is not yet directly usable for booting from the
+eMMC.
+
 ### HiKey
 
 The [LeMaker HiKey](http://www.lemaker.org/product-hikey-specification.html) is
