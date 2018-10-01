@@ -1,0 +1,59 @@
+From a8e3ae2e1f391296dc95a85ca4029ccf40e9bf14 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Tue, 2 Oct 2018 09:28:00 +0200
+Subject: [PATCH] tools: Fix broken object compilation rules
+
+As these rules depend on non-existing headers as well (likely copy &
+pasted from fiptool), they never matched, and the built-in rules were
+used. That led to random breakages when e.g. CPPFLAGS was suddenly
+evaluated and contained invalid options.
+
+For the stm32image, this reveals that we were relying on the built-in
+rules by passing -D_GNU_SOURCE via CPPFLAGS, rather than using CFLAGS as
+used in the local rule. Fix that as well.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ tools/doimage/Makefile    | 2 +-
+ tools/stm32image/Makefile | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/tools/doimage/Makefile b/tools/doimage/Makefile
+index bc74369f..9cec681a 100644
+--- a/tools/doimage/Makefile
++++ b/tools/doimage/Makefile
+@@ -39,7 +39,7 @@ ${PROJECT}: ${OBJECTS} Makefile
+ 	@echo "Built $@ successfully"
+ 	@echo
+ 
+-%.o: %.c %.h Makefile
++%.o: %.c Makefile
+ 	@echo "  CC      $<"
+ 	${Q}${CC} -c ${CFLAGS} ${INCLUDE_PATHS} $< -o $@
+ 
+diff --git a/tools/stm32image/Makefile b/tools/stm32image/Makefile
+index 80dfbecf..a593d316 100644
+--- a/tools/stm32image/Makefile
++++ b/tools/stm32image/Makefile
+@@ -12,8 +12,7 @@ PROJECT := stm32image${BIN_EXT}
+ OBJECTS := stm32image.o
+ V := 0
+ 
+-override CPPFLAGS += -D_GNU_SOURCE
+-CFLAGS := -Wall -Werror -pedantic -std=c99
++CFLAGS := -Wall -Werror -pedantic -std=c99 -D_GNU_SOURCE
+ ifeq (${DEBUG},1)
+   CFLAGS += -g -O0 -DDEBUG
+ else
+@@ -39,7 +38,7 @@ ${PROJECT}: ${OBJECTS} Makefile
+ 	@echo "Built $@ successfully"
+ 	@${ECHO_BLANK_LINE}
+ 
+-%.o: %.c %.h Makefile
++%.o: %.c Makefile
+ 	@echo "  CC      $<"
+ 	${Q}${CC} -c ${CFLAGS} $< -o $@
+ 
+-- 
+2.16.4
+
