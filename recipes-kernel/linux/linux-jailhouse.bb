@@ -31,9 +31,9 @@ SRC_URI += " \
     file://0007-ARM-dts-orange-pi-zero-Adjust-wifi-settings.patch \
     file://0008-serial-mvebu-uart-Fix-reporting-of-effective-CSIZE-t.patch \
     file://${KERNEL_DEFCONFIG}"
-SRC_URI[sha256sum] = "27dbdeee1e6f2f4aea6bcfc6d552f371c6ccc2e63e12d692516d05e3daa9cf1f"
-SRCREV = "fb67a109309134bee65d97e29076128d603227b3"
-PV = "4.14.70"
+SRC_URI[sha256sum] = "9eda42c32f046eefe98ce97cf343068896054e16daa84a4ca9f1a576ab58507f"
+SRCREV = "1dd68658b3a8308a160b0786fc4e1e04d8ff5216"
+PV = "4.14.73"
 
 S = "${WORKDIR}/linux-${SRCREV}"
 
