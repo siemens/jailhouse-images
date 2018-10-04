@@ -19,8 +19,9 @@ The host-side requirements are:
 
 To build a target image, just run `build-images.sh` and select one (or
 both) of the QEMU targets. The generated image can then be executed using
-`start-qemu.sh ARCHITECTURE`. Currently supported are `x86` and `arm64` as
-architectures.
+`start-qemu.sh ARCHITECTURE`. Currently supported are `x86` (only works on
+Intel CPUs so far) and `arm64` as architectures. On x86, make sure the
+kvm-intel module was loaded with `nested=1` to enable nested VMX support.
 
 
 Quickstart for Physical Targets
