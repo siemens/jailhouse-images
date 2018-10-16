@@ -62,11 +62,11 @@ case "$1" in
 		;;
 esac
 
-IMAGE_BUILD_DIR="$(dirname $0)/out/"
-IMAGE_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/demo-image-qemu-${DISTRO_ARCH}-jailhouse-demo-qemu-${DISTRO_ARCH}.ext4.img)
+IMAGE_PREFIX="$(dirname $0)/out/build/tmp/deploy/images/demo-image-qemu-${DISTRO_ARCH}-jailhouse-demo-qemu-${DISTRO_ARCH}"
+IMAGE_FILE=$(ls ${IMAGE_PREFIX}.ext4.img)
 
-KERNEL_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/vmlinuz*_jailhouse-demo-qemu-${DISTRO_ARCH} | tail -1)
-INITRD_FILE=$(ls ${IMAGE_BUILD_DIR}/build/tmp/deploy/images/initrd.img*_jailhouse-demo-qemu-${DISTRO_ARCH} | tail -1)
+KERNEL_FILE=$(ls ${IMAGE_PREFIX}.vmlinuz* | tail -1)
+INITRD_FILE=$(ls ${IMAGE_PREFIX}.initrd.img* | tail -1)
 
 shift 1
 
