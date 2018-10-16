@@ -13,9 +13,9 @@ require recipes-kernel/linux/linux-custom.inc
 
 python() {
     machine = d.getVar('MACHINE', True)
-    if machine in ['qemuamd64', 'nuc6cay']:
+    if machine in ['qemu-amd64', 'nuc6cay']:
         machine = 'x86-64'
-    if machine in ['qemuarm64', 'espressobin', 'macchiatobin', 'hikey']:
+    if machine in ['qemu-arm64', 'espressobin', 'macchiatobin', 'hikey']:
         machine = 'arm64'
     d.setVar('KERNEL_DEFCONFIG', machine + '_defconfig')
 }

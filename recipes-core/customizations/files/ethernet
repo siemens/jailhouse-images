@@ -14,13 +14,13 @@ allow-hotplug eth2
 allow-hotplug enp0s2
 allow-hotplug enp3s0
 
-# used on qemuarm64, orangepi-zero and espressobin
+# used on qemu-arm64, orangepi-zero and espressobin
 iface eth0 inet dhcp
 
 # used on macchiatobin
 iface eth2 inet dhcp
 
-# used on qemuamd64
+# used on qemu-amd64
 iface enp0s2 inet dhcp
 
 # used on nuc6cay

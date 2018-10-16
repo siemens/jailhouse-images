@@ -12,7 +12,9 @@
 header:
   version: 5
 
-target: multiconfig:qemuamd64-jailhouse:demo-image-qemuamd64
+machine: qemu-amd64
+distro: jailhouse-demo
+target: demo-image-qemu-amd64
 
 repos:
   jailhouse:

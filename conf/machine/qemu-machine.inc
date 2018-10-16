@@ -9,6 +9,7 @@
 # SPDX-License-Identifier: MIT
 #
 
-MACHINE = "espressobin"
+IMAGE_TYPE = "ext4-img"
 
-DISTRO = "jailhouse-demo"
+IMAGE_INSTALL_remove += "expand-on-first-boot"
+ROOTFS_EXTRA = "1024"
