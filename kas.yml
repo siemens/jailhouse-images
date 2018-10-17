@@ -10,7 +10,7 @@
 #
 
 header:
-  version: 5
+  version: 8
 
 machine: qemu-amd64
 distro: jailhouse-demo

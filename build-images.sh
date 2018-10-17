@@ -30,7 +30,7 @@ DOCKER_ARGS=""
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--latest)
-		LATEST="-latest"
+		LATEST=":/jailhouse-images/opt-latest.yml"
 		shift 1
 		;;
 	--all)
@@ -113,4 +113,4 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy ${DOCKER_ARGS} \
 	   kasproject/kas-isar sh -c "
 		cd /out;
-		kas ${CMD} /jailhouse-images/kas${LATEST}.yml"
+		kas ${CMD} /jailhouse-images/kas.yml${LATEST}"

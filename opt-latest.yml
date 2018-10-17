@@ -10,9 +10,7 @@
 #
 
 header:
-  version: 5
-  includes:
-    - kas.yml
+  version: 8
 
 local_conf_header:
   latest: |
