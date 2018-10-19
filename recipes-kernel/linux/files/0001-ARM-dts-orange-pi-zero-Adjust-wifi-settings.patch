@@ -1,0 +1,100 @@
+From ecbcb5c425040c314524f33b4a5b58dfb0c5bcf2 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 17 Jun 2018 08:18:41 +0200
+Subject: [PATCH] ARM: dts: orange-pi-zero: Adjust wifi settings
+
+This imports the dts changes of https://github.com/fifteenhex/xradio to
+enable the wifi module.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts | 44 ++++++++++++++++++-----
+ 1 file changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+index 84cd9c061227..bbc6f1e4af6e 100644
+--- a/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
++++ b/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts
+@@ -80,13 +80,14 @@
+ 		};
+ 	};
+ 
+-	reg_vcc_wifi: reg_vcc_wifi {
++	vdd_wifi: vdd_wifi {
+ 		compatible = "regulator-fixed";
+-		regulator-min-microvolt = <3300000>;
+-		regulator-max-microvolt = <3300000>;
+-		regulator-name = "vcc-wifi";
+-		enable-active-high;
++		regulator-name = "wifi";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
+ 		gpio = <&pio 0 20 GPIO_ACTIVE_HIGH>;
++		startup-delay-us = <70000>;
++		enable-active-high;
+ 	};
+ 
+ 	reg_vdd_cpux: vdd-cpux-regulator {
+@@ -106,10 +107,12 @@
+ 			  1300000 1>;
+ 	};
+ 
+-	wifi_pwrseq: wifi_pwrseq {
++	pwrseq_wifi: pwrseq_wifi@0 {
+ 		compatible = "mmc-pwrseq-simple";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_rst>;
+ 		reset-gpios = <&r_pio 0 7 GPIO_ACTIVE_LOW>;
+-		post-power-on-delay-ms = <200>;
++		post-power-on-delay-ms = <50>;
+ 	};
+ };
+ 
+@@ -140,9 +143,11 @@
+ };
+ 
+ &mmc1 {
+-	vmmc-supply = <&reg_vcc_wifi>;
+-	mmc-pwrseq = <&wifi_pwrseq>;
++	vmmc-supply = <&reg_vcc3v3>;
++	vqmmc-supply = <&vdd_wifi>;
++	mmc-pwrseq = <&pwrseq_wifi>;
+ 	bus-width = <4>;
++	max-frequency = <16000000>;
+ 	non-removable;
+ 	status = "okay";
+ 
+@@ -152,9 +157,30 @@
+ 	 */
+ 	xr819: sdio_wifi@1 {
+ 		reg = <1>;
++		compatible = "xradio,xr819";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_wake>;
++		interrupt-parent = <&pio>;
++		interrupts = <6 10 IRQ_TYPE_EDGE_RISING>;
++		interrupt-names = "host-wake";
++		local-mac-address = [dc 44 6d c0 ff ee];
+ 	};
+ };
+ 
++&pio {
++	wifi_wake: wifi_wake {
++		pins = "PG10";
++		function = "gpio_in";
++    };
++};
++
++&r_pio {
++	wifi_rst: wifi_rst {
++		pins = "PL7";
++		function = "gpio_out";
++    };
++};
++
+ &ohci0 {
+ 	status = "okay";
+ };
+-- 
+2.16.4
+

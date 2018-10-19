@@ -17,7 +17,7 @@ python() {
         machine = 'x86-64'
     if machine in ['qemu-arm64', 'espressobin', 'macchiatobin', 'hikey']:
         machine = 'arm64'
-    d.setVar('KERNEL_DEFCONFIG', machine + '_defconfig')
+    d.setVar('KERNEL_DEFCONFIG', machine + '_defconfig_4.14')
 }
 
 SRC_URI += " \
@@ -33,7 +33,6 @@ SRC_URI += " \
     file://${KERNEL_DEFCONFIG}"
 SRC_URI[sha256sum] = "9eda42c32f046eefe98ce97cf343068896054e16daa84a4ca9f1a576ab58507f"
 SRCREV = "1dd68658b3a8308a160b0786fc4e1e04d8ff5216"
-PV = "4.14.73"
 
 S = "${WORKDIR}/linux-${SRCREV}"
 
