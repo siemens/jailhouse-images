@@ -9,10 +9,9 @@
 # SPDX-License-Identifier: MIT
 #
 
-require conf/distro/debian-stretch.conf
+header:
+  version: 8
 
-KERNEL_NAME ?= "jailhouse"
-
-WKS_FILE = "${MACHINE}.wks"
-
-PREFERRED_VERSION_jailhouse ?= "0.10"
+local_conf_header:
+  preempt-rt: |
+    KERNEL_NAME = "jailhouse-rt"

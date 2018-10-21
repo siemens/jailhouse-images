@@ -23,14 +23,18 @@ usage()
 	exit 1
 }
 
-LATEST=""
+KAS_FILES="/jailhouse-images/kas.yml"
 CMD="build"
 DOCKER_ARGS=""
 
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--latest)
-		LATEST=":/jailhouse-images/opt-latest.yml"
+		KAS_FILES="${KAS_FILES}:/jailhouse-images/opt-latest.yml"
+		shift 1
+		;;
+	--rt)
+		KAS_FILES="${KAS_FILES}:/jailhouse-images/opt-rt.yml"
 		shift 1
 		;;
 	--all)
@@ -113,4 +117,4 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy ${DOCKER_ARGS} \
 	   kasproject/kas-isar sh -c "
 		cd /out;
-		kas ${CMD} /jailhouse-images/kas.yml${LATEST}"
+		kas ${CMD} ${KAS_FILES}"
