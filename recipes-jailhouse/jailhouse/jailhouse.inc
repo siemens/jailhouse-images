@@ -15,7 +15,9 @@ LICENSE = "GPL-2.0 & BSD-2-clause"
 
 SRC_URI = " \
     git://github.com/siemens/jailhouse;branch=next \
-    file://debian/"
+    file://debian/ \
+    file://nuc6cay.c \
+    file://linux-nuc6cay-demo.c"
 
 S = "${WORKDIR}/git"
 
@@ -31,4 +33,7 @@ do_prepare_build() {
     fi
     sed -i 's/@PV@/${PV}/' ${S}/debian/changelog
     sed -i 's/@KERNEL_NAME@/${KERNEL_NAME}/' ${S}/debian/control
+
+    cp ${WORKDIR}/nuc6cay.c ${S}/configs/x86/
+    cp ${WORKDIR}/linux-nuc6cay-demo.c ${S}/configs/x86/
 }
