@@ -9,6 +9,8 @@
 # SPDX-License-Identifier: MIT
 #
 
+PN .= "-${KERNEL_NAME}"
+
 DESCRIPTION = "Jailhouse partitioning hypervisor"
 
 LICENSE = "GPL-2.0 & BSD-2-clause"
@@ -31,8 +33,9 @@ do_prepare_build() {
         # Install device trees only on non-x86 archs as they only exist there
         echo "configs{,/*}/dts/*.dtb etc/jailhouse/dts" >> ${S}/debian/jailhouse.install
     fi
-    sed -i 's/@PV@/${PV}/' ${S}/debian/changelog
-    sed -i 's/@KERNEL_NAME@/${KERNEL_NAME}/' ${S}/debian/control
+    mv ${S}/debian/jailhouse.install ${S}/debian/jailhouse-${KERNEL_NAME}.install
+    sed -e 's/@PV@/${PV}/g' -e 's/@KERNEL_NAME@/${KERNEL_NAME}/g' \
+        -i ${S}/debian/changelog ${S}/debian/control
 
     cp ${WORKDIR}/nuc6cay.c ${S}/configs/x86/
     cp ${WORKDIR}/linux-nuc6cay-demo.c ${S}/configs/x86/

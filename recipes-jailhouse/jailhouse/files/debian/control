@@ -1,4 +1,4 @@
-Source: jailhouse
+Source: jailhouse-@KERNEL_NAME@
 Section: misc
 Priority: optional
 Standards-Version: 3.9.6
@@ -7,7 +7,7 @@ Build-Depends: linux-headers-@KERNEL_NAME@, git,
 Maintainer: Jan Kiszka <jan.kiszka@siemens.com>
 X-Python-Version: >= 2.7
 
-Package: jailhouse
+Package: jailhouse-@KERNEL_NAME@
 Architecture: any
 Depends: ${shlibs:Depends}, ${python:Depends}, linux-image-@KERNEL_NAME@, python-mako
 Description: Jailhouse partitioning hypervisor

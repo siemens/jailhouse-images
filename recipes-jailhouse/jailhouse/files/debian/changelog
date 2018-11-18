@@ -1,4 +1,4 @@
-jailhouse (@PV@) unstable; urgency=low
+jailhouse-@KERNEL_NAME@ (@PV@) unstable; urgency=low
 
   * Generated package.
 

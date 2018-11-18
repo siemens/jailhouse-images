@@ -22,5 +22,6 @@ IMAGE_PREINSTALL += " \
     iw wireless-tools wpasupplicant \
     pciutils usbutils ethtool iperf3"
 
-IMAGE_INSTALL += "jailhouse customizations-${MACHINE} non-root-initramfs"
+IMAGE_INSTALL += "jailhouse-${KERNEL_NAME}"
+IMAGE_INSTALL += "customizations-${MACHINE} non-root-initramfs"
 IMAGE_INSTALL += "expand-on-first-boot"

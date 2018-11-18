@@ -14,4 +14,4 @@ header:
 
 local_conf_header:
   latest: |
-    PREFERRED_VERSION_jailhouse = "0.9999-next"
+    PREFERRED_VERSION_jailhouse-${KERNEL_NAME} = "0.9999-next"
