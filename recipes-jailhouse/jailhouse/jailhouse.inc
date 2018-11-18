@@ -37,3 +37,8 @@ do_prepare_build() {
     cp ${WORKDIR}/nuc6cay.c ${S}/configs/x86/
     cp ${WORKDIR}/linux-nuc6cay-demo.c ${S}/configs/x86/
 }
+
+dpkg_runbuild_prepend() {
+    export KDIR=$(dpkg -L --root=${BUILDCHROOT_DIR} linux-headers-${KERNEL_NAME} | \
+                  grep "/lib/modules/.*/build")
+}
