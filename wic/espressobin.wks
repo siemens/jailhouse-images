@@ -9,4 +9,6 @@
 # SPDX-License-Identifier: MIT
 #
 
-part / --source rootfs --ondisk mmcblk0 --fstype ext4 --label platform --align 1024
+part / --source rootfs-u-boot --ondisk mmcblk0 --fstype ext4 --label platform --align 1024 --sourceparams "no_initrd=yes,script_prepend=setenv devtype mmc;setenv devnum 0;setenv distro_bootpart 1;setenv fdt_addr_r 0x4f00000;setenv fdtfile marvell/armada-3720-espressobin.dtb;setenv kernel_addr_r 0x5000000"
+
+bootloader --append "rw rootwait mem=768M"

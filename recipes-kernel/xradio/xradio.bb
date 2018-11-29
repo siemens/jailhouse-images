@@ -24,3 +24,7 @@ SRC_URI += " \
 SRCREV = "3ffc0f729454a5d118d6118974ae925beeb521c1"
 
 S = "${WORKDIR}/git"
+
+do_prepare_build_append() {
+    mv ${S}/debian/xradio.install ${S}/debian/xradio-${KERNEL_NAME}.install
+}
