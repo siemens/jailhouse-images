@@ -9,9 +9,9 @@
 # SPDX-License-Identifier: MIT
 #
 
-PN = "demo-image-${MACHINE}"
+inherit isar-image
 
-require recipes-core/images/isar-image-base.bb
+PN .= "-${MACHINE}"
 
 ISAR_RELEASE_CMD = "git -C ${LAYERDIR_jailhouse} describe --tags --dirty --match 'v[0-9].[0-9]*'"
 DESCRIPTION = "Jailhouse demo image"
