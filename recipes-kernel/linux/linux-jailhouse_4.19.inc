@@ -15,7 +15,7 @@ python() {
     machine = d.getVar('MACHINE', True)
     if machine in ['qemu-amd64', 'nuc6cay']:
         machine = 'x86-64'
-    if machine in ['qemu-arm64', 'espressobin', 'macchiatobin', 'hikey']:
+    if machine in ['qemu-arm64', 'espressobin', 'macchiatobin', 'hikey620']:
         machine = 'arm64'
     d.setVar('KERNEL_DEFCONFIG', machine + '_defconfig_4.19')
 }
