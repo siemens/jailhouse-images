@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2019
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -21,10 +21,9 @@ repos:
 
   isar:
     url: https://github.com/ilbers/isar
-    refspec: 3020d2a2cfca546bd47f52dc403d660655a200d8
+    refspec: 22f2387b3791a1c6c88b8c4424285d7788c3743c
     layers:
       meta:
-      meta-isar:
 
 bblayers_conf_header:
   standard: |
