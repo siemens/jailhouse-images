@@ -30,7 +30,7 @@ Quickstart for Physical Targets
 Call `build-images.sh` and select the desired target. Afterwards, flash the
 image on an empty SD card, e.g.:
 
-    dd if=out/build/tmp/deploy/images/orangepi-zero/demo-image-orangepi-zero-jailhouse-demo-orangepi-zero.wic.img \
+    dd if=build/tmp/deploy/images/orangepi-zero/demo-image-orangepi-zero-jailhouse-demo-orangepi-zero.wic.img \
        of=/dev/mmcblk0 bs=4M status=progress
 
 ### Orange Pi Zero

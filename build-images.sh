@@ -106,8 +106,7 @@ if [ -t 1 ]; then
 	INTERACTIVE="-t -i"
 fi
 
-mkdir -p out
-docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
+docker run -v $(pwd):/jailhouse-images:ro -v $(pwd):/work:rw --workdir=/work \
 	   -e USER_ID=$(id -u) -e SHELL=${SHELL} \
 	   -e KAS_TARGET="${KAS_TARGET}" -e KAS_TASK="${KAS_TASK}" \
 	   --rm ${INTERACTIVE} \
@@ -115,6 +114,4 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd)/out:/out:rw \
 	   --device $(/sbin/losetup -f) \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
 	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy ${DOCKER_ARGS} \
-	   kasproject/kas-isar sh -c "
-		cd /out;
-		kas ${CMD} ${KAS_FILES}"
+	   kasproject/kas-isar ${CMD} ${KAS_FILES}
