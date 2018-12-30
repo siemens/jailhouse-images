@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 4.19.0 Kernel Configuration
+# Linux/arm64 4.19.13 Kernel Configuration
 #
 
 #
@@ -647,7 +647,6 @@ CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
 # CONFIG_CRYPTO_AES_ARM64_NEON_BLK is not set
 # CONFIG_CRYPTO_CHACHA20_NEON is not set
 # CONFIG_CRYPTO_AES_ARM64_BS is not set
-# CONFIG_CRYPTO_SPECK_NEON is not set
 
 #
 # General architecture-dependent options
@@ -5141,7 +5140,6 @@ CONFIG_CRYPTO_ARC4=m
 # CONFIG_CRYPTO_SEED is not set
 # CONFIG_CRYPTO_SERPENT is not set
 # CONFIG_CRYPTO_SM4 is not set
-# CONFIG_CRYPTO_SPECK is not set
 # CONFIG_CRYPTO_TEA is not set
 # CONFIG_CRYPTO_TWOFISH is not set
 
