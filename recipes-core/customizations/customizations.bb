@@ -28,15 +28,6 @@ SRC_URI = " \
 
 DEBIAN_DEPENDS = "openssh-server, passwd"
 
-DEBIAN_DEPENDS_append_orangepi-zero = ", u-boot-script"
-DEPENDS_append_orangepi-zero = "u-boot-script"
-
-DEBIAN_DEPENDS_append_espressobin = ", u-boot-script"
-DEPENDS_append_espressobin = "u-boot-script"
-
-DEBIAN_DEPENDS_append_macchiatobin = ", u-boot-script"
-DEPENDS_append_macchiatobin = "u-boot-tools u-boot-script"
-
 do_install() {
 	install -v -d ${D}/etc/modprobe.d
 	install -v -m 644 ${WORKDIR}/e1000e-intx.conf ${D}/etc/modprobe.d/
