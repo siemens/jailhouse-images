@@ -13,6 +13,9 @@ PN = "customizations-${MACHINE}"
 
 inherit dpkg-raw
 
+# optional local customizations, not part of the repository
+include local.inc
+
 DESCRIPTION = "demo image customizations"
 
 SRC_URI = " \
