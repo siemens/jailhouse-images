@@ -98,6 +98,11 @@ You may also use the content of the boot and the root partition to fill the
 corresponding partitions on the eMMC, but do no flash the complete image
 directly to the eMMC because it does not contain any firmware.
 
+## Ultra96
+
+The [Avnet Ultra96](https://www.96boards.org/product/ultra96/) is supported.
+You can boot the board directly from the generated SD card image.
+
 
 Community Resources
 -------------------
