@@ -1,0 +1,14 @@
+jailhouse enable /etc/jailhouse/ultra96.cell
+jailhouse console
+jailhouse cell create /etc/jailhouse/ultra96-gic-demo.cell
+jailhouse cell load gic-demo /usr/libexec/jailhouse/demos/gic-demo.bin
+jailhouse cell start gic-demo
+jailhouse cell stats gic-demo
+jailhouse cell destroy gic-demo
+jailhouse cell linux /etc/jailhouse/ultra96-linux-demo.cell \
+                     /boot/vmlinuz* \
+                     -d /etc/jailhouse/dts/inmate-zynqmp.dtb \
+                     -i /usr/libexec/jailhouse/demos/rootfs.cpio \
+                     -c "console=ttyPS0,115200 ip=192.168.19.2"
+ssh 192.168.19.2
+jailhouse disable
