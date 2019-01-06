@@ -92,7 +92,7 @@ eMMC.
 The [LeMaker HiKey](http://www.lemaker.org/product-hikey-specification.html)
 with Kirin 620 SoC is supported with its 2 GB edition. The generated image can
 be used to boot from SD card. This requires a recent version of the UEFI-based
-bootloader (tested with version 1.4, September 17 2018).
+bootloader (tested with version 85, December 20 2018).
 
 You may also use the content of the boot and the root partition to fill the
 corresponding partitions on the eMMC, but do no flash the complete image
