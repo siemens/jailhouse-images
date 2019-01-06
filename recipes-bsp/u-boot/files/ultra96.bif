@@ -1,0 +1,18 @@
+#
+# Jailhouse, a Linux-based partitioning hypervisor
+#
+# Copyright (c) Siemens AG, 2019
+#
+# Authors:
+#  Jan Kiszka <jan.kiszka@siemens.com>
+#
+# SPDX-License-Identifier: MIT
+#
+
+image : {
+	[pmufw_image] ../usr/share/zynqmp/pmufw.elf
+	[bootloader, destination_cpu=a5x-0] ../usr/share/zynqmp/fsbl.elf
+	../design_1_wrapper.bit
+	[destination_cpu=a5x-0, exception_level=el-3,trustzone] ../arm-trusted-firmware-@ATF_PV@/build/zynqmp/release/bl31/bl31.elf
+	[destination_cpu=a5x-0, exception_level=el-2] u-boot.elf
+}
