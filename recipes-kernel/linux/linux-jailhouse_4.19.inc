@@ -21,7 +21,7 @@ python() {
 }
 
 SRC_URI += " \
-    https://github.com/siemens/linux/archive/${SRCREV}.tar.gz \
+    https://github.com/siemens/linux/archive/${SRCREV}.tar.gz;downloadfilename=linux-${SRCREV}.tar.gz \
     file://0001-ARM-dts-orange-pi-zero-Adjust-wifi-settings.patch \
     file://0001-pwrseq_simple-Workaround-for-missing-device-tree-ent.patch \
     file://0001-arm64-dts-zcu100-revC-Give-wifi-some-time-after-powe.patch \
