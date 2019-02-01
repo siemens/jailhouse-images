@@ -113,5 +113,6 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd):/work:rw --workdir=/work \
 	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
 	   --device $(/sbin/losetup -f) \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
-	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy ${DOCKER_ARGS} \
+	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy \
+	   -e NO_PROXY=$NO_PROXY ${DOCKER_ARGS} \
 	   kasproject/kas-isar ${CMD} ${KAS_FILES}
