@@ -16,4 +16,4 @@ all:
     - export KAS_TARGET
     - cd ..
     - kas build jailhouse-images/kas.yml
-    - kas build jailhouse-images/kas.yml:jailhouse-images/opt-latest.yml
+    - kas build jailhouse-images/kas.yml:jailhouse-images/opt-latest.yml:jailhouse-images/opt-rt.yml
