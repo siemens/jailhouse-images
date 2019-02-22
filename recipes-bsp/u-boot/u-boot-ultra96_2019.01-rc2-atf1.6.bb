@@ -20,14 +20,14 @@ SRC_URI += " \
     file://0001-zynqmp-Downgrade-to-PMUFW-0.3.patch \
     https://download.opensuse.org/repositories/devel:/ARM:/Factory:/Contrib:/Zynq:/ZCU100/standard/noarch/zynqmp-pmufw-2017.1-7.3.noarch.rpm;name=pmufw \
     https://download.opensuse.org/repositories/devel:/ARM:/Factory:/Contrib:/Zynq:/ZCU100/standard/aarch64/zynqmp-fsbl-2017.1-7.2.aarch64.rpm;name=fsbl \
-    https://download.opensuse.org/repositories/devel:/ARM:/Factory:/Contrib:/Zynq:/ZCU100/standard/noarch/zynqmp-hdf-20180326-4.2.noarch.rpm;name=hdf \
+    https://download.opensuse.org/repositories/devel:/ARM:/Factory:/Contrib:/Zynq:/ZCU100/standard/noarch/zynqmp-hdf-20180326-4.3.noarch.rpm;name=hdf \
     file://ultra96.bif \
     file://ultra96-rules \
     "
 SRC_URI[u-boot.sha256sum] = "e82ad58e1f83a39ba361b42203eaa2b70b30a43a64614b2b6853ffd68d0fd1f7"
 SRC_URI[pmufw.sha256sum] = "6b4fec22e76c3c44ba4bec72f6f73e85192373f2156b0af3ce9e8894312b968e"
 SRC_URI[fsbl.sha256sum] = "6f420f4cb049eb4ddd981fb9a1c964db9771e359dc51385a886bbcb27a9a616e"
-SRC_URI[hdf.sha256sum] = "30e34942e3a33a5d9fdfa395e5a9cd28d21317eb6200353640e973591206ec3d"
+SRC_URI[hdf.sha256sum] = "246bef07b16cace18cc7c270dedcec89913b64fa623e590461250e3e038f88fd"
 
 U_BOOT_CONFIG="avnet_ultra96_rev1_defconfig"
 U_BOOT_BIN="u-boot.elf"
