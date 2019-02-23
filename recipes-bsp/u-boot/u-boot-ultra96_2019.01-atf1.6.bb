@@ -24,7 +24,7 @@ SRC_URI += " \
     file://ultra96.bif \
     file://ultra96-rules \
     "
-SRC_URI[u-boot.sha256sum] = "e82ad58e1f83a39ba361b42203eaa2b70b30a43a64614b2b6853ffd68d0fd1f7"
+SRC_URI[u-boot.sha256sum] = "50bd7e5a466ab828914d080d5f6a432345b500e8fba1ad3b7b61e95e60d51c22"
 SRC_URI[pmufw.sha256sum] = "6b4fec22e76c3c44ba4bec72f6f73e85192373f2156b0af3ce9e8894312b968e"
 SRC_URI[fsbl.sha256sum] = "6f420f4cb049eb4ddd981fb9a1c964db9771e359dc51385a886bbcb27a9a616e"
 SRC_URI[hdf.sha256sum] = "246bef07b16cace18cc7c270dedcec89913b64fa623e590461250e3e038f88fd"
