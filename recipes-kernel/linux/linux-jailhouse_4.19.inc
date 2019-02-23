@@ -11,15 +11,8 @@
 
 require recipes-kernel/linux/linux-custom.inc
 
-python() {
-    machine = d.getVar('MACHINE', True)
-    if machine in ['qemu-amd64', 'nuc6cay']:
-        machine = 'x86-64'
-    if machine in ['qemu-arm64', 'espressobin', 'macchiatobin', 'hikey620',
-                   'ultra96']:
-        machine = 'arm64'
-    d.setVar('KERNEL_DEFCONFIG', machine + '_defconfig_4.19')
-}
+KERNEL_DEFCONFIG = "${DISTRO_ARCH}_defconfig_4.19"
+KERNEL_DEFCONFIG_orangepi-zero = "orangepi-zero_defconfig_4.19"
 
 SRC_URI += " \
     https://github.com/siemens/linux/archive/${SRCREV}.tar.gz;downloadfilename=linux-${SRCREV}.tar.gz \
