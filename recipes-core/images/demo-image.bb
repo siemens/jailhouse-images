@@ -9,9 +9,7 @@
 # SPDX-License-Identifier: MIT
 #
 
-inherit isar-image
-
-PN .= "-${MACHINE}"
+inherit image
 
 ISAR_RELEASE_CMD = "git -C ${LAYERDIR_jailhouse} describe --tags --dirty --match 'v[0-9].[0-9]*'"
 DESCRIPTION = "Jailhouse demo image"

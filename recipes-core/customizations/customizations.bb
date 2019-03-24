@@ -29,7 +29,7 @@ SRC_URI = " \
     file://99-silent-printk.conf \
     file://20-jailhouse-motd"
 
-DEBIAN_DEPENDS = "openssh-server, passwd"
+DEBIAN_DEPENDS = "openssh-server"
 
 do_install() {
 	install -v -d ${D}/etc/modprobe.d

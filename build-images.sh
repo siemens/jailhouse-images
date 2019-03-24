@@ -40,7 +40,7 @@ while [ $# -gt 0 ]; do
 	--all)
 		KAS_TARGET=
 		while read MACHINE DESCRIPTION; do
-			KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image-${MACHINE}"
+			KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image"
 		done < images.list
 		shift 1
 		;;
@@ -82,7 +82,7 @@ if [ -z "${KAS_TARGET}" ]; then
 		if [ ${IDX} -eq 0 ] 2>/dev/null; then
 			KAS_TARGET=
 			for MACHINE in ${MACHINES}; do
-				KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image-${MACHINE}"
+				KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image"
 			done
 			break
 		fi
@@ -90,7 +90,7 @@ if [ -z "${KAS_TARGET}" ]; then
 		N=1
 		for MACHINE in ${MACHINES}; do
 			if [ ${N} -eq ${IDX} ] 2>/dev/null; then
-				KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image-${MACHINE}"
+				KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image"
 				break
 			fi
 			N=$((N + 1))

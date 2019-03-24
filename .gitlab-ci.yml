@@ -11,7 +11,7 @@ all:
     - export ftp_proxy=$FTP_PROXY
     - export no_proxy=$NO_PROXY
     - while read MACHINE DESCRIPTION; do
-          KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image-${MACHINE}";
+          KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image";
       done < images.list
     - export KAS_TARGET
     - cd ..
