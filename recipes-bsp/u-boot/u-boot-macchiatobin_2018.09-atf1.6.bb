@@ -24,6 +24,8 @@ SRC_URI += " \
     "
 SRC_URI[u-boot.sha256sum] = "839bf23cfe8ce613a77e583a60375179d0ad324e92c82fbdd07bebf0fd142268"
 
+BUILD_DEPENDS =. "libssl-dev:native, "
+
 MV_DDR_REV="779e860c3b81eda192dd40270f46c0ff44e52113"
 MV_BIN_BRANCH="binaries-marvell-armada-18.06"
 MV_BIN_REV="14481806e699dcc6f7025dbe3e46cf26bb787791"
