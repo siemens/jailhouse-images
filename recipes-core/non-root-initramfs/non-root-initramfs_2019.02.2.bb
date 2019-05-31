@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2019
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -18,7 +18,7 @@ SRC_URI = " \
     file://debian/ \
     file://${DISTRO_ARCH}-config \
     file://overlay/"
-SRC_URI[sha256sum] = "8dc4b9bd22a165a4df0a1737f01de3dd0a6c15d9f8b16989426af062471a0abb"
+SRC_URI[sha256sum] = "0250b4e11d4aeba7cb5ac956b56e3069d3136c1e7fd741a658b0ea96c6b35181"
 
 S = "${WORKDIR}/buildroot-${PV}"
 
