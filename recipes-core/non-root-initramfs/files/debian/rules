@@ -13,21 +13,13 @@
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
-build-image:
+override_dh_auto_configure:
 	cp ../.config .
 	${MAKE} olddefconfig
-	${MAKE}
-
-# Only this target runs outside of fakeroot. We need to hook into it because
-# buildroot uses fakeroot itself.
-build: build-image
 
 # This target saves autotools outputs from output/. But we perform a clean
 # rebuild so that restoring the files may fail and is also not needed.
 override_dh_update_autotools_config:
-
-# We are building via build-image.
-override_dh_auto_build:
 
 # No test desired.
 override_dh_auto_test:

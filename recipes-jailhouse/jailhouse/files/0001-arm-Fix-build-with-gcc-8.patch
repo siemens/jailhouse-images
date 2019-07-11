@@ -1,0 +1,56 @@
+From 9f233898917f8c1141132606f2f2c624405d8c81 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sat, 13 Jul 2019 12:08:40 +0200
+Subject: [PATCH] arm: Fix build with gcc-8
+
+The inline .arch_extension statements are ignored by gcc-8. We rather
+need -march=armv7ve now.
+
+To keep older gcc prior to version 5 happy, leave the inline statements
+in place. Can be removed once we require newer gcc for other reasons.
+
+Reported-by: Vitaly Andrianov <vitalya@ti.com>
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ hypervisor/arch/arm/Makefile              | 2 +-
+ hypervisor/arch/arm/include/asm/smc.h     | 1 +
+ hypervisor/arch/arm/include/asm/sysregs.h | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/hypervisor/arch/arm/Makefile b/hypervisor/arch/arm/Makefile
+index 2f930cf3..a170b593 100644
+--- a/hypervisor/arch/arm/Makefile
++++ b/hypervisor/arch/arm/Makefile
+@@ -12,4 +12,4 @@
+ 
+ LINUXINCLUDE += -I$(src)/arch/arm-common/include
+ 
+-KBUILD_CFLAGS += -marm
++KBUILD_CFLAGS += -marm -march=armv7ve
+diff --git a/hypervisor/arch/arm/include/asm/smc.h b/hypervisor/arch/arm/include/asm/smc.h
+index 34944a2d..5cde3d8b 100644
+--- a/hypervisor/arch/arm/include/asm/smc.h
++++ b/hypervisor/arch/arm/include/asm/smc.h
+@@ -10,6 +10,7 @@
+  * the COPYING file in the top-level directory.
+  */
+ 
++/* for gcc < 5 */
+ asm (".arch_extension sec\n");
+ 
+ static inline int smc(unsigned long id)
+diff --git a/hypervisor/arch/arm/include/asm/sysregs.h b/hypervisor/arch/arm/include/asm/sysregs.h
+index 76dd5b55..b7eaccf6 100644
+--- a/hypervisor/arch/arm/include/asm/sysregs.h
++++ b/hypervisor/arch/arm/include/asm/sysregs.h
+@@ -283,6 +283,7 @@
+ #define arm_read_sysreg(...) _arm_read_sysreg(__VA_ARGS__)
+ 
+ #ifndef __ASSEMBLY__
++/* for gcc < 5 */
+ asm(".arch_extension virt\n");
+ 
+ #define arm_write_sysreg_32(op1, crn, crm, op2, val) \
+-- 
+2.16.4
+

@@ -1,9 +1,10 @@
 Source: non-root-initramfs
 Section: misc
 Priority: optional
-Standards-Version: 3.9.6
+Standards-Version: 4.3.0
 Build-Depends: wget, cpio, unzip, rsync, python:native, bc
 Maintainer: Jan Kiszka <jan.kiszka@siemens.com>
+Rules-Requires-Root: no
 
 Package: non-root-initramfs
 Architecture: any
