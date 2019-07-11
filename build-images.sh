@@ -111,7 +111,6 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd):/work:rw --workdir=/work \
 	   -e KAS_TARGET="${KAS_TARGET}" -e KAS_TASK="${KAS_TASK}" \
 	   --rm ${INTERACTIVE} \
 	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
-	   --device $(/sbin/losetup -f) \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
 	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy \
 	   -e NO_PROXY=$NO_PROXY ${DOCKER_ARGS} \
