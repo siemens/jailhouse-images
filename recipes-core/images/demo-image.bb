@@ -22,4 +22,4 @@ IMAGE_PREINSTALL += " \
 
 IMAGE_INSTALL += "jailhouse-${KERNEL_NAME}"
 IMAGE_INSTALL += "customizations-${MACHINE} non-root-initramfs"
-IMAGE_INSTALL += "expand-on-first-boot"
+IMAGE_INSTALL += "expand-on-first-boot sshd-regen-keys"
