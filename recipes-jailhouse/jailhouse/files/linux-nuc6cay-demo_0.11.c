@@ -21,6 +21,7 @@ struct {
 	struct jailhouse_cell_desc cell;
 	__u64 cpus[1];
 	struct jailhouse_memory mem_regions[4];
+	__u8 pio_bitmap[0x2000];
 	struct jailhouse_pci_device pci_devices[1];
 } __attribute__((packed)) config = {
 	.cell = {
@@ -32,6 +33,7 @@ struct {
 
 		.cpu_set_size = sizeof(config.cpus),
 		.num_memory_regions = ARRAY_SIZE(config.mem_regions),
+		.pio_bitmap_size = ARRAY_SIZE(config.pio_bitmap),
 		.num_pci_devices = ARRAY_SIZE(config.pci_devices),
 	},
 
@@ -69,6 +71,10 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
 		},
+	},
+
+	.pio_bitmap = {
+		[     0/8 ... 0xffff/8] = -1,
 	},
 
 	.pci_devices = {

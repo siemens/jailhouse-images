@@ -43,7 +43,7 @@ struct {
 	__u64 cpus[1];
 	struct jailhouse_memory mem_regions[54];
 	struct jailhouse_irqchip irqchips[1];
-	struct jailhouse_pio pio_regions[6];
+	__u8 pio_bitmap[0x2000];
 	struct jailhouse_pci_device pci_devices[21];
 	struct jailhouse_pci_capability pci_caps[53];
 } __attribute__((packed)) config = {
@@ -85,7 +85,7 @@ struct {
 			.cpu_set_size = sizeof(config.cpus),
 			.num_memory_regions = ARRAY_SIZE(config.mem_regions),
 			.num_irqchips = ARRAY_SIZE(config.irqchips),
-			.num_pio_regions = ARRAY_SIZE(config.pio_regions),
+			.pio_bitmap_size = ARRAY_SIZE(config.pio_bitmap),
 			.num_pci_devices = ARRAY_SIZE(config.pci_devices),
 			.num_pci_caps = ARRAY_SIZE(config.pci_caps),
 		},
@@ -502,13 +502,19 @@ struct {
 		},
 	},
 
-	.pio_regions = {
-		PIO_RANGE(0x40, 0x4), /* PIT */
-		PIO_RANGE(0x60, 0x2), /* HACK: NMI status/control */
-		PIO_RANGE(0x70, 0x2), /* RTC */
-		PIO_RANGE(0x3b0, 0x8), /* VGA */
-		PIO_RANGE(0x400, 0x80), /* HACK: ACPI */
-		PIO_RANGE(0xd00, 0xf300), /* PCI devices */
+	.pio_bitmap = {
+		[     0/8 ...   0x3f/8] = -1,
+		[  0x40/8 ...   0x47/8] = 0xf0, /* PIT */
+		[  0x48/8 ...   0x5f/8] = -1,
+		[  0x60/8 ...   0x67/8] = 0xec, /* HACK: NMI status/control */
+		[  0x68/8 ...   0x6f/8] = -1,
+		[  0x70/8 ...   0x77/8] = 0xfc, /* RTC */
+		[  0x78/8 ...  0x3af/8] = -1,
+		[ 0x3b0/8 ...  0x3df/8] = 0x00, /* VGA */
+		[ 0x3e0/8 ...  0x3ff/8] = -1,
+		[ 0x400/8 ...  0x47f/8] = 0, /* HACK: ACPI */
+		[ 0x480/8 ...  0xcff/8] = -1,
+		[ 0xd00/8 ... 0xffff/8] = 0, /* HACK: PCI bus */
 	},
 
 	.pci_devices = {
