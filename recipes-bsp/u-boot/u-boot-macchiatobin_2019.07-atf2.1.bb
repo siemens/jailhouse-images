@@ -19,17 +19,15 @@ SRC_URI += " \
     ftp://ftp.denx.de/pub/u-boot/u-boot-${U_BOOT_PV}.tar.bz2;name=u-boot \
     git://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell;protocol=https;branch=mv_ddr-armada-atf-mainline;rev=${MV_DDR_REV};destsuffix=mv-ddr-marvell \
     git://github.com/MarvellEmbeddedProcessors/binaries-marvell;protocol=https;branch=${MV_BIN_BRANCH};rev=${MV_BIN_REV};destsuffix=binaries-marvell \
-    git://github.com/MarvellEmbeddedProcessors/ble-marvell.git;protocol=https;branch=atf-mainline;rev=${MV_BLE_REV};destsuffix=ble-marvell \
     file://macchiatobin-rules \
     "
-SRC_URI[u-boot.sha256sum] = "839bf23cfe8ce613a77e583a60375179d0ad324e92c82fbdd07bebf0fd142268"
+SRC_URI[u-boot.sha256sum] = "bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0"
 
 BUILD_DEPENDS =. "libssl-dev:native, "
 
-MV_DDR_REV="779e860c3b81eda192dd40270f46c0ff44e52113"
-MV_BIN_BRANCH="binaries-marvell-armada-18.06"
-MV_BIN_REV="14481806e699dcc6f7025dbe3e46cf26bb787791"
-MV_BLE_REV="61d305e3869dec8c8c5b8c2fd985548f9a424688"
+MV_DDR_REV="a881467ef0f0185e6570dd0483023fde93cbb5f5"
+MV_BIN_BRANCH="binaries-marvell-armada-18.12"
+MV_BIN_REV="c6c529ea3d905a28cc77331964c466c3e2dc852e"
 
 U_BOOT_CONFIG="mvebu_mcbin-88f8040_defconfig"
 U_BOOT_BIN="u-boot.bin"

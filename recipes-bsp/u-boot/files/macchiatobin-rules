@@ -27,8 +27,7 @@ override_dh_auto_build:
 	$(MAKE) USE_COHERENT_MEM=0 \
 	        PLAT=a80x0_mcbin \
 	        MV_DDR_PATH=../mv-ddr-marvell \
-	        SCP_BL2=../binaries-marvell/mrvl_scp_bl2_mss_ap_cp1_a8040.img \
-	        BLE_PATH=../ble-marvell \
+	        SCP_BL2=../binaries-marvell/mrvl_scp_bl2.img \
 	        BL33=$(U_BOOT_DIR)/u-boot.bin \
 	        all fip
 
