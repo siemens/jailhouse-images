@@ -1,0 +1,31 @@
+From b8c188c02b5afc51257903a35a399fd4632978e8 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 25 Aug 2019 13:39:41 +0200
+Subject: [PATCH 2/2] Revert "tools/Makefile: fix HOSTCFLAGS with
+ CROSS_BUILD_TOOLS"
+
+This reverts commit 72c69ea8d603fd2448dd1d7c399c4f77b77773b7.
+
+Breaks CROSS_BUILD_TOOLS=y build with CONFIG_FIT and without
+CONFIG_FIT_SIGNATURE.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ tools/Makefile | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/Makefile b/tools/Makefile
+index 33e90a8025..2717304003 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -274,7 +274,6 @@ subdir- += env
+ 
+ ifneq ($(CROSS_BUILD_TOOLS),)
+ override HOSTCC = $(CC)
+-override HOSTCFLAGS = $(CFLAGS)
+ 
+ quiet_cmd_crosstools_strip = STRIP   $^
+       cmd_crosstools_strip = $(STRIP) $^; touch $@
+-- 
+2.16.4
+
