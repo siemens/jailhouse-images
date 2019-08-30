@@ -18,14 +18,11 @@ usage()
 	echo -e "--all\t\tBuild all available images (may take hours...)."
 	echo -e "--shell\t\tDrop into a shell to issue bitbake commands" \
 		"manually."
-	echo -e "--docker-args\tAdditional arguments to pass to docker for" \
-		"running the build."
 	exit 1
 }
 
 KAS_FILES="/jailhouse-images/kas.yml"
 CMD="build"
-DOCKER_ARGS=""
 
 while [ $# -gt 0 ]; do
 	case "$1" in
@@ -47,11 +44,6 @@ while [ $# -gt 0 ]; do
 	--shell)
 		CMD="shell"
 		shift 1
-		;;
-	--docker-args)
-		[ $# -gt 0 ] || usage
-		DOCKER_ARGS=$2
-		shift 2
 		;;
 	*)
 		usage
@@ -113,5 +105,5 @@ docker run -v $(pwd):/jailhouse-images:ro -v $(pwd):/work:rw --workdir=/work \
 	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
 	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
 	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy \
-	   -e NO_PROXY=$NO_PROXY ${DOCKER_ARGS} \
+	   -e NO_PROXY=$NO_PROXY \
 	   kasproject/kas-isar ${CMD} ${KAS_FILES}
