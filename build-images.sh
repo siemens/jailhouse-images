@@ -2,7 +2,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2019
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -21,24 +21,25 @@ usage()
 	exit 1
 }
 
-KAS_FILES="/jailhouse-images/kas.yml"
+JAILHOUSE_IMAGES=$(dirname $0)
+KAS_FILES="${JAILHOUSE_IMAGES}/kas.yml"
 CMD="build"
 
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--latest)
-		KAS_FILES="${KAS_FILES}:/jailhouse-images/opt-latest.yml"
+		KAS_FILES="${KAS_FILES}:${JAILHOUSE_IMAGES}/opt-latest.yml"
 		shift 1
 		;;
 	--rt)
-		KAS_FILES="${KAS_FILES}:/jailhouse-images/opt-rt.yml"
+		KAS_FILES="${KAS_FILES}:${JAILHOUSE_IMAGES}/opt-rt.yml"
 		shift 1
 		;;
 	--all)
 		KAS_TARGET=
 		while read MACHINE DESCRIPTION; do
 			KAS_TARGET="${KAS_TARGET} multiconfig:${MACHINE}-jailhouse-demo:demo-image"
-		done < images.list
+		done < ${JAILHOUSE_IMAGES}/images.list
 		shift 1
 		;;
 	--shell)
@@ -60,7 +61,7 @@ if [ -z "${KAS_TARGET}" ]; then
 		MACHINES="${MACHINES} ${MACHINE}"
 		NUM_MACHINES=$((NUM_MACHINES + 1))
 		echo " ${NUM_MACHINES}: ${DESCRIPTION}"
-	done < images.list
+	done < ${JAILHOUSE_IMAGES}/images.list
 	echo " 0: all (may take hours...)"
 	echo ""
 
@@ -93,17 +94,15 @@ if [ -z "${KAS_TARGET}" ]; then
 		fi
 	done
 fi
+export KAS_TARGET
 
-if [ -t 1 ]; then
-	INTERACTIVE="-t -i"
+if [ -z ${KAS_DOCKER} ]; then
+	KAS_DOCKER=./kas-docker
+	if [ ! -e ${KAS_DOCKER} ]; then
+		wget -q --show-progress -O ${KAS_DOCKER} \
+		     https://raw.githubusercontent.com/siemens/kas/master/kas-docker
+		chmod a+x ${KAS_DOCKER}
+	fi
 fi
 
-docker run -v $(pwd):/jailhouse-images:ro -v $(pwd):/work:rw --workdir=/work \
-	   -e USER_ID=$(id -u) -e SHELL=${SHELL} \
-	   -e KAS_TARGET="${KAS_TARGET}" -e KAS_TASK="${KAS_TASK}" \
-	   --rm ${INTERACTIVE} \
-	   --cap-add=SYS_ADMIN --cap-add=MKNOD --privileged \
-	   -e http_proxy=$http_proxy -e https_proxy=$https_proxy \
-	   -e ftp_proxy=$ftp_proxy -e no_proxy=$no_proxy \
-	   -e NO_PROXY=$NO_PROXY \
-	   kasproject/kas-isar ${CMD} ${KAS_FILES}
+${KAS_DOCKER} --isar ${CMD} ${KAS_FILES}
