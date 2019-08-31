@@ -1,0 +1,13 @@
+Source: ${PN}
+Section: misc
+Priority: optional
+Standards-Version: 3.9.6
+Build-Depends: bison, ca-certificates, flex, gawk, help2man,
+               libncurses5-dev:native, libtool-bin, texinfo, wget, unzip
+Maintainer: Jan Kiszka <jan.kiszka@siemens.com>
+
+Package: ${PN}
+# Mis-declare it as arch-independent in order to install it as host tool into
+# the buildchroot - Isar shortcoming
+Architecture: all
+Description: ${DESCRIPTION}
