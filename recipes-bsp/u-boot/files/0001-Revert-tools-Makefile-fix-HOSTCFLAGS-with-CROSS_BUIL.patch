@@ -1,7 +1,7 @@
-From b8c188c02b5afc51257903a35a399fd4632978e8 Mon Sep 17 00:00:00 2001
+From 06b5faeb1e6b18c86dc5fcdd1cc764ee49da1fbe Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Sun, 25 Aug 2019 13:39:41 +0200
-Subject: [PATCH 2/2] Revert "tools/Makefile: fix HOSTCFLAGS with
+Subject: [PATCH] Revert "tools/Makefile: fix HOSTCFLAGS with
  CROSS_BUILD_TOOLS"
 
 This reverts commit 72c69ea8d603fd2448dd1d7c399c4f77b77773b7.

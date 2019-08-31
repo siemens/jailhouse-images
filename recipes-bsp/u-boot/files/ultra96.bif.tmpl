@@ -10,7 +10,7 @@
 #
 
 image : {
-	[pmufw_image] ../usr/share/zynqmp/pmufw.elf
+	[pmufw_image] /usr/share/zynqmp-pmufw/executable.elf
 	[bootloader, destination_cpu=a5x-0] ../usr/share/zynqmp/fsbl.elf
 	../design_1_wrapper.bit
 	[destination_cpu=a5x-0, exception_level=el-3,trustzone] ../arm-trusted-firmware-${ATF_PV}/build/zynqmp/release/bl31/bl31.elf
