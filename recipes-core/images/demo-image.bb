@@ -17,7 +17,7 @@ DESCRIPTION = "Jailhouse demo image (${MACHINE})"
 IMAGE_PREINSTALL += " \
     bash-completion less vim nano man \
     ifupdown isc-dhcp-client net-tools iputils-ping ssh \
-    iw wireless-tools wpasupplicant \
+    iw wireless-tools wpasupplicant dbus \
     pciutils usbutils ethtool iperf3"
 
 IMAGE_INSTALL += "jailhouse-${KERNEL_NAME}"
