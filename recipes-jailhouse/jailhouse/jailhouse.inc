@@ -19,6 +19,9 @@ SRC_URI = " \
     git://github.com/siemens/jailhouse;branch=next \
     file://debian/"
 
+TEMPLATE_FILES = "debian/control.tmpl"
+TEMPLATE_VARS += "KERNEL_NAME"
+
 S = "${WORKDIR}/git"
 
 inherit dpkg
@@ -27,13 +30,12 @@ DEPENDS = "linux-image-${KERNEL_NAME}"
 
 do_prepare_build() {
     cp -r ${WORKDIR}/debian ${S}/
+    deb_add_changelog
     if [ "${DISTRO_ARCH}" != "amd64" ]; then
         # Install device trees only on non-x86 archs as they only exist there
         echo "configs{,/*}/dts/*.dtb etc/jailhouse/dts" >> ${S}/debian/jailhouse.install
     fi
     mv ${S}/debian/jailhouse.install ${S}/debian/jailhouse-${KERNEL_NAME}.install
-    sed -e 's/@PV@/${PV}/g' -e 's/@KERNEL_NAME@/${KERNEL_NAME}/g' \
-        -i ${S}/debian/changelog ${S}/debian/control
 }
 
 dpkg_runbuild_prepend() {
