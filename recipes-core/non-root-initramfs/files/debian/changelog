@@ -1,5 +1,0 @@
-non-root-initramfs (@PV@) unstable; urgency=low
-
-  * Generated package.
-
- -- Jan Kiszka <jan.kiszka@siemens.com>  Sat, 17 Feb 2018 00:00:00 +0000

@@ -26,7 +26,7 @@ do_prepare_build() {
 	cd ${WORKDIR}
 
 	cp -r debian ${S}
-	sed -i 's/@PV@/${PV}/' ${S}/debian/changelog
+	deb_add_changelog
 
 	ln -sf ${DISTRO_ARCH}-config .config
 }
