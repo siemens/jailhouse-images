@@ -13,8 +13,8 @@ require recipes-kernel/linux/linux-jailhouse_4.19.inc
 
 SRC_URI += "file://preempt-rt.cfg"
 
-SRC_URI[sha256sum] = "02e7eb3ea8366785ae516ca3bb9cdd2d3b83672b543b8be12a4853b02f2a6279"
-SRCREV = "643fa6fcbe61f5db2120aa8757bc02faa56988cb"
+SRC_URI[sha256sum] = "2d4640f928e237254ed4242f75c6133853859d38aa08a6b91fc3a919caa0dc7e"
+SRCREV = "90c6f75204884080b23d30424a4eff313dfeaa7d"
 
 do_prepare_build_prepend() {
     cat ${WORKDIR}/preempt-rt.cfg >> ${WORKDIR}/${KERNEL_DEFCONFIG}
