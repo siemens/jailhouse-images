@@ -27,7 +27,7 @@ case "$1" in
 		DISTRO_ARCH=amd64
 		QEMU=qemu-system-x86_64
 		QEMU_EXTRA_ARGS=" \
-			-cpu kvm64,-kvm_pv_eoi,-kvm_steal_time,-kvm_asyncpf,-kvmclock,+vmx,+arat \
+			-cpu host,-kvm-pv-eoi,-kvm-pv-ipi,-kvm-asyncpf,-kvm-steal-time,-kvmclock \
 			-smp 4 \
 			-enable-kvm -machine q35,kernel_irqchip=split \
 			-serial vc \
