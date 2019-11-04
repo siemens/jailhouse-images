@@ -14,7 +14,9 @@ require jailhouse.inc
 SRC_URI += " \
     file://nuc6cay_0.11.c \
     file://linux-nuc6cay-demo_0.11.c \
-    file://0001-arm-Fix-build-with-gcc-8.patch"
+    file://0001-arm-Fix-build-with-gcc-8.patch \
+    file://0001-x86-Permit-root-cell-to-enable-CR4.UMIP.patch \
+    file://0001-x86-ioapic-Rework-and-fix-redir-entry-programming.patch"
 
 SRCREV = "58052a7a9d1f5904d72b1637282c877172ee69f6"
 

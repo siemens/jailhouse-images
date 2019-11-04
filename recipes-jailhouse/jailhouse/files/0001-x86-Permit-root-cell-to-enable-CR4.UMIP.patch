@@ -1,0 +1,28 @@
+From 6820b515e9a71f5490a36d2a5041e21ab4ea1e4b Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 3 Nov 2019 11:44:24 +0100
+Subject: [PATCH] x86: Permit root cell to enable CR4.UMIP
+
+This is safe from hypervisor perspective.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ hypervisor/arch/x86/include/asm/processor.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hypervisor/arch/x86/include/asm/processor.h b/hypervisor/arch/x86/include/asm/processor.h
+index d8111690..d22a60d7 100644
+--- a/hypervisor/arch/x86/include/asm/processor.h
++++ b/hypervisor/arch/x86/include/asm/processor.h
+@@ -66,7 +66,7 @@
+ #define X86_CR4_VMXE					(1UL << 13)
+ #define X86_CR4_OSXSAVE					(1UL << 18)
+ #define X86_CR4_RESERVED				\
+-	(BIT_MASK(31, 23) | (1UL << 19) | (1UL << 15) | BIT_MASK(12, 11))
++	(BIT_MASK(31, 23) | (1UL << 19) | (1UL << 15) | (1UL << 12))
+ 
+ #define X86_XCR0_FP					0x00000001
+ 
+-- 
+2.16.4
+
