@@ -23,7 +23,7 @@ SRC_URI += " \
     file://ultra96.bif.tmpl \
     file://ultra96-rules \
     "
-SRC_URI[u-boot.sha256sum] = "bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0"
+SRC_URI[u-boot.sha256sum] = "8d6d6070739522dd236cba7055b8736bfe92b4fac0ea18ad809829ca79667014"
 
 TEMPLATE_FILES += "ultra96.bif.tmpl"
 TEMPLATE_VARS += "ATF_PV"
