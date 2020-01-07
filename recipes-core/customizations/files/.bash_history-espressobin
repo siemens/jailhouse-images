@@ -1,10 +1,10 @@
 jailhouse enable /etc/jailhouse/espressobin.cell
 jailhouse console
-jailhouse cell create /etc/jailhouse/espressobin-gic-demo.cell
-jailhouse cell load gic-demo /usr/libexec/jailhouse/demos/gic-demo.bin
-jailhouse cell start gic-demo
-jailhouse cell stats gic-demo
-jailhouse cell destroy gic-demo
+jailhouse cell create /etc/jailhouse/espressobin-inmate-demo.cell
+jailhouse cell load inmate-demo /usr/libexec/jailhouse/demos/gic-demo.bin
+jailhouse cell start inmate-demo
+jailhouse cell stats inmate-demo
+jailhouse cell destroy inmate-demo
 jailhouse cell linux /etc/jailhouse/espressobin-linux-demo.cell \
                      /boot/vmlinuz* \
                      -d /etc/jailhouse/dts/inmate-espressobin.dtb \
