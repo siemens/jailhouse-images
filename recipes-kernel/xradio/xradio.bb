@@ -19,7 +19,7 @@ SRC_URI += " \
     ${FW_URL}/fw_xr819.bin?raw=true;downloadfilename=fw_xr819.bin;sha256sum=4954ceb85807959c42e82c432109455bd9eabe95971402299a16d77ddd7d79f5 \
     ${FW_URL}/sdd_xr819.bin?raw=true;downloadfilename=sdd_xr819.bin;sha256sum=84d3fb3ca8e5d25a0c113a5063bccbeb5b53da230a0afa236b5b625f37db5161 \
     file://debian/xradio.install"
-SRCREV = "b7789c274091344eeff47cf34a48e0b225de852b"
+SRCREV = "502489a9389ac7118401dc7271c56d128376e191"
 
 S = "${WORKDIR}/git"
 
