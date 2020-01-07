@@ -9,27 +9,27 @@
 # SPDX-License-Identifier: MIT
 #
 
-allow-hotplug enp0s14
-allow-hotplug enp0s16
-allow-hotplug enp0s0
-allow-hotplug enP1p0s0
+allow-hotplug enp0s15
+allow-hotplug enp0s17
+allow-hotplug enp0s1
+allow-hotplug enP1p0s1
 
-# used on physical PCI bus
-iface enp0s14 inet static
+# used on x86 QEMU
+iface enp0s15 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
 
 # used on NUC6CAY
-iface enp0s16 inet static
+iface enp0s17 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
 
 # used on virtual PCI bus, domain 0000
-iface enp0s0 inet static
+iface enp0s1 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
 
 # used on virtual PCI bus, domain 0001
-iface enP1p0s0 inet static
+iface enP1p0s1 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
