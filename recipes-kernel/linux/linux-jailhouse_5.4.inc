@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2020
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -11,8 +11,8 @@
 
 require recipes-kernel/linux/linux-custom.inc
 
-KERNEL_DEFCONFIG = "${DISTRO_ARCH}_defconfig_4.19"
-KERNEL_DEFCONFIG_orangepi-zero = "orangepi-zero_defconfig_4.19"
+KERNEL_DEFCONFIG = "${DISTRO_ARCH}_defconfig_5.4"
+KERNEL_DEFCONFIG_orangepi-zero = "orangepi-zero_defconfig_5.4"
 
 SRC_URI += " \
     https://github.com/siemens/linux/archive/${SRCREV}.tar.gz;downloadfilename=linux-${SRCREV}.tar.gz \
