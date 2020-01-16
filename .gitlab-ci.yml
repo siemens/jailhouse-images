@@ -16,4 +16,5 @@ all:
     - export KAS_TARGET
     - cd ..
     - kas build jailhouse-images/kas.yml
+    - KAS_TARGET=$(echo $KAS_TARGET|sed 's/mc:rpi4-jailhouse-demo:demo-image//')
     - kas build jailhouse-images/kas.yml:jailhouse-images/opt-latest.yml:jailhouse-images/opt-rt.yml
