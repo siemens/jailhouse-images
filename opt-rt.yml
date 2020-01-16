@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2020
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -15,3 +15,4 @@ header:
 local_conf_header:
   preempt-rt: |
     KERNEL_NAME = "jailhouse-rt"
+    KERNEL_NAME_rpi4 = "not-supported"
