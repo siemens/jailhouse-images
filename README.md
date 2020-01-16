@@ -103,6 +103,13 @@ directly to the eMMC because it does not contain any firmware.
 The [Avnet Ultra96](https://www.96boards.org/product/ultra96/) is supported.
 You can boot the board directly from the generated SD card image.
 
+## Raspberry Pi 4
+
+The [Raspberry Pi 4 Model B](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
+is support. You can boot the board directly from the generated SD card image.
+The mini UART on the GPIO header (pin 6/8/10: Ground/TXD/RXD) is used as serial
+console.
+
 
 Community Resources
 -------------------
