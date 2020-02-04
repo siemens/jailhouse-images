@@ -13,5 +13,5 @@ require recipes-kernel/linux/linux-jailhouse_5.4.inc
 
 SRC_URI += "file://preempt-rt.cfg"
 
-SRC_URI[sha256sum] = "5714bd79562a43c17aa869a6dac40a19ac3965a3c1151aa4d0f66993eb69ae9d"
-SRCREV = "f8a16c29b76d12da917f14bbbbf97b862346e91e"
+SRC_URI[sha256sum] = "49ee37658114f123390e5c2b00bf177aa110e77ebfd62325a3267e29f34ec873"
+SRCREV = "83e85c7a8e18f1d72e5c78952a853b656def48b6"

@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2020
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -11,5 +11,5 @@
 
 require recipes-kernel/linux/linux-jailhouse_5.4.inc
 
-SRC_URI[sha256sum] = "c2a9e69f32c017c4d32d7f87d3221232fc9053e8fd94f7e25e8e6867f9be2dd0"
-SRCREV = "9caa6a8cab0d7f46475990aaeb7dcc7721547ef0"
+SRC_URI[sha256sum] = "55cbeb4ba845f191006c4cd1611c13fbbc7b7248efeee374165d76306204d648"
+SRCREV = "6d9ce684e169f54e4cdf19f4e785600cac603fd8"
