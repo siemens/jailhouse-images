@@ -11,10 +11,6 @@
 
 require jailhouse.inc
 
-SRCREV = "next"
-PV = "0.9999-next"
+SRC_URI += "file://0001-configs-arm-arm64-Fix-vPCI-IRQ-assignment-of-Linux-c.patch"
 
-dpkg_runbuild_prepend() {
-    bbplain $(printf "jailhouse-latest: Building revision %.12s\n" \
-                     $(cat ${S}/.git/refs/heads/next))
-}
+SRCREV = "92db71f257fabd3c08fa4b99498fa61a41ea831d"

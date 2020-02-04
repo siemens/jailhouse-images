@@ -1,0 +1,170 @@
+From 7e538dd94667a1426c4a694f8bd9c6071ac41b88 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Wed, 5 Feb 2020 07:37:08 +0100
+Subject: [PATCH] configs: arm/arm64: Fix vPCI IRQ assignment of Linux configs
+
+By moving the ivshmem devices for virtual network one slot up, we also
+changed their IRQs. Adjust the irqchip configs accordingly.
+
+Fixes: 68b8ff84ae8d ("configs/arm/bananapi-linux-demo.c")
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ configs/arm/bananapi-linux-demo.c          | 2 +-
+ configs/arm/jetson-tk1-linux-demo.c        | 2 +-
+ configs/arm64/espressobin-linux-demo.c     | 2 +-
+ configs/arm64/hikey-linux-demo.c           | 2 +-
+ configs/arm64/jetson-tx1-linux-demo.c      | 2 +-
+ configs/arm64/k3-am654-idk-linux-demo.c    | 2 +-
+ configs/arm64/k3-j721e-evm-linux-demo.c    | 2 +-
+ configs/arm64/macchiatobin-linux-demo.c    | 2 +-
+ configs/arm64/ultra96-linux-demo.c         | 2 +-
+ configs/arm64/zynqmp-zcu102-linux-demo-2.c | 2 +-
+ configs/arm64/zynqmp-zcu102-linux-demo.c   | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/configs/arm/bananapi-linux-demo.c b/configs/arm/bananapi-linux-demo.c
+index 43c7ef36..9819091e 100644
+--- a/configs/arm/bananapi-linux-demo.c
++++ b/configs/arm/bananapi-linux-demo.c
+@@ -96,7 +96,7 @@ struct {
+ 			.address = 0x01c81000,
+ 			.pin_base = 32,
+ 			.pin_bitmap = {
+-				1 << (52-32), 0, 0, 1 << (155-128),
++				1 << (52-32), 0, 0, 1 << (156-128),
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm/jetson-tk1-linux-demo.c b/configs/arm/jetson-tk1-linux-demo.c
+index 13a7c00e..52e11c1e 100644
+--- a/configs/arm/jetson-tk1-linux-demo.c
++++ b/configs/arm/jetson-tk1-linux-demo.c
+@@ -99,7 +99,7 @@ struct {
+ 			.address = 0x50041000,
+ 			.pin_base = 160,
+ 			.pin_bitmap = {
+-				1 << (152+32 - 160),
++				1 << (153+32 - 160),
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm64/espressobin-linux-demo.c b/configs/arm64/espressobin-linux-demo.c
+index e94bc63f..c326b6d5 100644
+--- a/configs/arm64/espressobin-linux-demo.c
++++ b/configs/arm64/espressobin-linux-demo.c
+@@ -89,7 +89,7 @@ struct {
+ 				(1 << (43 - 32)) | (1 << (44 - 32)) | (1 << (45 - 32)),
+ 				0,
+ 				0,
+-				(1 << (140 - 128))
++				(1 << (141 - 128))
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm64/hikey-linux-demo.c b/configs/arm64/hikey-linux-demo.c
+index aefc429d..cb6e101c 100644
+--- a/configs/arm64/hikey-linux-demo.c
++++ b/configs/arm64/hikey-linux-demo.c
+@@ -86,7 +86,7 @@ struct {
+ 			.address = 0xf6801000,
+ 			.pin_base = 32,
+ 			.pin_bitmap = {
+-				0, 1 << (71 - 64), 0, 1 << (143 - 128)
++				0, 1 << (71 - 64), 0, 1 << (144 - 128)
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm64/jetson-tx1-linux-demo.c b/configs/arm64/jetson-tx1-linux-demo.c
+index a14f865b..c5f2d811 100644
+--- a/configs/arm64/jetson-tx1-linux-demo.c
++++ b/configs/arm64/jetson-tx1-linux-demo.c
+@@ -103,7 +103,7 @@ struct {
+ 			.address = 0x50041000,
+ 			.pin_base = 160,
+ 			.pin_bitmap = {
+-				1 << (152+32 - 160),
++				1 << (153+32 - 160),
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm64/k3-am654-idk-linux-demo.c b/configs/arm64/k3-am654-idk-linux-demo.c
+index 02bd2b18..d03fd4cd 100644
+--- a/configs/arm64/k3-am654-idk-linux-demo.c
++++ b/configs/arm64/k3-am654-idk-linux-demo.c
+@@ -120,7 +120,7 @@ struct {
+ 			.address = 0x01800000,
+ 			.pin_base = 160,
+ 			.pin_bitmap = {
+-			1 << (189 - 160), 0x0, 0x00, 0,
++			1 << (190 - 160), 0x0, 0x00, 0,
+ 			},
+ 		},
+ 		{
+diff --git a/configs/arm64/k3-j721e-evm-linux-demo.c b/configs/arm64/k3-j721e-evm-linux-demo.c
+index 9a853e9a..f494b0cb 100644
+--- a/configs/arm64/k3-j721e-evm-linux-demo.c
++++ b/configs/arm64/k3-j721e-evm-linux-demo.c
+@@ -259,7 +259,7 @@ struct {
+ 	},
+ 
+ 	.pci_devices = {
+-		/* 00:00.0 */ {
++		/* 00:01.0 */ {
+ 			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
+ 			.bdf = 1 << 3,
+ 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
+diff --git a/configs/arm64/macchiatobin-linux-demo.c b/configs/arm64/macchiatobin-linux-demo.c
+index f7675e8a..ad29bbd5 100644
+--- a/configs/arm64/macchiatobin-linux-demo.c
++++ b/configs/arm64/macchiatobin-linux-demo.c
+@@ -96,7 +96,7 @@ struct {
+ 			.pin_bitmap = {
+ 				(1 << (51 - 32)),
+ 				0,
+-				(1 << (112 - 96)),
++				(1 << (113 - 96)),
+ 				0
+ 			},
+ 		},
+diff --git a/configs/arm64/ultra96-linux-demo.c b/configs/arm64/ultra96-linux-demo.c
+index 7054f5f0..102fa754 100644
+--- a/configs/arm64/ultra96-linux-demo.c
++++ b/configs/arm64/ultra96-linux-demo.c
+@@ -89,7 +89,7 @@ struct {
+ 				1 << (54 - 32),
+ 				0,
+ 				0,
+-				(1 << (140 - 128)) | (1 << (142 - 128))
++				(1 << (141 - 128)) | (1 << (142 - 128))
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm64/zynqmp-zcu102-linux-demo-2.c b/configs/arm64/zynqmp-zcu102-linux-demo-2.c
+index 4fbd46a8..76ed8064 100644
+--- a/configs/arm64/zynqmp-zcu102-linux-demo-2.c
++++ b/configs/arm64/zynqmp-zcu102-linux-demo-2.c
+@@ -85,7 +85,7 @@ struct {
+ 				0,
+ 				0,
+ 				0,
+-				(1 << (145 - 128)) | (1 << (146 - 128))
++				(1 << (146 - 128)) | (1 << (147 - 128))
+ 			},
+ 		},
+ 	},
+diff --git a/configs/arm64/zynqmp-zcu102-linux-demo.c b/configs/arm64/zynqmp-zcu102-linux-demo.c
+index c944fa56..32e38089 100644
+--- a/configs/arm64/zynqmp-zcu102-linux-demo.c
++++ b/configs/arm64/zynqmp-zcu102-linux-demo.c
+@@ -91,7 +91,7 @@ struct {
+ 				1 << (54 - 32),
+ 				0,
+ 				0,
+-				(1 << (140 - 128)) | (1 << (142 - 128))
++				(1 << (141 - 128)) | (1 << (143 - 128))
+ 			},
+ 		},
+ 	},
+-- 
+2.16.4
+

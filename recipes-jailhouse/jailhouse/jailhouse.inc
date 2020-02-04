@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2020
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -17,7 +17,9 @@ LICENSE = "GPL-2.0 & BSD-2-clause"
 
 SRC_URI = " \
     git://github.com/siemens/jailhouse;branch=next \
-    file://debian/"
+    file://debian/ \
+    file://nuc6cay.c \
+    file://linux-nuc6cay-demo.c"
 
 TEMPLATE_FILES = "debian/control.tmpl"
 TEMPLATE_VARS += "KERNEL_NAME"
@@ -36,6 +38,9 @@ do_prepare_build() {
         echo "configs{,/*}/dts/*.dtb etc/jailhouse/dts" >> ${S}/debian/jailhouse.install
     fi
     mv ${S}/debian/jailhouse.install ${S}/debian/jailhouse-${KERNEL_NAME}.install
+
+    cp ${WORKDIR}/nuc6cay.c ${S}/configs/x86/
+    cp ${WORKDIR}/linux-nuc6cay-demo.c ${S}/configs/x86/
 }
 
 dpkg_runbuild_prepend() {
