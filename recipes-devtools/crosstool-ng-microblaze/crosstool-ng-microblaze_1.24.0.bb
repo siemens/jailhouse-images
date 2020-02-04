@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2019
+# Copyright (c) Siemens AG, 2019-2020
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -14,17 +14,18 @@ inherit dpkg
 DESCRIPTION = "Microblaze toolchain built by crosstool-ng"
 
 SRC_URI = " \
-    http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-${PV}.tar.xz \
+    https://github.com/crosstool-ng/crosstool-ng/archive/crosstool-ng-${PV}.tar.gz \
     file://debian/ \
     file://defconfig"
-SRC_URI[sha256sum] = "804ced838ea7fe3fac1e82f0061269de940c82b05d0de672e7d424af98f22d2d"
+SRC_URI[sha256sum] = "36c0067a2da265aa88f8d91c1647d152c98a100b8e2ce416cf47dedf08c069e9"
 
 TEMPLATE_FILES = "debian/control.tmpl"
 
-S = "${WORKDIR}/crosstool-ng-${PV}"
+S = "${WORKDIR}/crosstool-ng-crosstool-ng-${PV}"
 
 do_prepare_build[dirs] = "${DL_DIR}/crosstool-ng"
 do_prepare_build() {
+    rm -rf ${S}/debian
     cp -r ${WORKDIR}/debian ${S}
     deb_add_changelog
 

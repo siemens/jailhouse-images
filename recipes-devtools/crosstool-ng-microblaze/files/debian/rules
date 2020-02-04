@@ -14,6 +14,7 @@ DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
 override_dh_auto_configure:
+	test -e configure || ./bootstrap
 	./configure --enable-local
 
 override_dh_auto_build:
