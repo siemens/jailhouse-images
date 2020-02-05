@@ -12,10 +12,11 @@ Quickstart for Virtual Targets
 
 The host-side requirements are:
 
-- Docker (tested with 17.09.1-ce)
-- QEMU >= 2.8 for x86 image, >= 2.12 for ARM64 image
-- Kernel >= 4.4 with KVM support (for x86 image)
-- On Intel, kvm_intel module loaded with parameter `nested=1`
+- Docker (tested with 19.03.5-ce)
+- QEMU >= 3.1
+- Kernel >= 4.4 with KVM support (for qemu-x86 image)
+- kvm_intel module loaded with parameter `nested=1` (for qemu-x86 image on
+  kernel < 4.20)
 
 To build a target image, just run `build-images.sh` and select one (or
 both) of the QEMU targets. The generated image can then be executed using
@@ -74,6 +75,10 @@ command line:
 
 After that, the board will automatically start from the generated SD card
 image.
+
+Note that XHCI is no longer working with the combination of pre-built vendor
+U-Boot 2017.03-armada-17.10 and kernel 5.4. The kernel suggests to update the
+firmware. This involves manual building and flashing a more recent version.
 
 ### MACCHIATObin
 
