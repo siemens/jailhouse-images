@@ -115,6 +115,13 @@ is support. You can boot the board directly from the generated SD card image.
 The mini UART on the GPIO header (pin 6/8/10: Ground/TXD/RXD) is used as serial
 console.
 
+## Pine64+
+
+The [Pine64+](https://www.pine64.org/devices/single-board-computers/pine-a64/)
+with Allwinner A64 is supported with its 2GB edition. You can boot the board
+directly from the generated SD card image. UART0 available via EXP 10 connector
+(pin 7/8/9: TXD/RXD/GND) is used as serial console. For details refer
+[here](https://linux-sunxi.org/Pine64#Serial_port_.2F_UART).
 
 Community Resources
 -------------------
