@@ -13,6 +13,9 @@
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
+# Needed in case we run as root (for whatever reason)
+export FORCE_UNSAFE_CONFIGURE=1
+
 override_dh_auto_configure:
 	cp ../.config .
 	${MAKE} olddefconfig
