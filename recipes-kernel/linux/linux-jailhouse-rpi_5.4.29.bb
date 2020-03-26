@@ -11,5 +11,5 @@
 
 require recipes-kernel/linux/linux-jailhouse_5.4.inc
 
-SRC_URI[sha256sum] = "53de4d966d6072302fdc87ddce3ec94a22132638bcb8bf2c0944e0159d8db611"
-SRCREV = "e569bd2d6d2d7b958973bb8c6e9db9cfc05c790b"
+SRC_URI[sha256sum] = "458ee382435a4b546a1caa2d0bd7b732278f352aabc427e296102529bc668233"
+SRCREV = "a584b7ff4b4b151703547ac384c2f12a6cdbc83d"
