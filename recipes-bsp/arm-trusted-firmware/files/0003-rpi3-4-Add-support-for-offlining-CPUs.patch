@@ -1,7 +1,7 @@
-From 92ff7ed78f8600adc9733663380706a1bdb3e4a9 Mon Sep 17 00:00:00 2001
+From 6368eab6c5129f4ee6679a2daa6f0d5315cfd655 Mon Sep 17 00:00:00 2001
 From: Jan Kiszka <jan.kiszka@siemens.com>
 Date: Sun, 8 Dec 2019 20:48:46 +0100
-Subject: [PATCH] rpi3/4: Add support for offlining CPUs
+Subject: [PATCH 3/3] rpi3/4: Add support for offlining CPUs
 
 The hooks were populated but the power down left the CPU in limbo-land.
 What we need to do - until there is a way to actually power off - is to
@@ -9,6 +9,7 @@ turn off the MMU and enter the spinning loop as if we were cold-booted.
 This allows the on-call to pick up the CPU again.
 
 Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Change-Id: Iefc7a58424e3578ad3dd355a7bd6eaba4b412699
 ---
  plat/rpi/common/rpi3_pm.c | 10 ++++++++++
  1 file changed, 10 insertions(+)

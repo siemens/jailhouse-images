@@ -1,0 +1,109 @@
+From 0ea846120c1df90cf8cf29ab3f664cf7e3eabc22 Mon Sep 17 00:00:00 2001
+From: Andre Przywara <andre.przywara@arm.com>
+Date: Thu, 12 Dec 2019 16:31:11 +0000
+Subject: [PATCH 2/3] plat: rpi4: Skip UART initialisation
+
+So far we have seen two different clock setups for the Raspberry Pi 4
+board, with the VPU clock divider being different. This was handled by
+reading the divider register and adjusting the base clock rate
+accordingly.
+Recently a new GPU firmware version appeared that changed the clock rate
+*again*, though this time at a higher level, so the VPU rate (and the
+apparent PLLC parent clock) did not seem to change, judging by reading
+the clock registers.
+So rather than playing cat and mouse with the GPU firmware or going
+further down the rabbit hole of exploring the whole clock tree, let's
+just skip the baud rate programming altogether. This works because the
+GPU firmware actually sets up and programs the debug UART already, so
+we can just use it.
+
+Pass 0 as the base clock rate to let the console driver skip the setup,
+also remove the no longer needed clock code.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Change-Id: Ica88a3f3c9c11059357c1e6dd8f7a4d9b1f98fd7
+---
+ plat/rpi/rpi4/aarch64/plat_helpers.S |  4 ++--
+ plat/rpi/rpi4/include/rpi_hw.h       |  8 --------
+ plat/rpi/rpi4/rpi4_bl31_setup.c      | 16 +++++-----------
+ 3 files changed, 7 insertions(+), 21 deletions(-)
+
+diff --git a/plat/rpi/rpi4/aarch64/plat_helpers.S b/plat/rpi/rpi4/aarch64/plat_helpers.S
+index 46073b791..083c30e71 100644
+--- a/plat/rpi/rpi4/aarch64/plat_helpers.S
++++ b/plat/rpi/rpi4/aarch64/plat_helpers.S
+@@ -136,8 +136,8 @@ endfunc platform_mem_init
+ 	 */
+ func plat_crash_console_init
+ 	mov_imm	x0, PLAT_RPI3_UART_BASE
+-	mov_imm	x1, PLAT_RPI4_VPU_CLK_RATE
+-	mov_imm	x2, PLAT_RPI3_UART_BAUDRATE
++	mov	x1, xzr
++	mov	x2, xzr
+ 	b	console_16550_core_init
+ endfunc plat_crash_console_init
+ 
+diff --git a/plat/rpi/rpi4/include/rpi_hw.h b/plat/rpi/rpi4/include/rpi_hw.h
+index ed367ee20..b1dd4e92e 100644
+--- a/plat/rpi/rpi4/include/rpi_hw.h
++++ b/plat/rpi/rpi4/include/rpi_hw.h
+@@ -58,13 +58,6 @@
+  */
+ #define RPI3_PM_RSTS_WRCFG_HALT		U(0x00000555)
+ 
+-/*
+- * Clock controller
+- */
+-#define RPI4_IO_CLOCK_OFFSET		ULL(0x00101000)
+-#define RPI4_CLOCK_BASE			(RPI_IO_BASE + RPI4_IO_CLOCK_OFFSET)
+-#define RPI4_VPU_CLOCK_DIVIDER		ULL(0x0000000c)
+-
+ /*
+  * Hardware random number generator.
+  */
+@@ -88,7 +81,6 @@
+  */
+ #define RPI3_IO_MINI_UART_OFFSET	ULL(0x00215040)
+ #define RPI3_MINI_UART_BASE		(RPI_IO_BASE + RPI3_IO_MINI_UART_OFFSET)
+-#define PLAT_RPI4_VPU_CLK_RATE		ULL(1000000000)
+ 
+ /*
+  * GPIO controller
+diff --git a/plat/rpi/rpi4/rpi4_bl31_setup.c b/plat/rpi/rpi4/rpi4_bl31_setup.c
+index 53ab0c2e2..9e3b53979 100644
+--- a/plat/rpi/rpi4/rpi4_bl31_setup.c
++++ b/plat/rpi/rpi4/rpi4_bl31_setup.c
+@@ -119,8 +119,6 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 				u_register_t arg2, u_register_t arg3)
+ 
+ {
+-	uint32_t div_reg;
+-
+ 	/*
+ 	 * LOCAL_CONTROL:
+ 	 * Bit 9 clear: Increment by 1 (vs. 2).
+@@ -136,16 +134,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 
+ 	/*
+ 	 * Initialize the console to provide early debug support.
+-	 * Different GPU firmware revisions set up the VPU divider differently,
+-	 * so read the actual divider register to learn the UART base clock
+-	 * rate. The divider is encoded as a 12.12 fixed point number, but we
+-	 * just care about the integer part of it.
++	 * We rely on the GPU firmware to have initialised the UART correctly,
++	 * as the baud base clock rate differs across GPU firmware revisions.
++	 * Providing a base clock of 0 lets the 16550 UART init routine skip
++	 * the initial enablement and baud rate setup.
+ 	 */
+-	div_reg = mmio_read_32(RPI4_CLOCK_BASE + RPI4_VPU_CLOCK_DIVIDER);
+-	div_reg = (div_reg >> 12) & 0xfff;
+-	if (div_reg == 0)
+-		div_reg = 1;
+-	rpi3_console_init(PLAT_RPI4_VPU_CLK_RATE / div_reg);
++	rpi3_console_init(0);
+ 
+ 	bl33_image_ep_info.pc = plat_get_ns_image_entrypoint();
+ 	bl33_image_ep_info.spsr = rpi3_get_spsr_for_bl33_entry();
+-- 
+2.16.4
+
