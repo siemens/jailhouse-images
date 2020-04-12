@@ -1,0 +1,58 @@
+From 8d6aed50dded9e956cc13be835b7c8a78241c745 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sun, 12 Apr 2020 18:26:36 +0200
+Subject: [PATCH] inmates: x86: Add LED blinking support to apic-demo
+
+This is analogous to gic-demo on the ARM side: Grab led-reg and led-pin
+from the command line and toggle the specified bit in that memory-mapped
+register at the pace of the print-outs to make an LED behind it blink.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ inmates/demos/x86/apic-demo.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/inmates/demos/x86/apic-demo.c b/inmates/demos/x86/apic-demo.c
+index d9aada6a..83ab77fd 100644
+--- a/inmates/demos/x86/apic-demo.c
++++ b/inmates/demos/x86/apic-demo.c
+@@ -18,6 +18,13 @@
+ 
+ #define APIC_TIMER_VECTOR	32
+ 
++/*
++ * Enables blinking LED
++ * SIMATIC IPC127E:     register 0xd0c506a8, pin 0
++ */
++static void *led_reg;
++static unsigned int led_pin;
++
+ static unsigned long expected_time;
+ static unsigned long min = -1, max;
+ static bool has_smi_count;
+@@ -72,6 +79,9 @@ static void irq_handler(unsigned int irq)
+ 	}
+ 	printk("\n");
+ 
++	if (led_reg)
++		mmio_write32(led_reg, mmio_read32(led_reg) ^ (1 << led_pin));
++
+ 	expected_time += 100 * NS_PER_MSEC;
+ 	apic_timer_set(expected_time - tsc_read_ns());
+ }
+@@ -132,6 +142,12 @@ void inmate_main(void)
+ 
+ 	init_apic();
+ 
++	led_reg = (void *)(unsigned long)cmdline_parse_int("led-reg", 0);
++	led_pin = cmdline_parse_int("led-pin", 0);
++
++	if (led_reg)
++		map_range(led_reg, 4, MAP_UNCACHED);
++
+ 	while (!terminate) {
+ 		cpu_relax();
+ 
+-- 
+2.16.4
+

@@ -19,6 +19,7 @@ EXTRA_JAILHOUSE_CONFIGS ?= ""
 
 EXTRA_JAILHOUSE_CONFIGS_amd64 = " \
     nuc6cay.c linux-nuc6cay-demo.c \
+    ipc127e.c linux-ipc127e-demo.c apic-ipc127e-demo.c \
     "
 
 SRC_URI = " \
