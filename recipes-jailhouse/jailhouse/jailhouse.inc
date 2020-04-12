@@ -15,11 +15,17 @@ DESCRIPTION = "Jailhouse partitioning hypervisor"
 
 LICENSE = "GPL-2.0 & BSD-2-clause"
 
+EXTRA_JAILHOUSE_CONFIGS ?= ""
+
+EXTRA_JAILHOUSE_CONFIGS_amd64 = " \
+    nuc6cay.c linux-nuc6cay-demo.c \
+    "
+
 SRC_URI = " \
     git://github.com/siemens/jailhouse;branch=next \
     file://debian/ \
-    file://nuc6cay.c \
-    file://linux-nuc6cay-demo.c"
+    ${@ " ".join(["file://" + cfg for cfg in d.getVar('EXTRA_JAILHOUSE_CONFIGS').split()]) } \
+    "
 
 TEMPLATE_FILES = "debian/control.tmpl"
 TEMPLATE_VARS += "KERNEL_NAME"
@@ -39,8 +45,9 @@ do_prepare_build() {
     fi
     mv ${S}/debian/jailhouse.install ${S}/debian/jailhouse-${KERNEL_NAME}.install
 
-    cp ${WORKDIR}/nuc6cay.c ${S}/configs/x86/
-    cp ${WORKDIR}/linux-nuc6cay-demo.c ${S}/configs/x86/
+    for cfg in ${EXTRA_JAILHOUSE_CONFIGS}; do
+        cp ${WORKDIR}/$cfg ${S}/configs/x86/
+    done
 }
 
 dpkg_runbuild_prepend() {
