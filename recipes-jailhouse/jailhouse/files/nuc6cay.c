@@ -36,8 +36,6 @@
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
 
-#define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
-
 struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
@@ -70,10 +68,12 @@ struct {
 				.vtd_interrupt_limit = 256,
 				.iommu_units = {
 					{
+						.type = JAILHOUSE_IOMMU_INTEL,
 						.base = 0xfed64000,
 						.size = 0x1000,
 					},
 					{
+						.type = JAILHOUSE_IOMMU_INTEL,
 						.base = 0xfed65000,
 						.size = 0x1000,
 					},
