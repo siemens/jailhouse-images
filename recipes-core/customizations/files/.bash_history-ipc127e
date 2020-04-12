@@ -1,0 +1,13 @@
+jailhouse enable /etc/jailhouse/ipc127e.cell
+jailhouse console
+jailhouse cell create /etc/jailhouse/apic-ipc127e-demo.cell
+jailhouse cell load apic-demo /usr/libexec/jailhouse/demos/apic-demo.bin \
+                    -s "con-virtual led-reg=0xd0c506a8" -a 0x1000
+jailhouse cell start apic-demo
+jailhouse cell stats apic-demo
+jailhouse cell destroy apic-demo
+jailhouse cell linux /etc/jailhouse/linux-ipc127e-demo.cell /boot/vmlinuz* \
+                     -i /usr/libexec/jailhouse/demos/rootfs.cpio \
+                     -c "console=jailhouse console=tty0 8250.nr_uarts=0 ip=192.168.19.2"
+ssh 192.168.19.2
+jailhouse disable

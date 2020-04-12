@@ -13,6 +13,7 @@ allow-hotplug eth0
 allow-hotplug eth2
 allow-hotplug enp0s2
 allow-hotplug enp3s0
+allow-hotplug eno1
 
 # used on qemu-arm64, orangepi-zero and espressobin
 iface eth0 inet dhcp
@@ -25,3 +26,6 @@ iface enp0s2 inet dhcp
 
 # used on nuc6cay
 iface enp3s0 inet dhcp
+
+# used on ipc127e
+iface eno1 inet dhcp
