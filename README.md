@@ -55,7 +55,19 @@ smoothly.
 
 The [NUC6CAY](https://www.intel.com/content/www/us/en/products/boards-kits/nuc/mini-pcs/nuc6cays.html)
 is supported with 8 GB of RAM. It can boot from an SD card, or you can flash
-the generated on a built-in storage device. The device has to boot in EFI mode.
+the generated image on a built-in storage device. The device has to boot in EFI
+mode.
+
+As the device comes without a UART connector, the output of Jailhouse can only
+be seen via the EFI framebuffer on a monitor or on the virtual Jailhouse
+console (`jailhouse console`).
+
+### SIMATIC IPC127E
+
+The [SIMATIC IPC127E](https://new.siemens.com/global/en/products/automation/pc-based/iot-gateways/simatic-ipc127e.html)
+is supported in its 2-cores variant. It can boot from an USB stick, or you can
+flash the generated image on a built-in storage device. The device has to boot
+in EFI mode.
 
 As the device comes without a UART connector, the output of Jailhouse can only
 be seen via the EFI framebuffer on a monitor or on the virtual Jailhouse
