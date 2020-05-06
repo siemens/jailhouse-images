@@ -16,7 +16,7 @@ require recipes-bsp/u-boot/u-boot-custom.inc
 require recipes-bsp/arm-trusted-firmware/arm-trusted-firmware_${ATF_PV}.inc
 
 SRC_URI += " \
-    ftp://ftp.denx.de/pub/u-boot/u-boot-${U_BOOT_PV}.tar.bz2;name=u-boot \
+    https://ftp.denx.de/pub/u-boot/u-boot-${U_BOOT_PV}.tar.bz2;name=u-boot \
     file://0001-Revert-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUIL.patch \
     file://ultra96.bit.xz \
     file://ultra96-fsbl.elf.xz \
