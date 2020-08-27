@@ -100,7 +100,7 @@ if [ -z ${KAS_DOCKER} ]; then
 	KAS_DOCKER=./kas-docker
 	if [ ! -e ${KAS_DOCKER} ]; then
 		wget -q --show-progress -O ${KAS_DOCKER} \
-		     https://raw.githubusercontent.com/siemens/kas/2.1.1/kas-docker
+		     https://raw.githubusercontent.com/siemens/kas/2.2/kas-docker
 		chmod a+x ${KAS_DOCKER}
 	fi
 fi
