@@ -18,4 +18,11 @@
 			};
 		};
 	};
+
+	fragment@1 {
+		target = <&pcie0>;
+		__overlay__ {
+			linux,pci-domain = <0x00000000>;
+		};
+	};
 };
