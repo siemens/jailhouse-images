@@ -1,0 +1,52 @@
+From 8e1aea00f77d1c1a4b2313255966b741c2f1fd93 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sat, 29 Aug 2020 08:08:08 +0200
+Subject: [PATCH 2/2] arm-common: gicv2: Fix byte access to ITARGETR
+
+Byte-size write accesses overwrote all fields the issuing cell owned,
+not only the target byte. And byte-size read accesses may have returned
+the wrong value. This was broken since the beginning, just wasn't
+stressed properly so far. Latest jailhouse-enabling/5.4-rpi revealed it
+finally.
+
+Fixes: ee6b35ba9037 ("arm: GICv2: handle SPI routing")
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ hypervisor/arch/arm-common/gic-v2.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/hypervisor/arch/arm-common/gic-v2.c b/hypervisor/arch/arm-common/gic-v2.c
+index 6a81f77b..b63b0fbc 100644
+--- a/hypervisor/arch/arm-common/gic-v2.c
++++ b/hypervisor/arch/arm-common/gic-v2.c
+@@ -421,9 +421,8 @@ static enum mmio_result gicv2_handle_irq_target(struct mmio_access *mmio,
+ 	offset = irq % 4;
+ 	mmio->address &= ~0x3;
+ 	mmio->value <<= 8 * offset;
+-	mmio->size = 4;
+ 
+-	for (n = 0; n < 4; n++) {
++	for (n = offset; n < mmio->size + offset; n++) {
+ 		if (irqchip_irq_in_cell(cell, irq_base + n))
+ 			access_mask |= 0xff << (8 * n);
+ 		else
+@@ -441,6 +440,8 @@ static enum mmio_result gicv2_handle_irq_target(struct mmio_access *mmio,
+ 		}
+ 	}
+ 
++	mmio->size = 4;
++
+ 	if (mmio->is_write) {
+ 		spin_lock(&dist_lock);
+ 		u32 itargetsr =
+@@ -454,6 +455,7 @@ static enum mmio_result gicv2_handle_irq_target(struct mmio_access *mmio,
+ 	} else {
+ 		mmio_perform_access(gicd_base, mmio);
+ 		mmio->value &= access_mask;
++		mmio->value >>= 8 * offset;
+ 	}
+ 
+ 	return MMIO_HANDLED;
+-- 
+2.26.2
+
