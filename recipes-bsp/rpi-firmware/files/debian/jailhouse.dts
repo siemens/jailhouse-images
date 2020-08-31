@@ -1,0 +1,21 @@
+/dts-v1/;
+/plugin/;
+/ {
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			reserved-memory {
+				#address-cells = <2>;
+				#size-cells = <1>;
+				ranges;
+
+				jailhouse@20000000 {
+					reg = <0 0x20000000 0x10000000>;
+					no-map;
+				};
+			};
+		};
+	};
+};

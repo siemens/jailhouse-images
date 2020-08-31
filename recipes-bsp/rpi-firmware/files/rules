@@ -1,0 +1,7 @@
+#!/usr/bin/make -f
+
+override_dh_auto_build:
+	dtc -O dtb -b 0 -@ debian/jailhouse.dts -o boot/overlays/jailhouse.dtbo
+
+%:
+	dh $@

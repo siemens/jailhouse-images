@@ -1,1 +1,0 @@
-console=serial0,115200 root=/dev/mmcblk0p2 rootwait mem=768M

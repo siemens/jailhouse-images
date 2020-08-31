@@ -17,6 +17,7 @@ SRC_URI += " \
     file://0002-configs-arm64-Add-inmate-demo-for-pine64-plus-board.patch \
     file://0003-configs-arm64-Add-Linux-demo-for-pine64-plus.patch \
     file://0001-inmates-x86-Add-LED-blinking-support-to-apic-demo.patch \
+    file://0001-configs-arm64-Add-support-for-RPi4-with-more-than-1G.patch \
     file://0002-arm-common-gicv2-Fix-byte-access-to-ITARGETR.patch \
     "
 

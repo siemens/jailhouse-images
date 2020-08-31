@@ -1,0 +1,306 @@
+From 7bcab7c38b2c853ec068b35d61205ef660fceaac Mon Sep 17 00:00:00 2001
+From: Jakub Luzny <jakub@luzny.cz>
+Date: Wed, 26 Aug 2020 18:16:42 +0200
+Subject: [PATCH 1/2] configs: arm64: Add support for RPi4 with more than 1G of
+ memory
+
+Add the required memory regions to support 2G, 4G and 8G RAM variants
+of the Raspberry Pi 4. Tested on all the bigger variants, not on 1G, as I don't
+have one on hand and it's not available anymore.
+
+Also moved the memory used by Jailhouse for the hypervisor and cells from
+0x30000000 to 0x20000000 to avoid conflict with GPU memory. That is fine for
+gpu_mem setting of up to 256. The memory is supposed to be reserved using
+reserved-memory node in the device tree.
+
+To support variants with >2G RAM, the PCI MMIO config space was moved into the
+ARM Local Peripherals address range, into free space behind the GIC.
+
+Signed-off-by: Jakub Luzny <jakub@luzny.cz>
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ configs/arm64/dts/inmate-rpi4.dts |  2 +-
+ configs/arm64/rpi4-inmate-demo.c  | 22 ++++++------
+ configs/arm64/rpi4-linux-demo.c   | 28 ++++++++--------
+ configs/arm64/rpi4.c              | 56 +++++++++++++++++++++----------
+ 4 files changed, 65 insertions(+), 43 deletions(-)
+
+diff --git a/configs/arm64/dts/inmate-rpi4.dts b/configs/arm64/dts/inmate-rpi4.dts
+index 52fd3ac2..ac6d4f58 100644
+--- a/configs/arm64/dts/inmate-rpi4.dts
++++ b/configs/arm64/dts/inmate-rpi4.dts
+@@ -96,7 +96,7 @@
+ 				<0 0 0 2 &gic GIC_SPI 154 IRQ_TYPE_EDGE_RISING>,
+ 				<0 0 0 3 &gic GIC_SPI 155 IRQ_TYPE_EDGE_RISING>,
+ 				<0 0 0 4 &gic GIC_SPI 156 IRQ_TYPE_EDGE_RISING>;
+-		reg = <0x0 0xe0000000 0x0 0x100000>;
++		reg = <0x0 0xff900000 0x0 0x100000>;
+ 		ranges =
+ 			<0x02000000 0x00 0x10000000 0x0 0x10000000 0x00 0x10000>;
+ 	};
+diff --git a/configs/arm64/rpi4-inmate-demo.c b/configs/arm64/rpi4-inmate-demo.c
+index 62442e7c..09dfc1f0 100644
+--- a/configs/arm64/rpi4-inmate-demo.c
++++ b/configs/arm64/rpi4-inmate-demo.c
+@@ -51,34 +51,34 @@ struct {
+ 	.mem_regions = {
+ 		/* IVSHMEM shared memory regions (demo) */
+ 		{
+-			.phys_start = 0x3faf0000,
+-			.virt_start = 0x3faf0000,
++			.phys_start = 0x2faf0000,
++			.virt_start = 0x2faf0000,
+ 			.size = 0x1000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3faf1000,
+-			.virt_start = 0x3faf1000,
++			.phys_start = 0x2faf1000,
++			.virt_start = 0x2faf1000,
+ 			.size = 0x9000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3fafa000,
+-			.virt_start = 0x3fafa000,
++			.phys_start = 0x2fafa000,
++			.virt_start = 0x2fafa000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3fafc000,
+-			.virt_start = 0x3fafc000,
++			.phys_start = 0x2fafc000,
++			.virt_start = 0x2fafc000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3fafe000,
+-			.virt_start = 0x3fafe000,
++			.phys_start = 0x2fafe000,
++			.virt_start = 0x2fafe000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+@@ -91,7 +91,7 @@ struct {
+ 				JAILHOUSE_MEM_IO_32 | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		/* RAM */ {
+-			.phys_start = 0x3fa00000,
++			.phys_start = 0x2fa00000,
+ 			.virt_start = 0,
+ 			.size = 0x00010000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+diff --git a/configs/arm64/rpi4-linux-demo.c b/configs/arm64/rpi4-linux-demo.c
+index 9e7fad26..cf36fa22 100644
+--- a/configs/arm64/rpi4-linux-demo.c
++++ b/configs/arm64/rpi4-linux-demo.c
+@@ -52,39 +52,39 @@ struct {
+ 	.mem_regions = {
+ 		/* IVSHMEM shared memory regions (demo) */
+ 		{
+-			.phys_start = 0x3faf0000,
+-			.virt_start = 0x3faf0000,
++			.phys_start = 0x2faf0000,
++			.virt_start = 0x2faf0000,
+ 			.size = 0x1000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3faf1000,
+-			.virt_start = 0x3faf1000,
++			.phys_start = 0x2faf1000,
++			.virt_start = 0x2faf1000,
+ 			.size = 0x9000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3fafa000,
+-			.virt_start = 0x3fafa000,
++			.phys_start = 0x2fafa000,
++			.virt_start = 0x2fafa000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3fafc000,
+-			.virt_start = 0x3fafc000,
++			.phys_start = 0x2fafc000,
++			.virt_start = 0x2fafc000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		{
+-			.phys_start = 0x3fafe000,
+-			.virt_start = 0x3fafe000,
++			.phys_start = 0x2fafe000,
++			.virt_start = 0x2fafe000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		/* IVSHMEM shared memory region */
+-		JAILHOUSE_SHMEM_NET_REGIONS(0x3fb00000, 1),
++		JAILHOUSE_SHMEM_NET_REGIONS(0x2fb00000, 1),
+ 		/* UART */ {
+ 			.phys_start = 0xfe215040,
+ 			.virt_start = 0xfe215040,
+@@ -94,15 +94,15 @@ struct {
+ 				JAILHOUSE_MEM_IO_32 | JAILHOUSE_MEM_ROOTSHARED,
+ 		},
+ 		/* RAM */ {
+-			.phys_start = 0x3f900000,
++			.phys_start = 0x2f900000,
+ 			.virt_start = 0,
+ 			.size = 0x10000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_LOADABLE,
+ 		},
+ 		/* RAM */ {
+-			.phys_start = 0x30000000,
+-			.virt_start = 0x30000000,
++			.phys_start = 0x20000000,
++			.virt_start = 0x20000000,
+ 			.size = 0x8000000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA |
+diff --git a/configs/arm64/rpi4.c b/configs/arm64/rpi4.c
+index 92463184..7b6a7a02 100644
+--- a/configs/arm64/rpi4.c
++++ b/configs/arm64/rpi4.c
+@@ -1,7 +1,7 @@
+ /*
+  * Jailhouse, a Linux-based partitioning hypervisor
+  *
+- * Test configuration for Raspberry Pi 4 (32-bit, quad-core Cortex-A72, 1GB RAM)
++ * Test configuration for Raspberry Pi 4 (quad-core Cortex-A72, 1GB, 2GB, 4GB or 8GB RAM)
+  *
+  * Copyright (c) Siemens AG, 2020
+  *
+@@ -10,6 +10,8 @@
+  *
+  * This work is licensed under the terms of the GNU GPL, version 2.  See
+  * the COPYING file in the top-level directory.
++ *
++ * Reservation via device tree: reg = <0x0 0x20000000 0x10000000>;
+  */
+ 
+ #include <jailhouse/types.h>
+@@ -18,7 +20,7 @@
+ struct {
+ 	struct jailhouse_system header;
+ 	__u64 cpus[1];
+-	struct jailhouse_memory mem_regions[12];
++	struct jailhouse_memory mem_regions[14];
+ 	struct jailhouse_irqchip irqchips[2];
+ 	struct jailhouse_pci_device pci_devices[2];
+ } __attribute__((packed)) config = {
+@@ -27,7 +29,7 @@ struct {
+ 		.revision = JAILHOUSE_CONFIG_REVISION,
+ 		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
+ 		.hypervisor_memory = {
+-			.phys_start = 0x3fc00000,
++			.phys_start = 0x2fc00000,
+ 			.size       = 0x00400000,
+ 		},
+ 		.debug_console = {
+@@ -38,7 +40,7 @@ struct {
+ 				 JAILHOUSE_CON_REGDIST_4,
+ 		},
+ 		.platform_info = {
+-			.pci_mmconfig_base = 0xe0000000,
++			.pci_mmconfig_base = 0xff900000,
+ 			.pci_mmconfig_end_bus = 0,
+ 			.pci_is_virtual = 1,
+ 			.pci_domain = 1,
+@@ -70,37 +72,37 @@ struct {
+ 	.mem_regions = {
+ 		/* IVSHMEM shared memory regions for 00:00.0 (demo) */
+ 		{
+-			.phys_start = 0x3faf0000,
+-			.virt_start = 0x3faf0000,
++			.phys_start = 0x2faf0000,
++			.virt_start = 0x2faf0000,
+ 			.size = 0x1000,
+ 			.flags = JAILHOUSE_MEM_READ,
+ 		},
+ 		{
+-			.phys_start = 0x3faf1000,
+-			.virt_start = 0x3faf1000,
++			.phys_start = 0x2faf1000,
++			.virt_start = 0x2faf1000,
+ 			.size = 0x9000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+ 		},
+ 		{
+-			.phys_start = 0x3fafa000,
+-			.virt_start = 0x3fafa000,
++			.phys_start = 0x2fafa000,
++			.virt_start = 0x2fafa000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+ 		},
+ 		{
+-			.phys_start = 0x3fafc000,
+-			.virt_start = 0x3fafc000,
++			.phys_start = 0x2fafc000,
++			.virt_start = 0x2fafc000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ,
+ 		},
+ 		{
+-			.phys_start = 0x3fafe000,
+-			.virt_start = 0x3fafe000,
++			.phys_start = 0x2fafe000,
++			.virt_start = 0x2fafe000,
+ 			.size = 0x2000,
+ 			.flags = JAILHOUSE_MEM_READ,
+ 		},
+ 		/* IVSHMEM shared memory regions for 00:01.0 (networking) */
+-		JAILHOUSE_SHMEM_NET_REGIONS(0x3fb00000, 0),
++		JAILHOUSE_SHMEM_NET_REGIONS(0x2fb00000, 0),
+ 		/* MMIO 1 (permissive) */ {
+ 			.phys_start = 0xfd500000,
+ 			.virt_start = 0xfd500000,
+@@ -115,10 +117,30 @@ struct {
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_IO,
+ 		},
+-		/* RAM */ {
++		/* RAM (0M-~762M) */ {
+ 			.phys_start = 0x0,
+ 			.virt_start = 0x0,
+-			.size = 0x3fa10000,
++			.size = 0x2fa10000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE,
++		},
++
++		/* ~2M reserved for shared memory regions */
++
++		/* 4M reserved for the hypervisor */
++
++		/* RAM (768M-4032M) */ {
++			.phys_start = 0x30000000,
++			.virt_start = 0x30000000,
++			.size = 0xcc000000,
++			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
++				JAILHOUSE_MEM_EXECUTE,
++		},
++
++		/* RAM (4096M-8192M) */ {
++			.phys_start = 0x100000000,
++			.virt_start = 0x100000000,
++			.size = 0x100000000,
+ 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+ 				JAILHOUSE_MEM_EXECUTE,
+ 		},
+-- 
+2.26.2
+

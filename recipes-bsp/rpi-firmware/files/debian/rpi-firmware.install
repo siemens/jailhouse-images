@@ -1,0 +1,8 @@
+boot/bootcode.bin	usr/lib/rpi-firmware/
+boot/LICENCE.broadcom	usr/lib/rpi-firmware/
+boot/*.dat		usr/lib/rpi-firmware/
+boot/*.dtb		usr/lib/rpi-firmware/
+boot/*.elf		usr/lib/rpi-firmware/
+boot/overlays/*		usr/lib/rpi-firmware/overlays/
+debian/cmdline.txt	usr/lib/rpi-firmware/
+debian/config.txt	usr/lib/rpi-firmware/
