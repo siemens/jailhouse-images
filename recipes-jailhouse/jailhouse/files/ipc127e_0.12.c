@@ -63,21 +63,21 @@ struct {
 		.platform_info = {
 			.pci_mmconfig_base = 0xe0000000,
 			.pci_mmconfig_end_bus = 0x3f,
-			.iommu_units = {
-				{
-					.type = JAILHOUSE_IOMMU_INTEL,
-					.base = 0xfed64000,
-					.size = 0x1000,
-				},
-				{
-					.type = JAILHOUSE_IOMMU_INTEL,
-					.base = 0xfed65000,
-					.size = 0x1000,
-				},
-			},
 			.x86 = {
 				.pm_timer_address = 0x408,
 				.vtd_interrupt_limit = 256,
+				.iommu_units = {
+					{
+						.type = JAILHOUSE_IOMMU_INTEL,
+						.base = 0xfed64000,
+						.size = 0x1000,
+					},
+					{
+						.type = JAILHOUSE_IOMMU_INTEL,
+						.base = 0xfed65000,
+						.size = 0x1000,
+					},
+				},
 			},
 		},
 		.root_cell = {

@@ -22,3 +22,13 @@ SRC_URI += " \
     "
 
 SRCREV = "92db71f257fabd3c08fa4b99498fa61a41ea831d"
+
+EXTRA_JAILHOUSE_CONFIGS_amd64 += " \
+    nuc6cay_0.12.c \
+    ipc127e_0.12.c \
+    "
+
+do_prepare_build_append_amd64() {
+    mv ${S}/configs/x86/nuc6cay_0.12.c ${S}/configs/x86/nuc6cay.c
+    mv ${S}/configs/x86/ipc127e_0.12.c ${S}/configs/x86/ipc127e.c
+}
