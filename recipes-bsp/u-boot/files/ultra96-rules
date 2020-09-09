@@ -21,7 +21,7 @@ override_dh_auto_build:
 	$(MAKE) $(PARALLEL_BUILD) -C ../arm-trusted-firmware-* \
 	        PLAT=zynqmp RESET_TO_BL31=1 bl31
 
-	echo "CONFIG_BOOTCOMMAND=\"setenv fdtfile xilinx/avnet-ultra96-rev1.dtb; run distro_bootcmd\"" \
+	echo "CONFIG_BOOTCOMMAND=\"setenv fdtfile xilinx/avnet-ultra96-rev$(ULTRA96_VERSION).dtb; run distro_bootcmd\"" \
 	    >> configs/${U_BOOT_CONFIG}
 	echo "CONFIG_WATCHDOG=n" >> configs/${U_BOOT_CONFIG}
 	echo "CONFIG_WDT=n" >> configs/${U_BOOT_CONFIG}

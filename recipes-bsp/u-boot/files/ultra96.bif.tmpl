@@ -11,8 +11,8 @@
 
 image : {
 	[pmufw_image] /usr/share/zynqmp-pmufw/executable.elf
-	[bootloader, destination_cpu=a5x-0] ../ultra96-fsbl.elf
-	../ultra96.bit
+	[bootloader, destination_cpu=a5x-0] ../ultra96-v${ULTRA96_VERSION}-fsbl.elf
+	../ultra96-v${ULTRA96_VERSION}.bit
 	[destination_cpu=a5x-0, exception_level=el-3,trustzone] ../arm-trusted-firmware-${ATF_PV}/build/zynqmp/release/bl31/bl31.elf
 	[destination_cpu=a5x-0, exception_level=el-2] u-boot.elf
 }
