@@ -7,5 +7,6 @@ espressobin	Marvell ESPRESSObin (1 GB edition)
 macchiatobin	Marvell MACCHIATObin
 hikey620	LeMaker HiKey (Kirin 620 SoC, 2 GB edition)
 ultra96-v1	Avnet Ultra96 v1
+ultra96-v2	Avnet Ultra96 v2
 rpi4		Raspberry Pi 4 (1-8 GB editions)
 pine64-plus	Pine64+ (Allwinner A64, 2 GB edition)
