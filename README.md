@@ -117,8 +117,14 @@ directly to the eMMC because it does not contain any firmware.
 
 ## Ultra96
 
-The [Avnet Ultra96](https://www.96boards.org/product/ultra96/) is supported.
-You can boot the board directly from the generated SD card image.
+The [Avnet Ultra96](https://www.96boards.org/product/ultra96/) is supported,
+both version 1 and 2. You can boot the board directly from the generated SD
+card image.
+
+Note that the configuration for the v1 will direct the UART console to the
+expansion connector, compatible with related expansion boards, while the v2
+configuration uses the UART male header as output, requiring the Avnet
+JTAG/UART adapter.
 
 ## Raspberry Pi 4
 
