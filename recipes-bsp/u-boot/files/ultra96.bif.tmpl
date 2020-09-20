@@ -10,6 +10,7 @@
 #
 
 image : {
+	[fsbl_config] a53_x64
 	[pmufw_image] /usr/share/zynqmp-pmufw/executable.elf
 	[bootloader, destination_cpu=a5x-0] ../ultra96-v${ULTRA96_VERSION}-fsbl.elf
 	../ultra96-v${ULTRA96_VERSION}.bit
