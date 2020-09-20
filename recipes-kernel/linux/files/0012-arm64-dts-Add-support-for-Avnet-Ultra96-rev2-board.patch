@@ -1,0 +1,83 @@
+From 380577fe56a72e5c01009730653aa3140bc5d33e Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Tue, 15 Sep 2020 23:13:55 +0200
+Subject: [PATCH 12/12] arm64: dts: Add support for Avnet Ultra96 rev2 board
+
+Import from Ultra96-PYNQ, primarily adding the wilc3000.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ arch/arm64/boot/dts/xilinx/Makefile           |  1 +
+ .../boot/dts/xilinx/avnet-ultra96-rev2.dts    | 49 +++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/xilinx/avnet-ultra96-rev2.dts
+
+diff --git a/arch/arm64/boot/dts/xilinx/Makefile b/arch/arm64/boot/dts/xilinx/Makefile
+index 60f5443f3ef4..01eb8cfa99e2 100644
+--- a/arch/arm64/boot/dts/xilinx/Makefile
++++ b/arch/arm64/boot/dts/xilinx/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-$(CONFIG_ARCH_ZYNQMP) += avnet-ultra96-rev1.dtb
++dtb-$(CONFIG_ARCH_ZYNQMP) += avnet-ultra96-rev2.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1232-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1254-revA.dtb
+ dtb-$(CONFIG_ARCH_ZYNQMP) += zynqmp-zc1275-revA.dtb
+diff --git a/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev2.dts b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev2.dts
+new file mode 100644
+index 000000000000..5f1a0b544fa9
+--- /dev/null
++++ b/arch/arm64/boot/dts/xilinx/avnet-ultra96-rev2.dts
+@@ -0,0 +1,49 @@
++/dts-v1/;
++
++#include "zynqmp-zcu100-revC.dts"
++
++/ {
++	model = "Avnet Ultra96 Rev2";
++	compatible = "avnet,ultra96-rev2", "avnet,ultra96-rev1",
++		     "avnet,ultra96",
++		     "xlnx,zynqmp-zcu100-revC", "xlnx,zynqmp-zcu100",
++		     "xlnx,zynqmp";
++
++	// Remove V1 Power ON/OFF controller from U96 V1 DT
++	/delete-node/ ltc2954;
++};
++
++&uart0 {
++	// Remove TI child node from U96 V1 DT
++	/delete-node/ bluetooth;
++};
++
++&sdhci1 {
++	max-frequency = <50000000>;
++	// cap-power-off-card not compatible with WILC3000
++	/delete-property/cap-power-off-card;
++	wilc_sdio@1 {
++		compatible = "microchip,wilc3000";
++		reg = <0>;
++		bus-width = <0x4>;
++		status = "okay";
++	};
++	// Remove TI child node from U96 V1 DT
++	/delete-node/ wifi@2;
++};
++
++&i2csw_4 {
++	/delete-node/ pmic@5e;
++	pmic1: pmic@43 {
++		reg = <0x43>;
++		compatible = "infineon,irps5401";
++	};
++	pmic2: pmic@44 {
++		reg = <0x44>;
++		compatible = "infineon,irps5401";
++	};
++	pmic3: pmic@45 {
++		reg = <0x45>;
++		compatible = "infineon,ir38060";
++	};
++};
+-- 
+2.26.2
+
