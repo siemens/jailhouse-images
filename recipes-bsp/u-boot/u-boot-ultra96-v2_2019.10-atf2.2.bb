@@ -1,0 +1,1 @@
+u-boot-ultra96-v1_2019.10-atf2.2.bb
