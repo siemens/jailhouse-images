@@ -9,34 +9,25 @@
 # SPDX-License-Identifier: MIT
 #
 
-U_BOOT_PV="${@d.getVar('PV').split('-atf')[0]}"
-ATF_PV="${@d.getVar('PV').split('-atf')[1]}"
-
-require recipes-bsp/u-boot/u-boot-custom.inc
-require recipes-bsp/arm-trusted-firmware/arm-trusted-firmware_${ATF_PV}.inc
+require u-boot-${PV}.inc
 
 ULTRA96_VERSION ?= "1"
 
 SRC_URI += " \
-    https://ftp.denx.de/pub/u-boot/u-boot-${U_BOOT_PV}.tar.bz2;name=u-boot \
-    file://0001-Revert-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUIL.patch \
     file://ultra96-v${ULTRA96_VERSION}.bit.xz \
     file://ultra96-v${ULTRA96_VERSION}-fsbl.elf.xz \
     file://ultra96.bif.tmpl \
     file://ultra96-rules \
     "
-SRC_URI[u-boot.sha256sum] = "8d6d6070739522dd236cba7055b8736bfe92b4fac0ea18ad809829ca79667014"
 
 TEMPLATE_FILES += "ultra96.bif.tmpl"
-TEMPLATE_VARS += "ATF_PV ULTRA96_VERSION"
+TEMPLATE_VARS += "ULTRA96_VERSION"
 
-DEPENDS += "zynqmp-pmufw"
-BUILD_DEPENDS += ", zynqmp-pmufw:native"
+DEPENDS += "zynqmp-pmufw trusted-firmware-a-ultra96"
+BUILD_DEPENDS += ", zynqmp-pmufw:native, trusted-firmware-a-ultra96"
 
-U_BOOT_CONFIG="avnet_ultra96_rev1_defconfig"
-U_BOOT_BIN="u-boot.elf"
-
-S = "${WORKDIR}/u-boot-${U_BOOT_PV}"
+U_BOOT_CONFIG = "xilinx_zynqmp_virt_defconfig"
+U_BOOT_BIN = "u-boot.elf"
 
 do_prepare_build_append() {
     cp ${WORKDIR}/ultra96-rules ${S}/debian/rules

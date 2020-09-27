@@ -1,0 +1,1 @@
+u-boot-ultra96-v1_2020.10.bb
