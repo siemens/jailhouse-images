@@ -19,6 +19,4 @@ IMAGE_INSTALL_append = " u-boot-script"
 
 IMAGE_BOOT_FILES = "/usr/lib/u-boot/ultra96-v${ULTRA96_VERSION}/boot.bin;boot.bin"
 
-PREFERRED_PROVIDER_u-boot-ultra96-v${ULTRA96_VERSION} = "u-boot-ultra96-v${ULTRA96_VERSION}"
-
 IMAGE_PREINSTALL_append = " firmware-ti-connectivity"
