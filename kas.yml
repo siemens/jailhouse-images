@@ -24,6 +24,10 @@ repos:
     refspec: 93658f7a72679c89e14adc7bbdbf3f5d52b7ac0d
     layers:
       meta:
+    patches:
+      tf-a:
+        path: isar-patches/0001-Add-recipe-include-for-building-custom-Trusted-Firmw.patch
+        repo: jailhouse
 
 bblayers_conf_header:
   standard: |
