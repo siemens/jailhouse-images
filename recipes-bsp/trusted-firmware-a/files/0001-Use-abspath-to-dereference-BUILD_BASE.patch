@@ -1,0 +1,144 @@
+From f62206b4871020506842807b263408e5162b23e9 Mon Sep 17 00:00:00 2001
+From: Grant Likely <grant.likely@arm.com>
+Date: Thu, 30 Jul 2020 08:50:10 +0100
+Subject: [PATCH] Use abspath to dereference $BUILD_BASE
+
+If the user tries to change BUILD_BASE to put the build products outside
+the build tree the compile will fail due to hard coded assumptions that
+$BUILD_BASE is a relative path. Fix by using $(abspath $(BUILD_BASE))
+to rationalize to an absolute path every time and remove the relative
+path assumptions.
+
+This patch also adds documentation that BUILD_BASE can be specified by
+the user.
+
+Signed-off-by: Grant Likely <grant.likely@arm.com>
+Signed-off-by: Manish Pandey <manish.pandey2@arm.com>
+Change-Id: Ib1af874de658484aaffc672f30029b852d2489c8
+---
+ Makefile                               | 6 ++++--
+ docs/getting_started/build-options.rst | 2 ++
+ lib/romlib/Makefile                    | 8 ++++----
+ plat/marvell/a8k/common/ble/ble.mk     | 8 ++++----
+ plat/nvidia/tegra/platform.mk          | 2 +-
+ plat/ti/k3/platform.mk                 | 2 +-
+ tools/sptool/sp_mk_generator.py        | 4 ++--
+ 7 files changed, 18 insertions(+), 14 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f01a9ae3e..1290d4ff4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -449,8 +449,10 @@ include common/backtrace/backtrace.mk
+ 
+ include ${MAKE_HELPERS_DIRECTORY}plat_helpers.mk
+ 
+-BUILD_BASE		:=	./build
+-BUILD_PLAT		:=	${BUILD_BASE}/${PLAT}/${BUILD_TYPE}
++ifeq (${BUILD_BASE},)
++     BUILD_BASE		:=	./build
++endif
++BUILD_PLAT		:=	$(abspath ${BUILD_BASE})/${PLAT}/${BUILD_TYPE}
+ 
+ SPDS			:=	$(sort $(filter-out none, $(patsubst services/spd/%,%,$(wildcard services/spd/*))))
+ 
+diff --git a/docs/getting_started/build-options.rst b/docs/getting_started/build-options.rst
+index 90fe83feb..c96499020 100644
+--- a/docs/getting_started/build-options.rst
++++ b/docs/getting_started/build-options.rst
+@@ -116,6 +116,8 @@ Common build options
+ -  ``BUILD_STRING``: Input string for VERSION_STRING, which allows the TF-A
+    build to be uniquely identified. Defaults to the current git commit id.
+ 
++-  ``BUILD_BASE``: Output directory for the build. Defaults to ``./build``
++
+ -  ``CFLAGS``: Extra user options appended on the compiler's command line in
+    addition to the options set by the build system.
+ 
+diff --git a/lib/romlib/Makefile b/lib/romlib/Makefile
+index cec94043d..2ff480bd4 100644
+--- a/lib/romlib/Makefile
++++ b/lib/romlib/Makefile
+@@ -10,14 +10,14 @@ LD          = $(CROSS_COMPILE)ld
+ OC          = $(CROSS_COMPILE)objcopy
+ CPP         = $(CROSS_COMPILE)cpp
+ ROMLIB_GEN  = ./romlib_generator.py
+-BUILD_DIR   = ../../$(BUILD_PLAT)/romlib
+-LIB_DIR     = ../../$(BUILD_PLAT)/lib
+-WRAPPER_DIR = ../../$(BUILD_PLAT)/libwrapper
++BUILD_DIR   = $(BUILD_PLAT)/romlib
++LIB_DIR     = $(BUILD_PLAT)/lib
++WRAPPER_DIR = $(BUILD_PLAT)/libwrapper
+ LIBS        = -lmbedtls -lfdt -lc
+ INC         = $(INCLUDES:-I%=-I../../%)
+ PPFLAGS     = $(INC) $(DEFINES) -P -x assembler-with-cpp -D__LINKER__ -MD -MP -MT $(BUILD_DIR)/romlib.ld
+ OBJS        = $(BUILD_DIR)/jmptbl.o $(BUILD_DIR)/init.o
+-MAPFILE     = ../../$(BUILD_PLAT)/romlib/romlib.map
++MAPFILE     = $(BUILD_PLAT)/romlib/romlib.map
+ 
+ ifneq ($(PLAT_DIR),)
+   WRAPPER_SOURCES   = $(shell $(ROMLIB_GEN) genwrappers -b $(WRAPPER_DIR) --list ../../$(PLAT_DIR)/jmptbl.i)
+diff --git a/plat/marvell/a8k/common/ble/ble.mk b/plat/marvell/a8k/common/ble/ble.mk
+index b6a9cd291..12e657581 100644
+--- a/plat/marvell/a8k/common/ble/ble.mk
++++ b/plat/marvell/a8k/common/ble/ble.mk
+@@ -5,9 +5,9 @@
+ 
+ MV_DDR_PATH		?=	drivers/marvell/mv_ddr
+ 
+-MV_DDR_LIB		= 	$(CURDIR)/$(BUILD_PLAT)/ble/mv_ddr_lib.a
+-LIBC_LIB		=	$(CURDIR)/$(BUILD_PLAT)/lib/libc.a
+-BLE_LIBS		= 	$(MV_DDR_LIB) $(LIBC_LIB)
++MV_DDR_LIB		=	$(BUILD_PLAT)/ble/mv_ddr_lib.a
++LIBC_LIB		=	$(BUILD_PLAT)/lib/libc.a
++BLE_LIBS		=	$(MV_DDR_LIB) $(LIBC_LIB)
+ PLAT_MARVELL		=	plat/marvell
+ 
+ BLE_SOURCES		+= 	$(BLE_PATH)/ble_main.c				\
+@@ -29,4 +29,4 @@ BLE_LINKERFILE		:=	$(BLE_PATH)/ble.ld.S
+ FORCE:
+ 
+ $(MV_DDR_LIB): FORCE
+-	@+make -C $(MV_DDR_PATH) --no-print-directory PLAT_INCLUDES="$(PLAT_INCLUDES)" PLATFORM=$(PLAT) ARCH=AARCH64 OBJ_DIR=$(CURDIR)/$(BUILD_PLAT)/ble
++	@+make -C $(MV_DDR_PATH) --no-print-directory PLAT_INCLUDES="$(PLAT_INCLUDES)" PLATFORM=$(PLAT) ARCH=AARCH64 OBJ_DIR=$(BUILD_PLAT)/ble
+diff --git a/plat/nvidia/tegra/platform.mk b/plat/nvidia/tegra/platform.mk
+index e03e1f37b..f7221afac 100644
+--- a/plat/nvidia/tegra/platform.mk
++++ b/plat/nvidia/tegra/platform.mk
+@@ -56,7 +56,7 @@ $(eval $(call add_define,ENABLE_TEGRA_WDT_LEGACY_FIQ_HANDLING))
+ $(eval $(call add_define,RELOCATE_BL32_IMAGE))
+ 
+ # modify BUILD_PLAT to point to SoC specific build directory
+-BUILD_PLAT	:=	${BUILD_BASE}/${PLAT}/${TARGET_SOC}/${BUILD_TYPE}
++BUILD_PLAT	:=	$(abspath ${BUILD_BASE})/${PLAT}/${TARGET_SOC}/${BUILD_TYPE}
+ 
+ # platform cflags (enable signed comparisons, disable stdlib)
+ TF_CFLAGS	+= -Wsign-compare -nostdlib
+diff --git a/plat/ti/k3/platform.mk b/plat/ti/k3/platform.mk
+index 65d5cc2a4..2de21aa7b 100644
+--- a/plat/ti/k3/platform.mk
++++ b/plat/ti/k3/platform.mk
+@@ -11,4 +11,4 @@ include ${PLAT_PATH}/common/plat_common.mk
+ include ${PLAT_PATH}/board/${TARGET_BOARD}/board.mk
+ 
+ # modify BUILD_PLAT to point to board specific build directory
+-BUILD_PLAT := ${BUILD_BASE}/${PLAT}/${TARGET_BOARD}/${BUILD_TYPE}
++BUILD_PLAT := $(abspath ${BUILD_BASE})/${PLAT}/${TARGET_BOARD}/${BUILD_TYPE}
+diff --git a/tools/sptool/sp_mk_generator.py b/tools/sptool/sp_mk_generator.py
+index 6b6fa1914..68fb82201 100755
+--- a/tools/sptool/sp_mk_generator.py
++++ b/tools/sptool/sp_mk_generator.py
+@@ -53,8 +53,8 @@ with open(sys.argv[2],'r') as in_file:
+     data = json.load(in_file)
+ json_file = os.path.abspath(sys.argv[2])
+ json_dir = os.path.dirname(json_file)
+-gen_file = sys.argv[1]
+-out_dir = sys.argv[3][2:]
++gen_file = os.path.abspath(sys.argv[1])
++out_dir = os.path.abspath(sys.argv[3])
+ dtb_dir = out_dir + "/fdts/"
+ print(dtb_dir)
+ 
+-- 
+2.26.2
+

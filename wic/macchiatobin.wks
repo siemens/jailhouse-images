@@ -9,7 +9,7 @@
 # SPDX-License-Identifier: MIT
 #
 
-part u-boot --source rawcopy --sourceparams "file=/usr/lib/u-boot/macchiatobin/flash-image.bin" --no-table --align 2048 --size 2M
+part u-boot --source rawcopy --sourceparams "file=/usr/lib/trusted-firmware-a/macchiatobin/flash-image.bin" --no-table --align 2048 --size 2M
 
 part / --source rootfs-u-boot --ondisk mmcblk1 --fstype ext4 --label platform --active --align 1024 --sourceparams "no_initrd=yes"
 
