@@ -13,4 +13,4 @@ part --source bootimg-partition --ondisk mmcblk0 --fstype vfat --label boot --al
 
 part / --source rootfs-u-boot --ondisk mmcblk0 --fstype ext4 --label platform --align 1024 --active --sourceparams "no_initrd=yes"
 
-bootloader --append "mem=1820M"
+bootloader --append "rootwait mem=1820M"
