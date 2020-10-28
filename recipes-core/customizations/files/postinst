@@ -2,7 +2,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2020
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -23,3 +23,6 @@ sed -i ':restart /\\$/N;s/\\\n[ ]*//;t restart' /root/.bash_history
 echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 echo "demo" > /etc/hostname
+
+# this helps with ttys not know to this file (removed upstream with bullseye)
+rm -f /etc/securetty
