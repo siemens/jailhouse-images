@@ -1,0 +1,14 @@
+jailhouse enable /etc/jailhouse/qemu-arm.cell
+jailhouse console
+jailhouse cell create /etc/jailhouse/qemu-arm-inmate-demo.cell
+jailhouse cell load inmate-demo /usr/libexec/jailhouse/demos/gic-demo.bin
+jailhouse cell start inmate-demo
+jailhouse cell stats inmate-demo
+jailhouse cell destroy inmate-demo
+jailhouse cell linux /etc/jailhouse/qemu-arm-linux-demo.cell \
+                     /boot/vmlinuz* \
+                     -d /etc/jailhouse/dts/inmate-qemu-arm.dtb \
+                     -i /usr/libexec/jailhouse/demos/rootfs.cpio \
+                     -c "console=ttyAMA0 ip=192.168.19.2"
+ssh 192.168.19.2
+jailhouse disable
