@@ -12,7 +12,6 @@
 require recipes-kernel/linux/linux-custom.inc
 
 KERNEL_DEFCONFIG = "${DISTRO_ARCH}_defconfig_5.4"
-KERNEL_DEFCONFIG_orangepi-zero = "orangepi-zero_defconfig_5.4"
 KERNEL_DEFCONFIG_rpi4 = "rpi4_defconfig_5.4"
 
 SRC_URI += " \
