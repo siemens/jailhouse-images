@@ -11,15 +11,15 @@
 
 require recipes-kernel/linux-module/module.inc
 
-FW_URL = "https://github.com/armbian/firmware/blob/7172b4b6608b131cbd6c60253c78a231993beed8/xr819"
+FW_URL = "https://github.com/armbian/firmware/blob/aff348fa9eef0fcc97d4f2bb7304f0862baffc20/xr819"
 
 SRC_URI += " \
     git://github.com/fifteenhex/xradio \
     ${FW_URL}/boot_xr819.bin?raw=true;downloadfilename=boot_xr819.bin;sha256sum=6583350b3eb12f70fc6d6081426717bd0019b55c6558ffe820c1548f0702bb8c \
-    ${FW_URL}/fw_xr819.bin?raw=true;downloadfilename=fw_xr819.bin;sha256sum=4954ceb85807959c42e82c432109455bd9eabe95971402299a16d77ddd7d79f5 \
+    ${FW_URL}/fw_xr819.bin?raw=true;downloadfilename=fw_xr819.bin;sha256sum=fb81436ad7cc0876614a2a9c2a54c5a93a75315aee164e3a3afe3db80842a9e1 \
     ${FW_URL}/sdd_xr819.bin?raw=true;downloadfilename=sdd_xr819.bin;sha256sum=84d3fb3ca8e5d25a0c113a5063bccbeb5b53da230a0afa236b5b625f37db5161 \
     file://debian/xradio.install"
-SRCREV = "502489a9389ac7118401dc7271c56d128376e191"
+SRCREV = "6bf0e2e21c80456e2a3d4ad1267caecde7165871"
 
 S = "${WORKDIR}/git"
 
