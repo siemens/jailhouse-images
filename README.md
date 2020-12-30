@@ -13,7 +13,7 @@ Quickstart for Virtual Targets
 The host-side requirements are:
 
 - Docker (tested with 19.03.5-ce)
-- QEMU >= 3.1
+- QEMU >= 4.2
 - Kernel >= 4.4 with KVM support (for qemu-x86 image)
 - kvm_intel module loaded with parameter `nested=1` (for qemu-x86 image on
   kernel < 4.20)
@@ -21,7 +21,7 @@ The host-side requirements are:
 To build a target image, just run `build-images.sh` and select one (or
 both) of the QEMU targets. The generated image can then be executed using
 `start-qemu.sh ARCHITECTURE`. Currently supported are `x86` (only works on
-Intel CPUs so far) and `arm64` as architectures. On x86, make sure the
+Intel CPUs so far), `arm64` and `arm` as architectures. On x86, make sure the
 kvm-intel module was loaded with `nested=1` to enable nested VMX support.
 
 
