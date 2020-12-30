@@ -7,6 +7,6 @@ max_framebuffers=2
 [all]
 enable_uart=1
 arm_64bit=1
-enable_gic=1
 armstub=bl31.bin
+dtoverlay=aliases
 dtoverlay=jailhouse
