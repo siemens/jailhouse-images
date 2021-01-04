@@ -35,3 +35,5 @@ do_prepare_build() {
 
 	ln -sf ${DISTRO_ARCH}-config .config
 }
+
+do_cleanall[cleandirs] += "${DL_DIR}/buildroot"
