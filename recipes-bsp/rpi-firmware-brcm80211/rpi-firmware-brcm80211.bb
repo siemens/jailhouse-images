@@ -12,8 +12,8 @@
 inherit dpkg-raw
 
 SRC_URI = "https://github.com/RPi-Distro/firmware-nonfree/archive/${SRCREV}.tar.gz;downloadfilename=firmware-${SRCREV}.tar.gz"
-SRCREV = "00daf85ffa373ecce7836df7543c6ebe4cf43639"
-SRC_URI[sha256sum] = "26e6e4aace9c9d1e9b9b1447f57ebd743dc15f3a337deac9e77d964885fcb3b3"
+SRCREV = "b66ab26cebff689d0d3257f56912b9bb03c20567"
+SRC_URI[sha256sum] = "033a21d19fbdc7617b8c5b58d4be5951e29be5be787a45875b615f4d4dcf3f5b"
 
 do_install() {
     cd ${WORKDIR}/firmware-nonfree-${SRCREV}/brcm
