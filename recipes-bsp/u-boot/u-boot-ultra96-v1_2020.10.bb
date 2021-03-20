@@ -24,7 +24,7 @@ TEMPLATE_FILES += "ultra96.bif.tmpl"
 TEMPLATE_VARS += "ULTRA96_VERSION"
 
 DEPENDS += "zynqmp-pmufw trusted-firmware-a-ultra96"
-BUILD_DEPENDS += ", zynqmp-pmufw:native, trusted-firmware-a-ultra96"
+DEBIAN_BUILD_DEPENDS += ", zynqmp-pmufw:native, trusted-firmware-a-ultra96"
 
 U_BOOT_CONFIG = "xilinx_zynqmp_virt_defconfig"
 U_BOOT_BIN = "u-boot.elf"

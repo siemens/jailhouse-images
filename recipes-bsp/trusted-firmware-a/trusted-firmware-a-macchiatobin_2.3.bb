@@ -31,4 +31,4 @@ TF_A_EXTRA_BUILDARGS = " \
     SCP_BL2=../binaries-marvell/mrvl_scp_bl2.img \
     BL33=/usr/lib/u-boot/macchiatobin/u-boot.bin \
     all fip"
-TF_A_BINARIES = "flash-image.bin"
+TF_A_BINARIES = "release/flash-image.bin"

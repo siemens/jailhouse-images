@@ -6,7 +6,7 @@ jailhouse cell start inmate-demo
 jailhouse cell stats inmate-demo
 jailhouse cell destroy inmate-demo
 jailhouse cell linux /etc/jailhouse/ultra96-linux-demo.cell \
-                     /boot/vmlinuz* \
+                     /boot/vmlinux* \
                      -d /etc/jailhouse/dts/inmate-zynqmp.dtb \
                      -i /usr/libexec/jailhouse/demos/rootfs.cpio \
                      -c "console=ttyPS0,115200 ip=192.168.19.2"

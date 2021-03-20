@@ -35,6 +35,7 @@ case "$1" in
 			-device intel-iommu,intremap=on,x-buggy-eim=on \
 			-device intel-hda,addr=1b.0 -device hda-duplex \
 			-device e1000e,addr=2.0,netdev=net"
+		KERNEL_SUFFIX=vmlinuz
 		KERNEL_CMDLINE=" \
 			root=/dev/sda intel_iommu=off memmap=82M\$0x3a000000 \
 			vga=0x305"
@@ -50,6 +51,7 @@ case "$1" in
 			-device virtconsole,chardev=con -chardev vc,id=con \
 			-device virtio-blk-device,drive=disk \
 			-device virtio-net-device,netdev=net"
+		KERNEL_SUFFIX=vmlinux
 		KERNEL_CMDLINE=" \
 			root=/dev/vda mem=768M"
 		;;
@@ -70,5 +72,5 @@ shift 1
 ${QEMU_PATH}${QEMU} \
 	-drive file=${IMAGE_FILE},discard=unmap,if=none,id=disk,format=raw \
 	-m 1G -serial mon:stdio -netdev user,id=net \
-	-kernel ${IMAGE_PREFIX}-vmlinuz -append "${KERNEL_CMDLINE}" \
+	-kernel "${IMAGE_PREFIX}-${KERNEL_SUFFIX}" -append "${KERNEL_CMDLINE}" \
 	-initrd ${IMAGE_PREFIX}-initrd.img ${QEMU_EXTRA_ARGS} "$@"
