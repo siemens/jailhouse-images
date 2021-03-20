@@ -12,9 +12,9 @@
 
 usage()
 {
-	echo "Usage: $0 ARCHITECTURE [QEMU_OPTIONS]"
-	echo -e "\nSet QEMU_PATH environment variable to use a locally " \
-		"built QEMU version"
+	printf "%b" "Usage: $0 ARCHITECTURE [QEMU_OPTIONS]\n"
+	printf "%b" "\nSet QEMU_PATH environment variable to use a locally " \
+		    "built QEMU version\n"
 	exit 1
 }
 
@@ -64,13 +64,15 @@ case "$1" in
 		;;
 esac
 
-IMAGE_PREFIX="$(dirname $0)/build/tmp/deploy/images/qemu-${DISTRO_ARCH}/demo-image-jailhouse-demo-qemu-${DISTRO_ARCH}"
-IMAGE_FILE=$(ls ${IMAGE_PREFIX}.ext4.img)
+IMAGE_PREFIX="$(dirname "$0")/build/tmp/deploy/images/qemu-${DISTRO_ARCH}/demo-image-jailhouse-demo-qemu-${DISTRO_ARCH}"
+IMAGE_FILE=$(ls "${IMAGE_PREFIX}.ext4.img")
 
 shift 1
 
-${QEMU_PATH}${QEMU} \
-	-drive file=${IMAGE_FILE},discard=unmap,if=none,id=disk,format=raw \
+# SC2086: Double quote to prevent globbing and word splitting.
+# shellcheck disable=2086
+"${QEMU_PATH}${QEMU}" \
+	-drive file="${IMAGE_FILE}",discard=unmap,if=none,id=disk,format=raw \
 	-m 1G -serial mon:stdio -netdev user,id=net \
 	-kernel "${IMAGE_PREFIX}-${KERNEL_SUFFIX}" -append "${KERNEL_CMDLINE}" \
-	-initrd ${IMAGE_PREFIX}-initrd.img ${QEMU_EXTRA_ARGS} "$@"
+	-initrd "${IMAGE_PREFIX}-initrd.img" ${QEMU_EXTRA_ARGS} "$@"
