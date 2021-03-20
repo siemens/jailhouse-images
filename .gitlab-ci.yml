@@ -1,4 +1,4 @@
-image: kasproject/kas-isar:2.2
+image: ghcr.io/siemens/kas/kas-isar:2.4
 
 variables:
   GIT_STRATEGY: clone

@@ -10,7 +10,9 @@
 #
 
 header:
-  version: 8
+  version: 10
+
+build_system: isar
 
 machine: qemu-amd64
 distro: jailhouse-demo

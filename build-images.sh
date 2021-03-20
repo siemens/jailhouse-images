@@ -22,6 +22,7 @@ usage()
 }
 
 JAILHOUSE_IMAGES=$(dirname $0)
+KAS_CONTAINER=${KAS_CONTAINER:-${JAILHOUSE_IMAGES}/kas-container}
 KAS_FILES="${JAILHOUSE_IMAGES}/kas.yml"
 CMD="build"
 
@@ -96,13 +97,4 @@ if [ -z "${KAS_TARGET}" ]; then
 fi
 export KAS_TARGET
 
-if [ -z ${KAS_DOCKER} ]; then
-	KAS_DOCKER=./kas-docker
-	if [ ! -e ${KAS_DOCKER} ]; then
-		wget -q --show-progress -O ${KAS_DOCKER} \
-		     https://raw.githubusercontent.com/siemens/kas/2.2/kas-docker
-		chmod a+x ${KAS_DOCKER}
-	fi
-fi
-
-${KAS_DOCKER} --isar ${CMD} ${KAS_FILES}
+${KAS_CONTAINER} ${CMD} ${KAS_FILES}
