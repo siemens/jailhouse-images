@@ -20,7 +20,7 @@ SRC_URI = " \
     file://${DISTRO_ARCH}-config \
     file://build-ivshmem-demo.sh \
     file://overlay/"
-SRC_URI[sha256sum] = "05247d495b4bad032e33190ba7a1843f607c7957a19c4b8aa42cfc234795f36c"
+SRC_URI[sha256sum] = "2d86279c26a2745b044e0b1cfa9bee17bd3b211e889f9a493defeed0ffaad588"
 
 SRC_REV_IVSHMEM_DEMO = "87cc49f944ed756e930b70991726ca5595a30717"
 SRC_URI[ivshmem-demo.sha256sum] = "e7cc426bb009c3c7d99c042ae45760494d8454647fbb042359655ea37ad1dcfc"
