@@ -1,0 +1,214 @@
+From 84bb39be8756f655e3882bbe529ac9921525fdb5 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Mon, 22 Mar 2021 19:58:58 +0100
+Subject: [PATCH] rpi: Use common memreserve pattern for rpi3 and rpi4
+
+This fixes the issue that recent kernels already have a memreserve for
+the startup stubs at address 0 and dislike adding another reservation at
+the same address.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Change-Id: I275194ba59405728f1a7913cb0fea0d02e75fc50
+---
+ plat/rpi/common/include/rpi_shared.h |  2 +
+ plat/rpi/common/rpi3_common.c        | 62 ++++++++++++++++++++++++
+ plat/rpi/rpi3/rpi3_bl31_setup.c      | 70 +---------------------------
+ plat/rpi/rpi4/rpi4_bl31_setup.c      |  3 +-
+ 4 files changed, 66 insertions(+), 71 deletions(-)
+
+diff --git a/plat/rpi/common/include/rpi_shared.h b/plat/rpi/common/include/rpi_shared.h
+index ddf239eb5..858bff2eb 100644
+--- a/plat/rpi/common/include/rpi_shared.h
++++ b/plat/rpi/common/include/rpi_shared.h
+@@ -38,4 +38,6 @@ int rpi3_vc_hardware_get_board_revision(uint32_t *revision);
+ 
+ int plat_rpi_get_model(void);
+ 
++void rpi3_dtb_add_mem_rsv(void *dtb, uint64_t rsc_base, uint64_t rsv_size);
++
+ #endif /* RPI3_PRIVATE_H */
+diff --git a/plat/rpi/common/rpi3_common.c b/plat/rpi/common/rpi3_common.c
+index ef88bf10e..77cd90b8b 100644
+--- a/plat/rpi/common/rpi3_common.c
++++ b/plat/rpi/common/rpi3_common.c
+@@ -6,6 +6,8 @@
+ 
+ #include <assert.h>
+ 
++#include <libfdt.h>
++
+ #include <platform_def.h>
+ 
+ #include <arch_helpers.h>
+@@ -245,3 +247,63 @@ uint32_t plat_interrupt_type_to_line(uint32_t type, uint32_t security_state)
+ 	/* Secure interrupts are signalled on the FIQ line always. */
+ 	return  __builtin_ctz(SCR_FIQ_BIT);
+ }
++
++#if defined(RPI3_PRELOADED_DTB_BASE) || PLAT == rpi4
++void rpi3_dtb_add_mem_rsv(void *dtb, uint64_t rsv_base, uint64_t rsv_size)
++{
++	int i, regions, rc;
++	uint64_t addr, size;
++
++	INFO("rpi3: Checking DTB...\n");
++
++	/* Return if no device tree is detected */
++	if (fdt_check_header(dtb) != 0)
++		return;
++
++	regions = fdt_num_mem_rsv(dtb);
++
++	VERBOSE("rpi3: Found %d mem reserve region(s)\n", regions);
++
++	/* We expect to find one reserved region that we can modify */
++	if (regions < 1)
++		return;
++
++	/*
++	 * Look for the region that corresponds to the default boot firmware. It
++	 * starts at address 0, and it is not needed when the default firmware
++	 * is replaced by this port of the Trusted Firmware.
++	 */
++	for (i = 0; i < regions; i++) {
++		if (fdt_get_mem_rsv(dtb, i, &addr, &size) != 0)
++			continue;
++
++		if (addr != 0x0)
++			continue;
++
++		VERBOSE("rpi3: Firmware mem reserve region found\n");
++
++		rc = fdt_del_mem_rsv(dtb, i);
++		if (rc != 0) {
++			INFO("rpi3: Can't remove mem reserve region (%d)\n", rc);
++		}
++
++		break;
++	}
++
++	if (i == regions) {
++		VERBOSE("rpi3: Firmware mem reserve region not found\n");
++	}
++
++	/*
++	 * Reserve all SRAM. As said in the documentation, this isn't actually
++	 * secure memory, so it is needed to tell BL33 that this is a reserved
++	 * memory region. It doesn't guarantee it won't use it, though.
++	 */
++	rc = fdt_add_mem_rsv(dtb, rsv_base, rsv_size);
++	if (rc != 0) {
++		WARN("rpi3: Can't add mem reserve region (%d)\n", rc);
++	}
++
++	INFO("rpi3: Reserved 0x%llx - 0x%llx in DTB\n", rsv_base, rsv_base + rsv_size);
++}
++#endif
+diff --git a/plat/rpi/rpi3/rpi3_bl31_setup.c b/plat/rpi/rpi3/rpi3_bl31_setup.c
+index 59157536b..959694e77 100644
+--- a/plat/rpi/rpi3/rpi3_bl31_setup.c
++++ b/plat/rpi/rpi3/rpi3_bl31_setup.c
+@@ -6,8 +6,6 @@
+ 
+ #include <assert.h>
+ 
+-#include <libfdt.h>
+-
+ #include <platform_def.h>
+ 
+ #include <common/bl_common.h>
+@@ -151,76 +149,10 @@ void bl31_plat_arch_setup(void)
+ 	enable_mmu_el3(0);
+ }
+ 
+-#ifdef RPI3_PRELOADED_DTB_BASE
+-/*
+- * Add information to the device tree (if any) about the reserved DRAM used by
+- * the Trusted Firmware.
+- */
+-static void rpi3_dtb_add_mem_rsv(void)
+-{
+-	int i, regions, rc;
+-	uint64_t addr, size;
+-	void *dtb = (void *)RPI3_PRELOADED_DTB_BASE;
+-
+-	INFO("rpi3: Checking DTB...\n");
+-
+-	/* Return if no device tree is detected */
+-	if (fdt_check_header(dtb) != 0)
+-		return;
+-
+-	regions = fdt_num_mem_rsv(dtb);
+-
+-	VERBOSE("rpi3: Found %d mem reserve region(s)\n", regions);
+-
+-	/* We expect to find one reserved region that we can modify */
+-	if (regions < 1)
+-		return;
+-
+-	/*
+-	 * Look for the region that corresponds to the default boot firmware. It
+-	 * starts at address 0, and it is not needed when the default firmware
+-	 * is replaced by this port of the Trusted Firmware.
+-	 */
+-	for (i = 0; i < regions; i++) {
+-		if (fdt_get_mem_rsv(dtb, i, &addr, &size) != 0)
+-			continue;
+-
+-		if (addr != 0x0)
+-			continue;
+-
+-		VERBOSE("rpi3: Firmware mem reserve region found\n");
+-
+-		rc = fdt_del_mem_rsv(dtb, i);
+-		if (rc != 0) {
+-			INFO("rpi3: Can't remove mem reserve region (%d)\n", rc);
+-		}
+-
+-		break;
+-	}
+-
+-	if (i == regions) {
+-		VERBOSE("rpi3: Firmware mem reserve region not found\n");
+-	}
+-
+-	/*
+-	 * Reserve all SRAM. As said in the documentation, this isn't actually
+-	 * secure memory, so it is needed to tell BL33 that this is a reserved
+-	 * memory region. It doesn't guarantee it won't use it, though.
+-	 */
+-	rc = fdt_add_mem_rsv(dtb, SEC_SRAM_BASE, SEC_SRAM_SIZE);
+-	if (rc != 0) {
+-		WARN("rpi3: Can't add mem reserve region (%d)\n", rc);
+-	}
+-
+-	INFO("rpi3: Reserved 0x%llx - 0x%llx in DTB\n", SEC_SRAM_BASE,
+-	     SEC_SRAM_BASE + SEC_SRAM_SIZE);
+-}
+-#endif
+-
+ void bl31_platform_setup(void)
+ {
+ #ifdef RPI3_PRELOADED_DTB_BASE
+ 	/* Only modify a DTB if we know where to look for it */
+-	rpi3_dtb_add_mem_rsv();
++	rpi3_dtb_add_mem_rsv((void *)RPI3_PRELOADED_DTB_BASE, SEC_SRAM_BASE, SEC_SRAM_SIZE);
+ #endif
+ }
+diff --git a/plat/rpi/rpi4/rpi4_bl31_setup.c b/plat/rpi/rpi4/rpi4_bl31_setup.c
+index cfacd1fe1..bd3c28fef 100644
+--- a/plat/rpi/rpi4/rpi4_bl31_setup.c
++++ b/plat/rpi/rpi4/rpi4_bl31_setup.c
+@@ -228,8 +228,7 @@ static void rpi4_prepare_dtb(void)
+ 	}
+ 
+ 	/* Reserve memory used by Trusted Firmware. */
+-	if (fdt_add_reserved_memory(dtb, "atf@0", 0, 0x80000))
+-		WARN("Failed to add reserved memory nodes to DT.\n");
++	rpi3_dtb_add_mem_rsv(dtb, 0, 0x80000);
+ 
+ 	offs = fdt_node_offset_by_compatible(dtb, 0, "arm,gic-400");
+ 	gic_int_prop[0] = cpu_to_fdt32(1);		// PPI
+-- 
+2.26.2
+

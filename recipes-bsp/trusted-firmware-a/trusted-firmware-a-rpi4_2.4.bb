@@ -11,4 +11,7 @@
 
 require trusted-firmware-a_${PV}.inc
 
+SRC_URI += " \
+    file://0001-rpi-Use-common-memreserve-pattern-for-rpi3-and-rpi4.patch"
+
 TF_A_PLATFORM = "rpi4"
