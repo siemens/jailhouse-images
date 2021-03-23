@@ -15,6 +15,7 @@ FIRMWARE_REV = "a67c351f9028c7a559330365c649a07721965cd4"
 
 SRC_URI += " \
     git://github.com/Avnet/u96v2-wilc-driver;protocol=https;branch=v15_2 \
+    file://0001-Make-compatible-with-5.8-kernels.patch;striplevel=2 \
     https://github.com/linux4wilc/firmware/raw/${FIRMWARE_REV}/wilc3000_wifi_firmware.bin;name=firmware \
     file://debian/wilc.install"
 SRCREV = "01ab7484e0e6b2191c69d7ec7c6e89da5ca51f0f"

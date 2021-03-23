@@ -1,0 +1,191 @@
+From ce711d00e932310f2bc4fd4d7228c4e1fa550331 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Sat, 27 Mar 2021 07:40:45 +0100
+Subject: [PATCH] Make compatible with 5.8+ kernels
+
+This is a port of upstream d530b9864073 to this fork. Breaks older
+kernels but it's not worth to account for that anymore.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ wilc/linux_wlan.c             | 20 ++++++++---------
+ wilc/wilc_wfi_cfgoperations.c | 42 ++++++++++++++---------------------
+ wilc/wilc_wfi_cfgoperations.h |  5 +++--
+ wilc/wilc_wfi_netdevice.h     |  9 +-------
+ 4 files changed, 31 insertions(+), 45 deletions(-)
+
+diff --git a/wilc/linux_wlan.c b/wilc/linux_wlan.c
+index 8cf0068..697e992 100644
+--- a/wilc/linux_wlan.c
++++ b/wilc/linux_wlan.c
+@@ -1229,6 +1229,7 @@ static int wilc_mac_open(struct net_device *ndev)
+ 	struct wilc_priv *priv = wdev_priv(vif->ndev->ieee80211_ptr);
+ 	unsigned char mac_add[ETH_ALEN] = {0};
+ 	int ret = 0;
++	struct mgmt_frame_regs mgmt_regs = {};
+ 
+ 	if (!wl || !wl->dev) {
+ 		PRINT_ER(ndev, "device not ready\n");
+@@ -1282,14 +1283,12 @@ static int wilc_mac_open(struct net_device *ndev)
+ 	}
+ 	ether_addr_copy(ndev->dev_addr, mac_add);
+ 
+-	wilc_mgmt_frame_register(vif->ndev->ieee80211_ptr->wiphy,
+-				 vif->ndev->ieee80211_ptr,
+-				 vif->frame_reg[0].type,
+-				 vif->frame_reg[0].reg);
+-	wilc_mgmt_frame_register(vif->ndev->ieee80211_ptr->wiphy,
+-				 vif->ndev->ieee80211_ptr,
+-				 vif->frame_reg[1].type,
+-				 vif->frame_reg[1].reg);
++	mgmt_regs.interface_stypes = vif->mgmt_reg_stypes;
++	/* so we detect a change */
++	vif->mgmt_reg_stypes = 0;
++	wilc_update_mgmt_frame_registrations(vif->ndev->ieee80211_ptr->wiphy,
++					     vif->ndev->ieee80211_ptr,
++					     &mgmt_regs);
+ 	netif_wake_queue(ndev);
+ 	wl->open_ifcs++;
+ 	priv->p2p.local_random = 0x01;
+@@ -1609,6 +1608,8 @@ void wilc_wfi_mgmt_rx(struct wilc *wilc, u8 *buff, u32 size)
+ {
+ 	int i = 0;
+ 	struct wilc_vif *vif;
++	u16 type = le16_to_cpup((__le16 *)buff);
++	u32 type_bit = BIT(type >> 4);
+ 
+ 	for (i = 0; i <= wilc->vif_num; i++) {
+ 		vif = netdev_priv(wilc->vif[i]->ndev);
+@@ -1619,8 +1620,7 @@ void wilc_wfi_mgmt_rx(struct wilc *wilc, u8 *buff, u32 size)
+ 	}
+ 
+ 	vif = netdev_priv(wilc->vif[1]->ndev);
+-	if ((buff[0] == vif->frame_reg[0].type && vif->frame_reg[0].reg) ||
+-	    (buff[0] == vif->frame_reg[1].type && vif->frame_reg[1].reg))
++	if (vif->mgmt_reg_stypes & type_bit)
+ 		wilc_wfi_p2p_rx(wilc->vif[1]->ndev, buff, size);
+ }
+ 
+diff --git a/wilc/wilc_wfi_cfgoperations.c b/wilc/wilc_wfi_cfgoperations.c
+index 53ccce1..e154232 100644
+--- a/wilc/wilc_wfi_cfgoperations.c
++++ b/wilc/wilc_wfi_cfgoperations.c
+@@ -2069,40 +2069,32 @@ static int mgmt_tx_cancel_wait(struct wiphy *wiphy,
+ 	return 0;
+ }
+ 
+-void wilc_mgmt_frame_register(struct wiphy *wiphy, struct wireless_dev *wdev,
+-			      u16 frame_type, bool reg)
++void wilc_update_mgmt_frame_registrations(struct wiphy *wiphy,
++					  struct wireless_dev *wdev,
++					  struct mgmt_frame_regs *upd)
+ {
+ 	struct wilc_priv *priv = wiphy_priv(wiphy);
+ 	struct wilc_vif *vif = netdev_priv(priv->wdev->netdev);
+ 	struct wilc *wl = vif->wilc;
++	u32 presp_bit = BIT(IEEE80211_STYPE_PROBE_REQ >> 4);
++	u32 action_bit = BIT(IEEE80211_STYPE_ACTION >> 4);
+ 
+-	if (!frame_type)
+-		return;
++	if (wl->initialized) {
++		bool prev = vif->mgmt_reg_stypes & presp_bit;
++		bool now = upd->interface_stypes & presp_bit;
+ 
+-	PRINT_INFO(vif->ndev, GENERIC_DBG,
+-		   "Frame registering Frame Type: %x: Boolean: %d\n",
+-		   frame_type, reg);
+-	switch (frame_type) {
+-	case PROBE_REQ:
+-		vif->frame_reg[0].type = frame_type;
+-		vif->frame_reg[0].reg = reg;
+-		break;
++		if (now != prev)
++			wilc_frame_register(vif, IEEE80211_STYPE_PROBE_REQ, now);
+ 
+-	case ACTION:
+-		vif->frame_reg[1].type = frame_type;
+-		vif->frame_reg[1].reg = reg;
+-		break;
++		prev = vif->mgmt_reg_stypes & action_bit;
++		now = upd->interface_stypes & action_bit;
+ 
+-	default:
+-		break;
++		if (now != prev)
++			wilc_frame_register(vif, IEEE80211_STYPE_ACTION, now);
+ 	}
+ 
+-	if (!wl->initialized) {
+-		PRINT_INFO(vif->ndev, GENERIC_DBG,
+-			   "Return since mac is closed\n");
+-		return;
+-	}
+-	wilc_frame_register(vif, frame_type, reg);
++	vif->mgmt_reg_stypes =
++		upd->interface_stypes & (presp_bit | action_bit);
+ }
+ 
+ static int set_cqm_rssi_config(struct wiphy *wiphy, struct net_device *dev,
+@@ -2712,7 +2704,7 @@ static const struct cfg80211_ops wilc_cfg80211_ops = {
+ 	.cancel_remain_on_channel = cancel_remain_on_channel,
+ 	.mgmt_tx_cancel_wait = mgmt_tx_cancel_wait,
+ 	.mgmt_tx = mgmt_tx,
+-	.mgmt_frame_register = wilc_mgmt_frame_register,
++	.update_mgmt_frame_registrations = wilc_update_mgmt_frame_registrations,
+ 	.set_power_mgmt = set_power_mgmt,
+ 	.set_cqm_rssi_config = set_cqm_rssi_config,
+ 
+diff --git a/wilc/wilc_wfi_cfgoperations.h b/wilc/wilc_wfi_cfgoperations.h
+index e9115a6..77ff719 100644
+--- a/wilc/wilc_wfi_cfgoperations.h
++++ b/wilc/wilc_wfi_cfgoperations.h
+@@ -21,8 +21,9 @@ void wilc_wfi_monitor_rx(struct wilc_vif *vif, u8 *buff, u32 size);
+ void wilc_wfi_deinit_mon_interface(void);
+ struct net_device *wilc_wfi_init_mon_interface(const char *name,
+ 					       struct net_device *real_dev);
+-void wilc_mgmt_frame_register(struct wiphy *wiphy, struct wireless_dev *wdev,
+-			      u16 frame_type, bool reg);
++void wilc_update_mgmt_frame_registrations(struct wiphy *wiphy,
++					  struct wireless_dev *wdev,
++					  struct mgmt_frame_regs *upd);
+ void wilc_sysfs_init(struct wilc_vif *vif1, struct wilc_vif *vif2);
+ void wilc_sysfs_exit(void);
+ void filter_shadow_scan(struct wilc_priv *priv, u8 *ch_freq_list,
+diff --git a/wilc/wilc_wfi_netdevice.h b/wilc/wilc_wfi_netdevice.h
+index 12f48f3..614d9fd 100644
+--- a/wilc/wilc_wfi_netdevice.h
++++ b/wilc/wilc_wfi_netdevice.h
+@@ -32,8 +32,6 @@
+ #define PMKID_FOUND				1
+ #define NUM_STA_ASSOCIATED			8
+ 
+-#define NUM_REG_FRAME				2
+-
+ #define TCP_ACK_FILTER_LINK_SPEED_THRESH	54
+ #define DEFAULT_LINK_SPEED			72
+ 
+@@ -125,11 +123,6 @@ struct wilc_priv {
+ 	struct wilc_p2p_var p2p;
+ };
+ 
+-struct frame_reg {
+-	u16 type;
+-	bool reg;
+-};
+-
+ #define MAX_TCP_SESSION                25
+ #define MAX_PENDING_ACKS               256
+ 
+@@ -168,7 +161,7 @@ struct wilc_vif {
+ 	u8 iftype;
+ 	int monitor_flag;
+ 	int mac_opened;
+-	struct frame_reg frame_reg[NUM_REG_FRAME];
++	u32 mgmt_reg_stypes;
+ 	struct net_device_stats netstats;
+ 	struct wilc *wilc;
+ 	u8 bssid[ETH_ALEN];
+-- 
+2.26.2
+
