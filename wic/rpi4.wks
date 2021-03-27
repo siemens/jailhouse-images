@@ -11,7 +11,7 @@
 
 part --source bootimg-partition --ondisk mmcblk0 --fstype vfat --label boot --align 1 --size 32 --overhead-factor 1 --extra-space 0
 
-part / --source rootfs --ondisk mmcblk0 --fstype ext4 --label platform --align 1024 --active
+part / --source rootfs --ondisk mmcblk0 --fstype ext4 --mkfs-extraopts "-T default" --label platform --align 1024 --active
 
 # silence wic
 bootloader

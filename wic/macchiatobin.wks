@@ -11,6 +11,6 @@
 
 part u-boot --source rawcopy --sourceparams "file=/usr/lib/trusted-firmware-a/macchiatobin/flash-image.bin" --no-table --align 2048 --size 2M
 
-part / --source rootfs-u-boot --ondisk mmcblk1 --fstype ext4 --label platform --active --align 1024 --sourceparams "no_initrd=yes"
+part / --source rootfs-u-boot --ondisk mmcblk1 --fstype ext4 --mkfs-extraopts "-T default" --label platform --active --align 1024 --sourceparams "no_initrd=yes"
 
 bootloader --append "rw rootwait cma=32M mem=3840M"
