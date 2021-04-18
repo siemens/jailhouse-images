@@ -1,0 +1,33 @@
+From 389e7aa2c97c0faa79d59dbf8fce1394db05cb62 Mon Sep 17 00:00:00 2001
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Date: Thu, 13 May 2021 10:48:22 +0200
+Subject: [PATCH] plat/marvell/armada: Add missing dependency of mrvl_flash
+
+Allows building only this target.
+
+Not for upstream, they fixed this implicitly while refactoring the
+build.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Change-Id: I4901fa238a29842e03e34d0e0cb52816eea39183
+---
+ plat/marvell/armada/a8k/common/a8k_common.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/plat/marvell/armada/a8k/common/a8k_common.mk b/plat/marvell/armada/a8k/common/a8k_common.mk
+index c8273265e..9ac86a117 100644
+--- a/plat/marvell/armada/a8k/common/a8k_common.mk
++++ b/plat/marvell/armada/a8k/common/a8k_common.mk
+@@ -160,8 +160,7 @@ ${DOIMAGETOOL}: mrvl_clean
+ 	@$(DOIMAGE_LIBS_CHECK)
+ 	${Q}${MAKE} --no-print-directory -C ${DOIMAGEPATH}
+ 
+-mrvl_flash: ${BUILD_PLAT}/${FIP_NAME} ${DOIMAGETOOL} ${BUILD_PLAT}/ble.bin
++mrvl_flash: ${BUILD_PLAT}/${FIP_NAME} ${DOIMAGETOOL} ${BUILD_PLAT}/ble.bin ${BUILD_PLAT}/bl1.bin
+ 	$(shell truncate -s %128K ${BUILD_PLAT}/bl1.bin)
+ 	$(shell cat ${BUILD_PLAT}/bl1.bin ${BUILD_PLAT}/${FIP_NAME} > ${BUILD_PLAT}/${BOOT_IMAGE})
+ 	${DOIMAGETOOL} ${DOIMAGE_FLAGS} ${BUILD_PLAT}/${BOOT_IMAGE} ${BUILD_PLAT}/${FLASH_IMAGE}
+-
+-- 
+2.26.2
+

@@ -12,12 +12,12 @@
 require trusted-firmware-a_${PV}.inc
 
 SRC_URI += " \
-    git://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell;protocol=https;branch=mv_ddr-armada-atf-mainline;rev=${MV_DDR_REV};destsuffix=mv-ddr-marvell \
+    git://github.com/MarvellEmbeddedProcessors/mv-ddr-marvell;protocol=https;rev=${MV_DDR_REV};destsuffix=mv-ddr-marvell \
     git://github.com/MarvellEmbeddedProcessors/binaries-marvell;protocol=https;branch=${MV_BIN_BRANCH};rev=${MV_BIN_REV};destsuffix=binaries-marvell \
-    file://0001-mv_ddr4_training-fix-gcc-warning-about-uninitialized.patch;patchdir=${WORKDIR}/mv-ddr-marvell \
+    file://0001-plat-marvell-armada-Add-missing-dependency-of-mrvl_f.patch \
     "
 
-MV_DDR_REV="a881467ef0f0185e6570dd0483023fde93cbb5f5"
+MV_DDR_REV="7c351731d19645f64d2826a47e8f4d9cd1c74db3"
 MV_BIN_BRANCH="binaries-marvell-armada-18.12"
 MV_BIN_REV="c6c529ea3d905a28cc77331964c466c3e2dc852e"
 
@@ -30,5 +30,5 @@ TF_A_EXTRA_BUILDARGS = " \
     MV_DDR_PATH=../mv-ddr-marvell \
     SCP_BL2=../binaries-marvell/mrvl_scp_bl2.img \
     BL33=/usr/lib/u-boot/macchiatobin/u-boot.bin \
-    all fip"
+    mrvl_flash"
 TF_A_BINARIES = "release/flash-image.bin"
