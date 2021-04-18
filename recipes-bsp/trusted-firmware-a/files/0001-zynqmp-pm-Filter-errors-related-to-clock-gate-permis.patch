@@ -1,0 +1,45 @@
+From e85c1473dc49acb2feb2d552c9a1bad99e2477ca Mon Sep 17 00:00:00 2001
+From: Mirela Simonovic <mirela.simonovic@aggios.com>
+Date: Fri, 24 Aug 2018 17:09:07 +0200
+Subject: [PATCH 1/2] zynqmp: pm: Filter errors related to clock gate
+ permissions
+
+Linux clock framework cannot properly deal with these errors. When the
+error is related to the lack of permissions to control the clock we
+filter the error and report the success to linux. Before recent changes
+in clock framework across the stack, this was done in the PMU-FW as a
+workaround. Since the PMU-FW now handles clocks and the permissions to
+control them using general principles rather than workarounds, it can
+no longer distinguish such exceptions and it has to return no-access
+error.
+
+Signed-off-by: Mirela Simonovic <mirela.simonovic@aggios.com>
+Acked-by: Will Wong <WILLW@xilinx.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Change-Id: I1491a80e472f44e322a542b29a20eb1cb3319802
+---
+ plat/xilinx/zynqmp/pm_service/pm_api_sys.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/plat/xilinx/zynqmp/pm_service/pm_api_sys.c b/plat/xilinx/zynqmp/pm_service/pm_api_sys.c
+index b1720d9f6..cd9d597bf 100644
+--- a/plat/xilinx/zynqmp/pm_service/pm_api_sys.c
++++ b/plat/xilinx/zynqmp/pm_service/pm_api_sys.c
+@@ -907,7 +907,13 @@ static enum pm_ret_status pm_clock_gate(unsigned int clock_id,
+ 
+ 	/* Send request to the PMU */
+ 	PM_PACK_PAYLOAD2(payload, api_id, clock_id);
+-	return pm_ipi_send_sync(primary_proc, payload, NULL, 0);
++	status = pm_ipi_send_sync(primary_proc, payload, NULL, 0);
++
++	/* If action fails due to the lack of permissions filter the error */
++	if (status == PM_RET_ERROR_ACCESS)
++		status = PM_RET_SUCCESS;
++
++	return status;
+ }
+ 
+ /**
+-- 
+2.26.2
+

@@ -11,6 +11,11 @@
 
 require trusted-firmware-a_${PV}.inc
 
+SRC_URI += " \
+    file://0001-zynqmp-pm-Filter-errors-related-to-clock-gate-permis.patch \
+    file://0002-zynqmp-pm-update-error-codes-to-match-Linux-and-PMU-.patch \
+    "
+
 TF_A_NAME = "ultra96"
 TF_A_PLATFORM = "zynqmp"
 TF_A_EXTRA_BUILDARGS = "RESET_TO_BL31=1 ZYNQMP_CONSOLE=cadence1"
