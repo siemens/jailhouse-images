@@ -16,6 +16,7 @@ usage()
 	printf "%b" "\nOptions:\n"
 	printf "%b" "--latest\tBuild latest Jailhouse version from next" \
 		    "branch.\n"
+	printf "%b" "--rt\t\tBuild with PREEMPT-RT kernel.\n"
 	printf "%b" "--all\t\tBuild all available images (may take hours...).\n"
 	printf "%b" "--shell\t\tDrop into a shell to issue bitbake commands" \
 		    "manually.\n"
