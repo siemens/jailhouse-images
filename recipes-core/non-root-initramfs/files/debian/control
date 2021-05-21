@@ -2,7 +2,7 @@ Source: non-root-initramfs
 Section: misc
 Priority: optional
 Standards-Version: 4.3.0
-Build-Depends: wget, cpio, unzip, rsync, python:native, bc
+Build-Depends: wget, cpio, unzip, rsync, python3:native, bc
 Maintainer: Jan Kiszka <jan.kiszka@siemens.com>
 Rules-Requires-Root: no
 

@@ -27,4 +27,4 @@ export ARCH=x86
 endif
 
 %:
-	CFLAGS= LDFLAGS= dh $@ --parallel --with python2
+	CFLAGS= LDFLAGS= dh $@ --parallel --with python3

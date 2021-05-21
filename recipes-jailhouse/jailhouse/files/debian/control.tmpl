@@ -3,11 +3,11 @@ Section: misc
 Priority: optional
 Standards-Version: 3.9.6
 Build-Depends: linux-headers-${KERNEL_NAME}, git,
-               dh-python, python-pip:native, python-setuptools, python-mako:native
+               dh-python, python3-pip:native, python3-setuptools, python3-mako:native
 Maintainer: Jan Kiszka <jan.kiszka@siemens.com>
 X-Python-Version: >= 2.7
 
 Package: ${PN}
 Architecture: any
-Depends: ${shlibs:Depends}, ${python:Depends}, linux-image-${KERNEL_NAME}, python-mako
+Depends: ${shlibs:Depends}, ${python3:Depends}, linux-image-${KERNEL_NAME}, python3-mako
 Description: ${DESCRIPTION}
