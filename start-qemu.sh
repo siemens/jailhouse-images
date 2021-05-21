@@ -26,8 +26,15 @@ case "$1" in
 	x86|x86_64|amd64)
 		DISTRO_ARCH=amd64
 		QEMU=qemu-system-x86_64
+		CPU_FEATURES="-kvm-pv-eoi,-kvm-pv-ipi,-kvm-asyncpf,-kvm-steal-time,-kvmclock"
+
+		# qemu >= 5.2 has kvm-asyncpf-int which needs to be disabled
+		if ${QEMU} -cpu help | grep kvm-asyncpf-int > /dev/null; then
+			CPU_FEATURES="${CPU_FEATURES},-kvm-asyncpf-int"
+		fi
+
 		QEMU_EXTRA_ARGS=" \
-			-cpu host,-kvm-pv-eoi,-kvm-pv-ipi,-kvm-asyncpf,-kvm-steal-time,-kvmclock \
+			-cpu host,${CPU_FEATURES} \
 			-smp 4 \
 			-enable-kvm -machine q35,kernel_irqchip=split \
 			-serial vc \
