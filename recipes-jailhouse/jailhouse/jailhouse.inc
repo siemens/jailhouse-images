@@ -1,13 +1,15 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018-2020
+# Copyright (c) Siemens AG, 2018-2021
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
 #
 # SPDX-License-Identifier: MIT
 #
+
+FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
 PN .= "-${KERNEL_NAME}"
 
@@ -44,7 +46,7 @@ do_prepare_build() {
         # Install device trees only on non-x86 archs as they only exist there
         echo "configs{,/*}/dts/*.dtb etc/jailhouse/dts" >> ${S}/debian/jailhouse.install
     fi
-    mv ${S}/debian/jailhouse.install ${S}/debian/jailhouse-${KERNEL_NAME}.install
+    mv ${S}/debian/jailhouse.install ${S}/debian/${PN}.install
 
     for cfg in ${EXTRA_JAILHOUSE_CONFIGS}; do
         cp ${WORKDIR}/$cfg ${S}/configs/x86/
