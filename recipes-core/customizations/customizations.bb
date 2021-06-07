@@ -20,7 +20,7 @@ DESCRIPTION = "demo image customizations"
 
 SRC_URI = " \
     file://postinst \
-    file://.bash_history-${MACHINE} \
+    file://.bash_history-* \
     file://e1000e-intx.conf \
     file://ethernet \
     file://ivshmem-net \
