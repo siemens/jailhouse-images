@@ -1,5 +1,5 @@
-Jailhouse Image
-===============
+Jailhouse Reference Images
+==========================
 
 The goal of this project is to generate ready-to-use reference images for the
 [Jailhouse hypervisor](https://github.com/siemens/jailhouse) to support
