@@ -23,6 +23,3 @@ sed -i ':restart /\\$/N;s/\\\n[ ]*//;t restart' /root/.bash_history
 echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
 
 echo "demo" > /etc/hostname
-
-# this helps with ttys not know to this file (removed upstream with bullseye)
-rm -f /etc/securetty
