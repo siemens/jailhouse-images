@@ -1,0 +1,28 @@
+From cfb7d07ae1e0ef4dbf14f40a5744d1abd382d000 Mon Sep 17 00:00:00 2001
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 10 Oct 2021 21:27:50 +1300
+Subject: [PATCH] isl: Update mirror URL
+
+gforge.inria.fr has been shutdown. The isl project has moved hosting to
+sourceforge.io. Update the mirror accordingly.
+
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ packages/isl/package.desc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/packages/isl/package.desc b/packages/isl/package.desc
+index ffae478d..20f7e024 100644
+--- a/packages/isl/package.desc
++++ b/packages/isl/package.desc
+@@ -1,6 +1,6 @@
+ repository='git git://repo.or.cz/isl.git'
+ bootstrap='./autogen.sh'
+-mirrors='http://isl.gforge.inria.fr'
++mirrors='https://libisl.sourceforge.io'
+ relevantpattern='*.*|.'
+ milestones='0.12 0.13 0.14 0.15 0.18'
+ archive_formats='.tar.xz .tar.bz2 .tar.gz'
+-- 
+2.31.1
+
