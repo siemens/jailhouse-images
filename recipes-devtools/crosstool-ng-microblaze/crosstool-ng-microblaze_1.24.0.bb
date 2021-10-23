@@ -31,3 +31,5 @@ do_prepare_build() {
 
     cp ${WORKDIR}/defconfig ${S}
 }
+
+do_cleanall[cleandirs] += "${DL_DIR}/crosstool-ng"
