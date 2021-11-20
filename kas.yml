@@ -23,7 +23,7 @@ repos:
 
   isar:
     url: https://github.com/ilbers/isar
-    refspec: dbb9df67c1321aa7f6020948a964a2bcf636684a
+    refspec: 5f87d48f279761c2fefef1db16b4ccb5b955a364
     layers:
       meta:
 
@@ -38,3 +38,5 @@ local_conf_header:
     CONF_VERSION = "1"
   cross: |
     ISAR_CROSS_COMPILE = "1"
+  ccache: |
+    USE_CCACHE = "1"
