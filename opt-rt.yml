@@ -15,4 +15,3 @@ header:
 local_conf_header:
   preempt-rt: |
     KERNEL_NAME = "jailhouse-rt"
-    KERNEL_NAME_rpi4 = "not-supported"
