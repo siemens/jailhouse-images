@@ -10,9 +10,9 @@ all:
     - export https_proxy=$HTTPS_PROXY
     - export ftp_proxy=$FTP_PROXY
     - export no_proxy=$NO_PROXY
-    - while read MACHINE DESCRIPTION; do
-          KAS_TARGET="${KAS_TARGET} mc:${MACHINE}-jailhouse-demo:demo-image";
-      done < images.list
+    - for TARGET in $(grep "\"mc:" Kconfig | sed 's/.*"\([^"]\+\)"/\1/'); do
+          KAS_TARGET="${KAS_TARGET} ${TARGET}";
+      done
     - export KAS_TARGET
     - cd ..
     - kas build jailhouse-images/kas.yml

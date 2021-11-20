@@ -1,0 +1,154 @@
+mainmenu "Jailhouse Reference Images"
+
+config KAS_INCLUDE_MAIN
+	string
+	default "kas.yml"
+
+config KAS_BUILD_SYSTEM
+	string
+	default "isar"
+
+comment "Targets to be built"
+
+config TARGET_QEMU_AMD64
+	bool "QEMU/KVM Intel-x86 virtual target"
+	default y
+
+config KAS_TARGET_QEMU_AMD64
+	string
+	depends on TARGET_QEMU_AMD64
+	default "mc:qemu-amd64-jailhouse-demo:demo-image"
+
+
+config TARGET_QEMU_ARM
+	bool "QEMU ARM virtual target"
+
+config KAS_TARGET_QEMU_ARM
+	string
+	depends on TARGET_QEMU_ARM
+	default "mc:qemu-arm-jailhouse-demo:demo-image"
+
+
+config TARGET_QEMU_ARM64
+	bool "QEMU ARM64 virtual target"
+
+config KAS_TARGET_QEMU_ARM64
+	string
+	depends on TARGET_QEMU_ARM64
+	default "mc:qemu-arm64-jailhouse-demo:demo-image"
+
+
+config TARGET_ORANGEPI_ZERO
+	bool "Orange Pi Zero (256 MB edition)"
+
+config KAS_TARGET_ORANGEPI_ZERO
+	string
+	depends on TARGET_ORANGEPI_ZERO
+	default "mc:orangepi-zero-jailhouse-demo:demo-image"
+
+
+config TARGET_NUC6CAY
+	bool "Intel NUC (NUC6CAY, 8 GB RAM)"
+
+config KAS_TARGET_NUC6CAY
+	string
+	depends on TARGET_NUC6CAY
+	default "mc:nuc6cay-jailhouse-demo:demo-image"
+
+
+config TARGET_Q7_AL_E3940
+	bool "MSC Q7-AL-E3940-24N0211I"
+
+config KAS_TARGET_Q7_AL_E3940
+	string
+	depends on TARGET_Q7_AL_E3940
+	default "mc:q7-al-e3940-jailhouse-demo:demo-image"
+
+
+config TARGET_ESPRESSOBIN
+	bool "Marvell ESPRESSObin (1 GB edition)"
+
+config KAS_TARGET_ESPRESSOBIN
+	string
+	depends on TARGET_ESPRESSOBIN
+	default "mc:espressobin-jailhouse-demo:demo-image"
+
+
+config TARGET_MACCHIATOBIN
+	bool "Marvell MACCHIATObin"
+
+config KAS_TARGET_MACCHIATOBIN
+	string
+	depends on TARGET_MACCHIATOBIN
+	default "mc:macchiatobin-jailhouse-demo:demo-image"
+
+
+config TARGET_HIKEY620
+	bool "LeMaker HiKey (Kirin 620 SoC, 2 GB edition)"
+
+config KAS_TARGET_HIKEY620
+	string
+	depends on TARGET_HIKEY620
+	default "mc:hikey620-jailhouse-demo:demo-image"
+
+
+config TARGET_ULTRA96_V1
+	bool "Avnet Ultra96 v1"
+
+config KAS_TARGET_ULTRA96_V1
+	string
+	depends on TARGET_ULTRA96_V1
+	default "mc:ultra96-v1-jailhouse-demo:demo-image"
+
+
+config TARGET_ULTRA96_V2
+	bool "Avnet Ultra96 v2"
+
+config KAS_TARGET_ULTRA96_V2
+	string
+	depends on TARGET_ULTRA96_V2
+	default "mc:ultra96-v2-jailhouse-demo:demo-image"
+
+
+config TARGET_RPI4
+	bool "Raspberry Pi 4 (1-8 GB editions)"
+
+config KAS_TARGET_RPI4
+	string
+	depends on TARGET_RPI4
+	default "mc:rpi4-jailhouse-demo:demo-image"
+
+
+config TARGET_PINE64_PLUS
+	bool "Pine64+ (Allwinner A64, 2 GB edition)"
+
+config KAS_TARGET_PINE64_PLUS
+	string
+	depends on TARGET_PINE64_PLUS
+	default "mc:pine64-plus-jailhouse-demo:demo-image"
+
+
+comment "Image options"
+
+config RT
+	bool "Use Preempt RT kernel"
+	help
+	  Use Preempt RT kernel for root and non-root cell. Typical RT tests
+	  are included in the image.
+
+config KAS_INCLUDE_RT
+	string
+	depends on RT
+	default "opt-rt.yml"
+
+
+config LATEST
+	bool "Build latest Jailhouse version"
+	help
+	  Build Jailhouse from 'next' branch in git, rather than from the
+	  last release.
+
+config KAS_INCLUDE_LATEST
+	string
+	depends on LATEST
+	default "opt-latest.yml"

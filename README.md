@@ -18,8 +18,8 @@ The host-side requirements are:
 - kvm_intel module loaded with parameter `nested=1` (for qemu-x86 image on
   kernel < 4.20)
 
-To build a target image, just run `build-images.sh` and select one (or
-both) of the QEMU targets. The generated image can then be executed using
+To build a target image, just run `./kas-container menu` and select one (or
+more) of the QEMU targets. The generated image can then be executed using
 `start-qemu.sh ARCHITECTURE`. Currently supported are `x86` (only works on
 Intel CPUs so far), `arm64` and `arm` as architectures. On x86, make sure the
 kvm-intel module was loaded with `nested=1` to enable nested VMX support.
@@ -28,7 +28,7 @@ kvm-intel module was loaded with `nested=1` to enable nested VMX support.
 Quickstart for Physical Targets
 -------------------------------
 
-Call `build-images.sh` and select the desired target. Afterwards, flash the
+Call `./kas-container menu` and select the desired target. Afterwards, flash the
 image on an empty SD card, e.g.:
 
     dd if=build/tmp/deploy/images/orangepi-zero/demo-image-jailhouse-demo-orangepi-zero.wic.img \
