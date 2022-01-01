@@ -1,7 +1,7 @@
 /*
  * Jailhouse, a Linux-based partitioning hypervisor
  *
- * Copyright (c) Siemens AG, 2021
+ * Copyright (c) Siemens AG, 2021-2022
  *
  * Authors:
  *  Jan Kiszka <jan.kiszka@siemens.com>
@@ -22,8 +22,8 @@
 				uart1 = "/soc/serial@7e215040";
 
 				/* Ensure stable /dev/mmcblk0 assignment */
-				mmc0 = "/emmc2bus/emmc2@7e340000";
-				mmc1 = "/soc/sdhci@7e300000";
+				mmc0 = "/emmc2bus/mmc@7e340000";
+				mmc1 = "/soc/mmc@7e300000";
 			};
 		};
 	};
