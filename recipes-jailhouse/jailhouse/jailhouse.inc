@@ -25,7 +25,7 @@ EXTRA_JAILHOUSE_CONFIGS_amd64 = " \
     "
 
 SRC_URI = " \
-    git://github.com/siemens/jailhouse;branch=next \
+    git://github.com/siemens/jailhouse;branch=next;protocol=https \
     file://debian/ \
     ${@ " ".join(["file://" + cfg for cfg in d.getVar('EXTRA_JAILHOUSE_CONFIGS').split()]) } \
     "
