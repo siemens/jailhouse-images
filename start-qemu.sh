@@ -54,7 +54,7 @@ case "$1" in
 		QEMU_EXTRA_ARGS=" \
 			-cpu cortex-a57 \
 			-smp 16 \
-			-machine virt,gic-version=3,virtualization=on \
+			-machine virt,gic-version=3,virtualization=on,its=off \
 			-device virtio-serial-device \
 			-device virtconsole,chardev=con -chardev vc,id=con \
 			-device virtio-blk-device,drive=disk \
