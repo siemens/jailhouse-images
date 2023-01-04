@@ -2,7 +2,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2023
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -41,7 +41,8 @@ case "$1" in
 			-device ide-hd,drive=disk \
 			-device intel-iommu,intremap=on,x-buggy-eim=on \
 			-device intel-hda,addr=1b.0 -device hda-duplex \
-			-device e1000e,addr=2.0,netdev=net"
+			-device e1000e,addr=2.0,netdev=net \
+			-device pcie-pci-bridge"
 		KERNEL_SUFFIX=vmlinuz
 		KERNEL_CMDLINE=" \
 			root=/dev/sda intel_iommu=off memmap=82M\$0x3a000000 \

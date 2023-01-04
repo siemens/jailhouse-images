@@ -1,7 +1,7 @@
 #
 # Jailhouse, a Linux-based partitioning hypervisor
 #
-# Copyright (c) Siemens AG, 2018
+# Copyright (c) Siemens AG, 2018-2023
 #
 # Authors:
 #  Jan Kiszka <jan.kiszka@siemens.com>
@@ -9,13 +9,13 @@
 # SPDX-License-Identifier: MIT
 #
 
-allow-hotplug enp0s15
+allow-hotplug ens15
 allow-hotplug enp0s17
 allow-hotplug enp0s1
 allow-hotplug enP1p0s1
 
 # used on x86 QEMU
-iface enp0s15 inet static
+iface ens15 inet static
 	address 192.168.19.1
 	netmask 255.255.255.0
 
